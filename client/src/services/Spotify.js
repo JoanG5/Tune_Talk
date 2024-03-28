@@ -39,15 +39,14 @@
 // };
 
 // export default spotifyAuthService;
-
 import SpotifyWebApi from "spotify-web-api-js";
 
-const spotifyApi = new SpotifyWebApi();
+const SpotifyService = {
+  spotifyApi: new SpotifyWebApi(),
 
-const Spotify = {
   searchTracks: async (query) => {
     try {
-      const response = await spotifyApi.searchTracks(query);
+      const response = await SpotifyService.spotifyApi.searchTracks(query);
       return response.tracks.items;
     } catch (error) {
       console.error("Error searching for tracks:", error);
@@ -56,10 +55,7 @@ const Spotify = {
   },
 
   setAccessToken: (accessToken) => {
-    spotifyApi.setAccessToken(accessToken);
+    SpotifyService.spotifyApi.setAccessToken(accessToken);
   },
-
-  spotifyApi,
 };
-
-export default Spotify;
+export default SpotifyService;

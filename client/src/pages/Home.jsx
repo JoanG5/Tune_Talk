@@ -1,36 +1,27 @@
-import React, { useState } from "react";
-import Spotify from "../services/Spotify";
+import React, { useEffect, useState } from "react";
+import SpotifyService from "../services/Spotify";
 
 function Home() {
-  const [searchQuery, setSearchQuery] = useState("");
-  const [searchResults, setSearchResults] = useState([]);
+  useEffect(() => {
+    var authParameters = {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+      },
+      body: `grant_type=client_credentials&client_id=${
+        import.meta.env.SPOTIFY_CLIENT_ID
+      }&client_secret=${import.meta.env.SPOTIFY_CLIENT_SECRET}`,
+    };
 
-  const handleSearch = async () => {
-    try {
-      const tracks = await Spotify.searchTracks(searchQuery);
-      setSearchResults(tracks);
-    } catch (error) {
-      console.error("Error searching for tracks:", error);
-    }
-  };
+    fetch(`https://accounts.spotify.com/api/token`, authParameters)
+      .then((response) => response.json())
+      .then((data) => console.log(data))
+      .catch((error) => console.error("Error fetching access token:", error));
+  }, []);
 
   return (
     <div>
-      <input
-        type="text"
-        placeholder="Search for a song"
-        value={searchQuery}
-        onChange={(e) => setSearchQuery(e.target.value)}
-      />
-      <button onClick={handleSearch}>Search</button>
-      <ul>
-        {searchResults.map((track) => (
-          <li key={track.id}>
-            {track.name} by{" "}
-            {track.artists.map((artist) => artist.name).join(", ")}
-          </li>
-        ))}
-      </ul>
+      <h1>Home</h1>
     </div>
   );
 }
