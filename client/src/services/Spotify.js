@@ -1,8 +1,8 @@
 // import SpotifyWebApi from "spotify-web-api-js";
 
 // const spotifyApi = new SpotifyWebApi();
-// const clientId = "ffe56e9fc2c24489b96303ee0d791ac4";
-// const clientSecret = "f284269b97c0437baafff32a65fe336f";
+// const clientId = process.env.SPOTIFYCLIENTID;
+// const clientSecret = process.env.SPOTIFYCLIENTSECRET;
 // const redirectUri = "http://localhost:5173/callback";
 
 // const scopes = ["user-read-private", "user-read-email", "user-library-read"];
