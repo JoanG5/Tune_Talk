@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import axios from "axios";
 import SpotifyService from "../services/Spotify";
 
 function Home() {
@@ -21,10 +22,10 @@ function Home() {
       .catch((error) => console.error("Error fetching access token:", error));
   }, []);
 
-  async function artistSearch() {
+  const artistSearch = () => {
     console.log(`Searching for ${search}`);
 
-    var searchParameters = {
+    const searchParameters = {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -32,24 +33,28 @@ function Home() {
       },
     };
 
-    var artistID = await fetch(
+    const request = axios.get(
       `https://api.spotify.com/v1/search?q=${search}&type=artist`,
       searchParameters
-    )
-      .then((response) => response.json())
-      .then((data) => {
-        return data.artists.items[0].id;
+    );
+    request
+      .then((response) => {
+        const request = axios.get(
+          `https://api.spotify.com/v1/artists/${response.data.artists.items[0].id}/albums`,
+          searchParameters
+        );
+        request
+          .then((response) => {
+            setAlbums(response.data.items);
+          })
+          .catch((error) => {
+            console.error("Error fetching albums:", error);
+          });
+      })
+      .catch((error) => {
+        console.error("Error fetching artist:", error);
       });
-
-    var albums = await fetch(
-      `https://api.spotify.com/v1/artists/${artistID}/albums`,
-      searchParameters
-    )
-      .then((response) => response.json())
-      .then((data) => {
-        setAlbums(data.items);
-      });
-  } 
+  };
 
   return (
     <div>
