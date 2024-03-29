@@ -8,18 +8,28 @@ function Home() {
   const [albums, setAlbums] = useState([]);
 
   useEffect(() => {
-    var authParameters = {
-      method: "POST",
+    const authParameters = {
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
       },
-      body: `grant_type=client_credentials&client_id=${process.env.SPOTIFY_CLIENT_ID}&client_secret=${process.env.SPOTIFY_CLIENT_SECRET}`,
     };
-
-    fetch(`https://accounts.spotify.com/api/token`, authParameters)
-      .then((response) => response.json())
-      .then((data) => setAccessToken(data.access_token))
-      .catch((error) => console.error("Error fetching access token:", error));
+    const requestBody = new URLSearchParams();
+    requestBody.append("grant_type", "client_credentials");
+    requestBody.append("client_id", process.env.SPOTIFY_CLIENT_ID);
+    requestBody.append("client_secret", process.env.SPOTIFY_CLIENT_SECRET);
+    axios
+      .post(
+        "https://accounts.spotify.com/api/token",
+        requestBody,
+        authParameters
+      )
+      .then((response) => {
+        const { access_token } = response.data;
+        setAccessToken(access_token);
+      })
+      .catch((error) => {
+        console.error("Error fetching access token:", error);
+      });
   }, []);
 
   const artistSearch = () => {
