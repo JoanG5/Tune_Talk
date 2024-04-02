@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import Button from "@mui/material/Button";
 import SpotifyService from "../services/Spotify";
 
 function Home() {
@@ -68,6 +69,7 @@ function Home() {
 
   return (
     <div>
+      <Button variant="contained">Hello world</Button>
       <input onChange={(e) => setSearch(e.target.value)}></input>
       <button onClick={artistSearch}>SEARCH</button>
       <ul>
