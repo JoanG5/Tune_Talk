@@ -31,7 +31,7 @@ function SavedSongItem({ props }) {
         <div className="flex-grow" />
         <ListItemText primary="10/10" />
       </ListItemButton>
-      <Divider component="li" />
+      <Divider />
     </div>
   );
 }
