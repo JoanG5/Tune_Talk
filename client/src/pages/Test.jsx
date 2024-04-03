@@ -1,84 +1,79 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
-import Button from "@mui/material/Button";
-import SpotifyService from "../services/Spotify";
+import {
+  getArtist,
+  getAlbums,
+  getOneAlbum,
+  getOneTrack,
+} from "../services/Spotify";
 
-function Home() {
-  const [search, setSearch] = useState("");
-  const [accessToken, setAccessToken] = useState("");
+function Test() {
+  const [artist, setArtist] = useState({});
   const [albums, setAlbums] = useState([]);
 
-  useEffect(() => {
-    const authParameters = {
-      headers: {
-        "Content-Type": "application/x-www-form-urlencoded",
-      },
-    };
-    const requestBody = new URLSearchParams();
-    requestBody.append("grant_type", "client_credentials");
-    requestBody.append("client_id", process.env.SPOTIFY_CLIENT_ID);
-    requestBody.append("client_secret", process.env.SPOTIFY_CLIENT_SECRET);
-    axios
-      .post(
-        "https://accounts.spotify.com/api/token",
-        requestBody,
-        authParameters
-      )
-      .then((response) => {
-        const { access_token } = response.data;
-        setAccessToken(access_token);
-      })
-      .catch((error) => {
-        console.error("Error fetching access token:", error);
-      });
-  }, []);
-
-  const artistSearch = () => {
-    console.log(`Searching for ${search}`);
-
-    const searchParameters = {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${accessToken}`,
-      },
-    };
-
-    const request = axios.get(
-      `https://api.spotify.com/v1/search?q=${search}&type=artist`,
-      searchParameters
-    );
-    request
-      .then((response) => {
-        const request = axios.get(
-          `https://api.spotify.com/v1/artists/${response.data.artists.items[0].id}/albums`,
-          searchParameters
-        );
-        request
-          .then((response) => {
-            setAlbums(response.data.items);
-          })
-          .catch((error) => {
-            console.error("Error fetching albums:", error);
-          });
-      })
-      .catch((error) => {
-        console.error("Error fetching artist:", error);
-      });
+  const searchArtist = async () => {
+    try {
+      const artist = await getArtist("Joji");
+      setArtist(artist);
+    } catch (error) {
+      console.error("Error fetching access token:", error);
+    }
   };
+
+  const searchAlbums = async () => {
+    try {
+      const albums = await getAlbums("Joji");
+      console.log(albums);
+      setAlbums(albums);
+    } catch (error) {
+      console.error("Error fetching access token:", error);
+    }
+  };
+
+  const searchOneAlbum = async () => {
+    try {
+      const album = await getOneAlbum("Nectar");
+      console.log(album);
+    } catch (error) {
+      console.error("Error fetching access token:", error);
+    }
+  };
+
+  const searchOneTrack = async () => {
+    try {
+      const track = await getOneTrack("Slow Dancing in the Dark");
+      console.log(track);
+    } catch (error) {
+      console.error("Error fetching access token:", error);
+    }
+  };
+
+  useEffect(() => {
+    searchArtist();
+    searchAlbums();
+    searchOneAlbum();
+    searchOneTrack();
+  }, []);
 
   return (
     <div>
-      <Button variant="contained">Hello world</Button>
-      <input onChange={(e) => setSearch(e.target.value)}></input>
-      <button onClick={artistSearch}>SEARCH</button>
+      <h1 className="text-3xl font-bold underline">{artist.name}</h1>
+      <h1 className="text-3xl font-bold underline">Albums:</h1>
       <ul>
-        {albums.map((album) => (
-          <li key={album.id}>{album.name}</li>
-        ))}
+        {artist.albums &&
+          artist.albums.map((album) => <li key={album.id}>{album.name}</li>)}
+      </ul>
+      <h1 className="text-3xl font-bold underline">Top Tracks:</h1>
+      <ul>
+        {artist.topTracks &&
+          artist.topTracks.map((track) => <li key={track.id}>{track.name}</li>)}
+      </ul>
+      <h1 className="text-3xl font-bold underline">All Tracks:</h1>
+      <ul>
+        {artist.tracks &&
+          artist.tracks.map((track) => <li key={track.id}>{track.name}</li>)}
       </ul>
     </div>
   );
 }
 
-export default Home;
+export default Test;
