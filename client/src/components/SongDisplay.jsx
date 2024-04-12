@@ -3,7 +3,8 @@ import { styled } from '@mui/material/styles';
 import Paper from '@mui/material/Paper';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
-import ButtonBase from '@mui/material/ButtonBase';
+import Box from '@mui/material/Box';
+import { grey } from '@mui/material/colors';
 
 function SongDisplay({props}) {
   const duration = (ms) => {
@@ -14,32 +15,28 @@ function SongDisplay({props}) {
   };
   const Img = styled('img')({
     margin: 'auto',
+    minWidth: '128px',
+    maxBlockSize: '256px',
     display: 'block',
-    maxWidth: '100%',
-    maxHeight: '100%',
+    paddingBottom: '16px',
   });
   
   return (
     <div>
       {props && (
-        <Paper
+        <Paper elevation={0}
           sx={{
             p: 2,
             margin: 'auto',
-            minWidth: '450px',
-            maxWidth: '40%',
+            minWidth: '535px',
             flexGrow: 1,
-            backgroundColor: (theme) =>
-              theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
           }}
           >
-          <Grid container spacing={3} direction='row' alignItems='flex-end'>
-            <Grid item xs={4}>
-              <ButtonBase sx={{ minWidth: '128px', maxWidth: '300px', width: 'auto', height: 'auto'}}>
+          <Grid container spacing={3} direction='row' alignItems='center' paddingRight={3}>
+            <Grid item xs={4} >
                 <Img alt={props.album.name} src={props.album.images[0].url} />
-              </ButtonBase>
             </Grid>
-            <Grid item xs={8}>
+            <Grid item xs={4}>
                 <Typography fontWeight={700} gutterBottom variant="subtitle2" component="span">
                   Song
                 </Typography>
@@ -49,6 +46,19 @@ function SongDisplay({props}) {
                 <Typography fontWeight={400} gutterBottom variant="subtitle2" component="span">
                   {props.artists[0].name} • {props.album.name} • {duration(props.duration_ms)}
                 </Typography>
+              </Grid>
+              <Grid item xs={4}>
+                <Box sx={{ bgcolor: grey[800], color: grey[200], p: '12px' }}>
+                  <Typography fontWeight={700} gutterBottom variant="subtitle1" >
+                    User Score
+                  </Typography>
+                  <Typography fontWeight={900} gutterBottom variant="h4" >
+                    80
+                  </Typography>
+                  <Typography gutterBottom variant="caption">
+                    Based on 100 ratings
+                  </Typography>
+                </Box>
             </Grid>
           </Grid>
         </Paper>
