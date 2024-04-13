@@ -24,18 +24,19 @@ function SavedSongs() {
   }, []);
 
   return (
-    <div className="flex justify-center items-center">
+    <div className="flex justify-center items-center ">
       <List
         sx={{
           width: "80%",
           maxWidth: 1500,
           height: "100%",
-          bgcolor: "background.paper",
+          
         }}
+        className="bg-slate-400	rounded-lg shadow-lg overflow-y-auto"
       >
         {console.log(tracks)}
-        <ListItem>
-          <ListItem>
+        <ListItem className="bg-slate-500">
+          <ListItem >
             <ListItemText>
               <Typography variant="h4">Saved Songs</Typography>
             </ListItemText>
