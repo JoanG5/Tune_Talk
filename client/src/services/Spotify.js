@@ -124,6 +124,7 @@ export const getOneTrack = async (search) => {
       `https://api.spotify.com/v1/tracks/${trackId}`,
       searchParameters
     );
+    console.log(trackResponse.data)
     return trackResponse.data;
   } catch (error) {
     console.error("Error fetching data:", error);
