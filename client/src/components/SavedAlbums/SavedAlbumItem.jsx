@@ -6,6 +6,16 @@ import Divider from "@mui/material/Divider";
 import Avatar from "@mui/material/Avatar";
 
 function SavedAlbumItem({ props }) {
+  const getAllArtists = (artists) => {
+    let allArtists = "";
+    props.artists.map((artist) => {
+      allArtists += artist.name + ", ";
+    });
+    return allArtists.slice(0, -2);
+  };
+
+  getAllArtists(props.artists);
+
   return (
     <div>
       <ListItemButton className="h-32 flex items-center justify-between">
@@ -21,7 +31,7 @@ function SavedAlbumItem({ props }) {
         <ListItemText
           sx={{ width: "30%" }}
           primary={props.name}
-          secondary={props.artists[0].name}
+          secondary={getAllArtists(props.artists)}
         />
         <ListItemText
           sx={{ width: "30%" }}

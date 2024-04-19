@@ -144,5 +144,17 @@ export const testAlbumData = async () => {
   data.push(await getOneAlbum("Nectar"));
   data.push(await getOneAlbum("In Tongues"));
   data.push(await getOneAlbum("Ballads 1"));
+  data.push(await getOneAlbum("We Dont Trust You"));
+  data.push(await getOneAlbum("We Still Dont Trust You"));
+  data.push(await getOneAlbum("2093"));
+  data.push(await getOneAlbum("Utopia"));
+  data.push(await getOneAlbum("Heavens knows pink"));
+  data.push(await getOneAlbum("Scrapyard"))
+  return data;
+};
+
+export const testCurrAlbumData = async () => {
+  const data = [];
+  data.push(await getOneAlbum("We Dont Trust You"));
   return data;
 };

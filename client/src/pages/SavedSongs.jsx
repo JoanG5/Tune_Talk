@@ -13,7 +13,7 @@ import { testData } from "../services/Spotify";
 function SavedSongs() {
   const [tracks, setTracks] = useState([]);
   const [value, setValue] = useState("1");
-
+  
   useEffect(() => {
     const searchTracks = async () => {
       try {
@@ -25,6 +25,8 @@ function SavedSongs() {
     };
     searchTracks();
   }, []);
+
+  console.log(tracks)
 
   const handleChange = (event, newValue) => {
     setValue(newValue);

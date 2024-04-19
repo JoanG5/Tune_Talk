@@ -8,17 +8,22 @@ import TabContext from "@mui/lab/TabContext";
 import TabList from "@mui/lab/TabList";
 import TabPanel from "@mui/lab/TabPanel";
 import SavedAlbumSection from "../components/SavedAlbums/SavedAlbumSection";
+
 import { testAlbumData } from "../services/Spotify";
+import { testCurrAlbumData } from "../services/Spotify";
 
 function SavedAlbum() {
   const [albums, setAlbums] = useState([]);
+  const [currAlbums, setCurrAlbums] = useState([]);
   const [value, setValue] = useState("1");
 
   useEffect(() => {
     const searchAlbums = async () => {
       try {
         const albums = await testAlbumData();
+        const currAlbums = await testCurrAlbumData();
         setAlbums(albums);
+        setCurrAlbums(currAlbums);
       } catch (error) {
         console.error("Error fetching access token:", error);
       }
@@ -29,6 +34,7 @@ function SavedAlbum() {
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
+
 
   return (
     <div>
@@ -63,10 +69,14 @@ function SavedAlbum() {
           </TabList>
         </Box>
         <TabPanel value="1">
-          <SavedAlbumSection props={albums} />
+          <SavedAlbumSection props={albums.slice(0, 4)} />
         </TabPanel>
-        <TabPanel value="2">Item Two</TabPanel>
-        <TabPanel value="3">Item Three</TabPanel>
+        <TabPanel value="2">
+          <SavedAlbumSection props={albums.slice(4, 7)} />
+        </TabPanel>
+        <TabPanel value="3">
+          <SavedAlbumSection props={albums.slice(7)} />
+        </TabPanel>
       </TabContext>
     </div>
   );
