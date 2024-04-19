@@ -13,6 +13,7 @@ function Test() {
   const searchArtist = async () => {
     try {
       const artist = await getArtist("Joji");
+      console.log(artist);
       setArtist(artist);
     } catch (error) {
       console.error("Error fetching access token:", error);
@@ -49,9 +50,9 @@ function Test() {
 
   useEffect(() => {
     searchArtist();
-    searchAlbums();
-    searchOneAlbum();
-    searchOneTrack();
+    // searchAlbums();
+    // searchOneAlbum();
+    // searchOneTrack();
   }, []);
 
   return (

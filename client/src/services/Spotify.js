@@ -138,3 +138,11 @@ export const testData = async () => {
   data.push(await getOneTrack("Will He"));
   return data;
 };
+
+export const testAlbumData = async () => {
+  const data = [];
+  data.push(await getOneAlbum("Nectar"));
+  data.push(await getOneAlbum("In Tongues"));
+  data.push(await getOneAlbum("Ballads 1"));
+  return data;
+};

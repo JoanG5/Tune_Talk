@@ -7,23 +7,23 @@ import Tab from "@mui/material/Tab";
 import TabContext from "@mui/lab/TabContext";
 import TabList from "@mui/lab/TabList";
 import TabPanel from "@mui/lab/TabPanel";
-import SavedSongSection from "../components/SavedSongs/SavedSongSection";
-import { testData } from "../services/Spotify";
+import SavedAlbumSection from "../components/SavedAlbums/SavedAlbumSection";
+import { testAlbumData } from "../services/Spotify";
 
-function SavedSongs() {
-  const [tracks, setTracks] = useState([]);
+function SavedAlbum() {
+  const [albums, setAlbums] = useState([]);
   const [value, setValue] = useState("1");
 
   useEffect(() => {
-    const searchTracks = async () => {
+    const searchAlbums = async () => {
       try {
-        const tracks = await testData();
-        setTracks(tracks);
+        const albums = await testAlbumData();
+        setAlbums(albums);
       } catch (error) {
         console.error("Error fetching access token:", error);
       }
     };
-    searchTracks();
+    searchAlbums();
   }, []);
 
   const handleChange = (event, newValue) => {
@@ -57,13 +57,13 @@ function SavedSongs() {
           }}
         >
           <TabList onChange={handleChange} aria-label="lab API tabs example">
-            <Tab label="All Songs" value="1" />
+            <Tab label="All Albums" value="1" />
             <Tab label="Currently Listening" value="2" />
             <Tab label="Plan On Listening" value="3" />
           </TabList>
         </Box>
         <TabPanel value="1">
-          <SavedSongSection props={tracks} />
+          <SavedAlbumSection props={albums} />
         </TabPanel>
         <TabPanel value="2">Item Two</TabPanel>
         <TabPanel value="3">Item Three</TabPanel>
@@ -72,4 +72,4 @@ function SavedSongs() {
   );
 }
 
-export default SavedSongs;
+export default SavedAlbum;
