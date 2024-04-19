@@ -21,7 +21,7 @@ export const getToken = async () => {
     return access_token;
   } catch (error) {
     console.error("Error fetching access token:", error);
-    throw error; // Propagate the error for handling elsewhere if needed
+    throw error;
   }
 };
 
