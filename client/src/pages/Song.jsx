@@ -1,5 +1,5 @@
 import React, { useState, useEffect }from 'react'
-import SongDisplay from '../components/SongDisplay'
+import SongDisplay from '../components/Song/SongDisplay'
 import ReviewList from '../components/Reviews';
 import {getOneTrack} from '../services/Spotify'
 
@@ -25,7 +25,7 @@ function Song() {
     <div>
       <SongDisplay props={songInfo}/>
       
-      <ReviewList reviews={[]}/>
+      <ReviewList reviews={[0]}/>
     </div>
   )
 }

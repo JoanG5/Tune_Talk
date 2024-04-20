@@ -29,7 +29,7 @@ function SongDisplay({props}) {
         <Paper elevation={0}
           sx={{
             p: 2,
-            margin: 'auto',
+            margin: '16px',
             minWidth: '535px',
             flexGrow: 1,
           }}
