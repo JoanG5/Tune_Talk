@@ -5,7 +5,7 @@ import Album from "./pages/Album";
 import Song from "./pages/Song";
 import Profile from "./pages/Profile";
 import SavedSongs from "./pages/SavedSongs";
-import SavedAlbum from "./pages/SavedAlbum";
+import SavedAlbums from "./pages/SavedAlbums";
 
 function App() {
   return (
@@ -16,7 +16,7 @@ function App() {
         <Route path="/song" element={<Song />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/profile/savedsong" element={<SavedSongs />} />
-        <Route path="/profile/savedalbum" element={<SavedAlbum />} />
+        <Route path="/profile/savedalbum" element={<SavedAlbums />} />
         <Route path="/test" element={<Test />} />
       </Routes>
     </Router>
