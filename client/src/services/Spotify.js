@@ -106,7 +106,11 @@ export const getOneAlbum = async (search) => {
       `https://api.spotify.com/v1/albums/${albumId}`,
       searchParameters
     );
-    return albumResponse.data;
+    const artistNames = albumResponse.data.artists.map(artist => artist.name).join(', ');
+    return {
+      ...albumResponse.data,
+      artistNames: artistNames,
+    };
   } catch (error) {
     console.error("Error fetching data:", error);
     throw error;
