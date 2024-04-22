@@ -28,7 +28,7 @@ function Profile() {
   }, []);
 
   return (
-    <div>
+    <div style={{ fontFamily: "Roboto,Helvetica,Arial,sans-serif" }}>
       <body className="h-full">
         <header></header>
         <div className="content py-10 px-0">
@@ -134,7 +134,7 @@ function Profile() {
                   className="section-heading"
                   style={{
                     color: "DimGray",
-                    fontFamily: "Graphik-Regular-Web, sans-serif",
+                    fontFamily: "Roboto,Helvetica,Arial,sans-serif",
                     fontSize: "1rem",
                     fontWeight: "550",
                     letterSpacing: ".05em",
