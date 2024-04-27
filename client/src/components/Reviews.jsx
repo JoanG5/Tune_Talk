@@ -2,25 +2,27 @@ import * as React from 'react';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import Divider from '@mui/material/Divider';
-import ListItemText from '@mui/material/ListItemText';
 import ListItemAvatar from '@mui/material/ListItemAvatar';
 import Avatar from '@mui/material/Avatar';
 import Typography from '@mui/material/Typography';
 import Paper from '@mui/material/Paper';
 import Rating from '@mui/material/Rating';
-
+import Grid from '@mui/material/Grid';
 
 function ReviewList({reviews}){
 
     return(
         <div >
+            <Grid container spacing={0} direction='row'>
+            <Grid item xs={2} ></Grid>
+            <Grid item xs={5} >
              <Paper elevation={0}
                 sx={{
                     p: 2,
-                    marginLeft: "24px",
-                    minWidth: '535px',
+                    margin: "auto",
+                    minWidth: '400px',
                     flexGrow: 1,
-                    maxWidth: '50%'
+                    maxWidth: '100%'
                 }}
                 >
                 <Typography fontWeight={700} gutterBottom variant="subtitle1" component="span">
@@ -40,7 +42,7 @@ function ReviewList({reviews}){
                             <div class="col-span-2">User <br />
                             <Rating name="read-only" value={4} readOnly size='small' /> <br />
                             </div>
-                            <div class="col-span-2">comments</div>
+                            <div class="col-span-2">comment</div>
                         </div>
                     
                     </ListItem>
@@ -48,9 +50,11 @@ function ReviewList({reviews}){
                 </List>
         )}
         </Paper>
+        </Grid> 
+        </Grid>
         </div>
     );
 };
 
 
-export default ReviewList
+export default ReviewList;

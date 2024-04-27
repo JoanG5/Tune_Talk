@@ -1,11 +1,10 @@
 import React, { useState, useEffect }from 'react'
-import SongDisplay from '../components/Song/SongDisplay'
+import SongDisplay from '../components/SongPage/SongDisplay'
 import ReviewList from '../components/Reviews';
 import {getOneTrack} from '../services/Spotify'
 
 function Song() {
   const [songInfo, setSongInfo] = useState(null);
-  // title variable for later
   const songTitle = "Slow Dancing in the Dark"; 
 
   useEffect(() => {

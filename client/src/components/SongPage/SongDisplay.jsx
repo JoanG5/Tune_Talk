@@ -16,11 +16,11 @@ function SongDisplay({props}) {
     return `${minutes}:${seconds}`
   };
   const Img = styled('img')({
-    margin: 'auto',
+    marginLeft: 'auto',
     minWidth: '128px',
     maxBlockSize: '256px',
     display: 'block',
-    paddingBottom: '16px',
+    textAlign: "right"
   });
 
   return (
@@ -34,7 +34,7 @@ function SongDisplay({props}) {
             flexGrow: 1,
           }}
           >
-          <Grid container spacing={3} direction='row' justifyContent='center' alignItems='center' paddingRight={3}>
+          <Grid container spacing={2} direction='row' justifyContent='center' alignItems='center' paddingRight={4}>
             <Grid item xs={3} >
                 <Img alt={props.album.name} src={props.album.images[0].url} />
             </Grid>
@@ -55,8 +55,8 @@ function SongDisplay({props}) {
                   <MusicPlayerSlider src={props.preview_url} />
                 </Box>
               </Grid>
-              <Grid item xs={3}>
-                <Box sx={{ border: '2px solid grey', p: '12px', minWidth: '200px', minHeight: '185px'}}>
+              <Grid item xs={4}>
+                <Box sx={{ border: '2px solid grey', p: '12px', minWidth: '200px', minHeight: '120px', marginBottom: '8px', maxWidth: '400px' }}>
                   <Typography fontWeight={700} gutterBottom component={'legend'} >
                     User Score
                   </Typography>
@@ -65,9 +65,7 @@ function SongDisplay({props}) {
                     Based on 100 ratings
                   </Typography>
                 </Box>
-            </Grid>
-            <Grid item xs>
-                <Box sx={{ border: '2px solid grey', p: '12px', minWidth: '250px' }}>
+                <Box sx={{  border: '2px solid grey', p: '12px', minWidth: '200px', maxWidth: '400px' }}>
                   <Typography fontWeight={700} gutterBottom variant="subtitle2" >
                     Details
                   </Typography>
