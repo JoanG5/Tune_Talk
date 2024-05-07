@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from "react";
 import Avatar from "@mui/material/Avatar";
 import Box from "@mui/material/Box";
@@ -10,7 +11,6 @@ import Typography from "@mui/material/Typography";
 import { Button, CardActionArea, CardActions } from "@mui/material";
 import { testAlbumData } from "../services/Spotify";
 
-
 function Profile() {
   const [value, setValue] = React.useState(0);
   const [albums, setAlbums] = useState([]);
@@ -18,6 +18,7 @@ function Profile() {
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
+
 
   console.log(testAlbumData);
   console.log(albums);
@@ -36,8 +37,6 @@ function Profile() {
 
   
   
-  
-
   return (
     <div>
       <body className="h-full">
@@ -218,6 +217,7 @@ function Profile() {
                       </Button>
                     </CardActions>
                   </Card>
+
                   <Card sx={{ maxWidth: 250 }}>
                     <CardActionArea>
                       <CardMedia
@@ -258,6 +258,7 @@ function Profile() {
                       </Button>
                     </CardActions>
                   </Card>
+
                 </ul>
               </section>
             </div>
