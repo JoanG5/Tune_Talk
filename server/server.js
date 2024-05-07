@@ -10,9 +10,9 @@ app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });
 
-const userRouter = require("./routes/user");
-const songRouter = require("./routes/song");
-const albumRouter = require("./routes/album");
+const userRouter = require("./routes/Users/user");
+const songRouter = require("./routes/Songs/song");
+const albumRouter = require("./routes/Albums/album");
 app.use("/user", userRouter);
 app.use("/song", songRouter);
 app.use("/album", albumRouter);
