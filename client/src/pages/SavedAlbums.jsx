@@ -8,6 +8,7 @@ import TabContext from "@mui/lab/TabContext";
 import TabList from "@mui/lab/TabList";
 import TabPanel from "@mui/lab/TabPanel";
 import SavedAlbumSection from "../components/SavedAlbums/SavedAlbumSection";
+import Loading from "../components/Loading";
 
 import { testAlbumData } from "../services/Spotify";
 import { testCurrAlbumData } from "../services/Spotify";
@@ -35,6 +36,9 @@ function SavedAlbum() {
     setValue(newValue);
   };
 
+  if (albums.length === 0) {
+    return <Loading />;
+  }
 
   return (
     <div>

@@ -149,7 +149,7 @@ export const testAlbumData = async () => {
   data.push(await getOneAlbum("We Still Dont Trust You"));
   data.push(await getOneAlbum("2093"));
   data.push(await getOneAlbum("Utopia"));
-  data.push(await getOneAlbum("Heavens knows pink"));
+  data.push(await getOneAlbum("Heavens knows pinkpantheress"));
   data.push(await getOneAlbum("Scrapyard"))
   return data;
 };
