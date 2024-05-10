@@ -5,7 +5,7 @@ const User = require("./user.model");
 router
   .route("/")
   .get(async (req, res) => {
-    const users = await User.findAll(); // Fetch all users from the database
+    const users = await User.findAll();
     res.status(200).json(users);
   })
   .post(async (req, res) => {
