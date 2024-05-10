@@ -1,51 +1,48 @@
-const { Sequelize } = require("sequelize");
+const { Sequelize, DataTypes } = require("sequelize");
+const sequelize = require("../../database");
 
-const albumModel = (sequelize) => {
-  const Album = sequelize.define("Album", {
-    album_id: {
-      type: Sequelize.INTEGER,
-      autoIncrement: true,
-      primaryKey: true,
+const Album = sequelize.define("Album", {
+  album_id: {
+    type: DataTypes.INTEGER,
+    autoIncrement: true,
+    primaryKey: true,
+  },
+  title: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+  artist: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+  genre: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+  release_date: {
+    type: DataTypes.DATE,
+    allowNull: false,
+  },
+  createdAt: {
+    type: DataTypes.DATE,
+    defaultValue: DataTypes.NOW,
+  },
+  updatedAt: {
+    type: DataTypes.DATE,
+    defaultValue: Sequelize.NOW,
+  },
+  spotify_id: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+  user_id: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+    references: {
+      model: "Users",
+      key: "user_id",
     },
-    title: {
-      type: Sequelize.STRING,
-      allowNull: false,
-    },
-    artist: {
-      type: Sequelize.STRING,
-      allowNull: false,
-    },
-    genre: {
-      type: Sequelize.STRING,
-      allowNull: false,
-    },
-    release_date: {
-      type: Sequelize.DATE,
-      allowNull: false,
-    },
-    createdAt: {
-      type: Sequelize.DATE,
-      defaultValue: Sequelize.NOW,
-    },
-    updatedAt: {
-      type: Sequelize.DATE,
-      defaultValue: Sequelize.NOW,
-    },
-    spotify_id : {
-      type: Sequelize.STRING,
-      allowNull: false,
-    },
-    user_id: {
-      type: Sequelize.INTEGER,
-      allowNull: false,
-      references: {
-        model: "Users",
-        key: "user_id",
-      },
-    },
-  });
+  },
+});
 
-  return Album;
-};
-
-module.exports = { albumModel };
+module.exports = Album;

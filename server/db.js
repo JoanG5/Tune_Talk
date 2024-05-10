@@ -28,6 +28,7 @@ const connection = async () => {
     Song = songModel(sequelize);
     Album = albumModel(sequelize);
     await sequelize.sync({ force: true });
+    return { User, Review, Song, Album };
   } catch (error) {
     console.error("Unable to connect to the database:", error);
   }

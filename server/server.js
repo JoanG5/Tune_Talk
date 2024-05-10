@@ -1,4 +1,3 @@
-const { connection } = require("./db");
 const express = require("express");
 const cors = require("cors");
 const app = express();
@@ -7,7 +6,6 @@ app.use(cors());
 
 PORT = 3000;
 
-connection();
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
