@@ -10,9 +10,12 @@ import CardMedia from "@mui/material/CardMedia";
 import Typography from "@mui/material/Typography";
 import { Button, CardActionArea, CardActions } from "@mui/material";
 import { testAlbumData } from "../services/Spotify";
+import { useAuth0 } from "@auth0/auth0-react";
 
 function Profile() {
-  const [value, setValue] = React.useState(0);
+  const { user } = useAuth0();
+  const { name, picture } = user;
+  const [value, setValue] = useState(0);
   const [albums, setAlbums] = useState([]);
 
   const handleChange = (event, newValue) => {
@@ -48,7 +51,7 @@ function Profile() {
               >
                 <div className="profile-avatar" style={{ gridArea: "avatar" }}>
                   <span>
-                    <Avatar sx={{ width: 100, height: 100 }} />
+                    <Avatar sx={{ width: 100, height: 100 }} src={picture} />
                   </span>
                 </div>
                 <div
@@ -61,7 +64,7 @@ function Profile() {
                   }}
                 >
                   <h1 className="display-name text-[30px] font-semibold">
-                    <span className="inline-flex max-w-md">vitsions</span>
+                    <span className="inline-flex max-w-md">{name}</span>
                   </h1>
                 </div>
                 <div

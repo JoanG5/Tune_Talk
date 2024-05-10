@@ -9,11 +9,12 @@ import TabList from "@mui/lab/TabList";
 import TabPanel from "@mui/lab/TabPanel";
 import SavedSongSection from "../components/SavedSongs/SavedSongSection";
 import { testData } from "../services/Spotify";
+import Loading from "../components/Loading";
 
 function SavedSongs() {
   const [tracks, setTracks] = useState([]);
   const [value, setValue] = useState("1");
-  
+
   useEffect(() => {
     const searchTracks = async () => {
       try {
@@ -26,11 +27,15 @@ function SavedSongs() {
     searchTracks();
   }, []);
 
-  console.log(tracks)
+  console.log(tracks);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
+
+  if (tracks.length === 0) {
+    return <Loading />;
+  }
 
   return (
     <div>
@@ -44,7 +49,7 @@ function SavedSongs() {
               }}
               variant="h4"
             >
-              Saved Album
+              Saved Songs
             </Typography>
           </ListItemText>
         </ListItem>
