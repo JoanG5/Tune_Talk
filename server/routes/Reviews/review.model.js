@@ -23,14 +23,18 @@ const reviewModel = (sequelize) => {
       type: Sequelize.DATE,
       defaultValue: Sequelize.NOW,
     },
-    // user_id: {
-    //   type: Sequelize.INTEGER,
-    //   allowNull: false,
-    //   references: {
-    //     model: "User",
-    //     key: "user_id",
-    //   },
-    // },
+    spotify_id: {
+      type: Sequelize.INTEGER,
+      allowNull: false,
+    },
+    user_id: {
+      type: Sequelize.INTEGER,
+      allowNull: false,
+      references: {
+        model: "Users",
+        key: "user_id",
+      },
+    },
   });
 
   return Review;
