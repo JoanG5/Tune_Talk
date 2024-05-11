@@ -1,5 +1,5 @@
-import React from "react";
-import { useState } from "react";
+
+import React, { useState, useEffect } from "react";
 import Avatar from "@mui/material/Avatar";
 import Box from "@mui/material/Box";
 import Tabs from "@mui/material/Tabs";
@@ -9,6 +9,7 @@ import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
 import Typography from "@mui/material/Typography";
 import { Button, CardActionArea, CardActions } from "@mui/material";
+import { testAlbumData } from "../services/Spotify";
 
 function Profile() {
   const [value, setValue] = React.useState(0);
@@ -18,6 +19,24 @@ function Profile() {
     setValue(newValue);
   };
 
+
+  console.log(testAlbumData);
+  console.log(albums);
+
+  useEffect(() => {
+    const searchAlbums = async () => {
+      try {
+        const albums = await testAlbumData();
+        setAlbums(albums);
+      } catch (error) {
+        console.error("Error fetching access token:", error);
+      }
+    };
+    searchAlbums();
+  }, []);
+
+  
+  
   return (
     <div>
       <body className="h-full">
@@ -198,6 +217,48 @@ function Profile() {
                       </Button>
                     </CardActions>
                   </Card>
+
+                  <Card sx={{ maxWidth: 250 }}>
+                    <CardActionArea>
+                      <CardMedia
+                        component="img"
+                        height="140"
+                        image="/static/images/cards/contemplative-reptile.jpg"
+                        alt="green iguana"
+                      />
+                      <CardContent>
+                        <Typography gutterBottom variant="h5" component="div">
+                          Lizard
+                        </Typography>
+                      </CardContent>
+                    </CardActionArea>
+                    <CardActions>
+                      <Button size="small" color="primary">
+                        Share
+                      </Button>
+                    </CardActions>
+                  </Card>
+                  <Card sx={{ maxWidth: 250 }}>
+                    <CardActionArea>
+                      <CardMedia
+                        component="img"
+                        height="140"
+                        image="/static/images/cards/contemplative-reptile.jpg"
+                        alt="green iguana"
+                      />
+                      <CardContent>
+                        <Typography gutterBottom variant="h5" component="div">
+                          Lizard
+                        </Typography>
+                      </CardContent>
+                    </CardActionArea>
+                    <CardActions>
+                      <Button size="small" color="primary">
+                        Share
+                      </Button>
+                    </CardActions>
+                  </Card>
+
                 </ul>
               </section>
             </div>
