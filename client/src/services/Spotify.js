@@ -124,8 +124,23 @@ export const getOneTrack = async (search) => {
       `https://api.spotify.com/v1/tracks/${trackId}`,
       searchParameters
     );
-    console.log(trackResponse.data)
+    console.log(trackResponse.data);
     return trackResponse.data;
+  } catch (error) {
+    console.error("Error fetching data:", error);
+    throw error;
+  }
+};
+
+export const getOneTrackId = async (id) => {
+  try {
+    const response = await axios.get(
+      `https://api.spotify.com/v1/tracks/${id}`,
+      searchParameters
+    );
+    console.log(response.data);
+    const trackData = response.data;
+    return trackData;
   } catch (error) {
     console.error("Error fetching data:", error);
     throw error;
@@ -150,7 +165,7 @@ export const testAlbumData = async () => {
   data.push(await getOneAlbum("2093"));
   data.push(await getOneAlbum("Utopia"));
   data.push(await getOneAlbum("Heavens knows pinkpantheress"));
-  data.push(await getOneAlbum("Scrapyard"))
+  data.push(await getOneAlbum("Scrapyard"));
   return data;
 };
 
