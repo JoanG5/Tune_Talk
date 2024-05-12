@@ -7,8 +7,15 @@ import Profile from "./pages/Profile";
 import SavedSongs from "./pages/SavedSongs";
 import SavedAlbums from "./pages/SavedAlbums";
 import Auth0ProviderWithHistory from "./auth0Provider";
+import { useAuth0 } from "@auth0/auth0-react";
 
 function App() {
+  const { isLoading, error } = useAuth0();
+
+  if (isLoading) {
+    return <div>Loading ...</div>;
+  }
+
   return (
     <Auth0ProviderWithHistory>
       <Router>
