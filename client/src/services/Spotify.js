@@ -124,7 +124,7 @@ export const getOneTrack = async (search) => {
       `https://api.spotify.com/v1/tracks/${trackId}`,
       searchParameters
     );
-    console.log(trackResponse.data);
+    // console.log(trackResponse.data);
     return trackResponse.data;
   } catch (error) {
     console.error("Error fetching data:", error);
@@ -138,13 +138,23 @@ export const getOneTrackId = async (id) => {
       `https://api.spotify.com/v1/tracks/${id}`,
       searchParameters
     );
-    console.log(response.data);
     const trackData = response.data;
     return trackData;
   } catch (error) {
     console.error("Error fetching data:", error);
     throw error;
   }
+};
+
+export const getTrackDataFromDB = async (tracks) => {
+  const trackData = [];
+  for (const track of tracks) {
+    const trackId = track.spotify_id;
+    const trackResponse = await getOneTrackId(trackId);
+    trackResponse.db_id = track.song_id;
+    trackData.push(trackResponse);
+  }
+  return trackData;
 };
 
 export const testData = async () => {

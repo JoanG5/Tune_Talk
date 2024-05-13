@@ -39,7 +39,10 @@ function Song() {
         user_id: 1, // TEMPORARY USER ID, WILL USE AUTH0 TO GET USER ID
       };
 
-      const response = await axios.post("http://localhost:3000/song", songData);
+      const response = await axios.post(
+        "http://localhost:3000/song/",
+        songData
+      );
       console.log(response);
     } catch (error) {
       console.error("Error saving song:", error);
