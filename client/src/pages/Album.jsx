@@ -9,6 +9,7 @@ import { Button } from "@mui/material";
 function Album() {
   const TEMP_USER = 1; // TEMPORARY USER ID, WILL USE AUTH0 TO GET USER ID
   const [AlbumInfo, setAlbumInfo] = useState(null);
+  const [reviews, setReviews] = useState([]);
   const [review, setReview] = useState("");
   const [rating, setRating] = useState(0);
 
@@ -23,6 +24,10 @@ function Album() {
       try {
         const trackData = await getOneAlbumId(albumId);
         setAlbumInfo(trackData);
+        const reviews = await axios.get(
+          `http://localhost:3000/albumReview/${albumId}`
+        );
+        setReviews(reviews.data);
       } catch (error) {
         console.error("Error fetching album info:", error);
       }
@@ -95,6 +100,20 @@ function Album() {
           min={0}
           max={5}
         ></input>
+      </div>
+
+      {/* PLACE HOLDER COMMENT SECTION, JUST TO TEST GET, CAN REPLACE */}
+      <div
+        className="flex flex-col justify-center"
+        style={{ textAlign: "center" }}
+      >
+        {reviews.map((review, index) => (
+          <div key={index}>
+            <p>
+              {review.review}, {review.rating}*
+            </p>
+          </div>
+        ))}
       </div>
     </div>
   );

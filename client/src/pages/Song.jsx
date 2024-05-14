@@ -9,6 +9,7 @@ import { getOneTrack, getOneTrackId } from "../services/Spotify";
 function Song() {
   const TEMP_USER = 1; // TEMPORARY USER ID, WILL USE AUTH0 TO GET USER ID
   const [songInfo, setSongInfo] = useState(null);
+  const [reviews, setReviews] = useState([]);
   const [review, setReview] = useState("");
   const [rating, setRating] = useState(0);
 
@@ -23,6 +24,11 @@ function Song() {
       try {
         const trackData = await getOneTrackId(songId);
         setSongInfo(trackData);
+        const reviews = await axios.get(
+          `http://localhost:3000/songReview/${songId}`
+        );
+        setReviews(reviews.data);
+        console.log(reviews.data);
       } catch (error) {
         console.error("Error fetching song info:", error);
       }
@@ -96,6 +102,20 @@ function Song() {
           min={0}
           max={5}
         ></input>
+      </div>
+
+      {/* PLACE HOLDER COMMENT SECTION, JUST TO TEST GET, CAN REPLACE */}
+      <div
+        className="flex flex-col justify-center"
+        style={{ textAlign: "center" }}
+      >
+        {reviews.map((review, index) => (
+          <div key={index}>
+            <p>
+              {review.review}, {review.rating}*
+            </p>
+          </div>
+        ))}
       </div>
     </div>
   );
