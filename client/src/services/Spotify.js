@@ -157,6 +157,31 @@ export const getTrackDataFromDB = async (tracks) => {
   return trackData;
 };
 
+export const getOneAlbumId = async (id) => {
+  try {
+    const response = await axios.get(
+      `https://api.spotify.com/v1/albums/${id}`,
+      searchParameters
+    );
+    const albumData = response.data;
+    return albumData;
+  } catch (error) {
+    console.error("Error fetching data:", error);
+    throw error;
+  }
+};
+
+export const getAlbumDataFromDB = async (albums) => {
+  const albumData = [];
+  for (const album of albums) {
+    const albumId = album.spotify_id;
+    const albumResponse = await getOneAlbumId(albumId);
+    albumResponse.db_id = album.album_id;
+    albumData.push(albumResponse);
+  }
+  return albumData;
+};
+
 export const testData = async () => {
   const data = [];
   data.push(await getOneTrack("Slow Dancing in the Dark"));

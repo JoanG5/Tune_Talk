@@ -1,7 +1,7 @@
 const { Sequelize, DataTypes } = require("sequelize");
 const sequelize = require("../../database");
 
-const Review = sequelize.define("Review", {
+const AlbumReview = sequelize.define("Review", {
   review_id: {
     type: DataTypes.INTEGER,
     autoIncrement: true,
@@ -35,6 +35,14 @@ const Review = sequelize.define("Review", {
       key: "user_id",
     },
   },
+  album_id: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+    references: {
+      model: "Albums",
+      key: "album_id",
+    },
+  },
 });
 
-module.exports = Review;
+module.exports = AlbumReview;

@@ -4,8 +4,12 @@ import ListItemText from "@mui/material/ListItemText";
 import ListItemAvatar from "@mui/material/ListItemAvatar";
 import Divider from "@mui/material/Divider";
 import Avatar from "@mui/material/Avatar";
+import axios from "axios";
+import { Button } from "@mui/material";
 
 function SavedAlbumItem({ props }) {
+  const TEMP_USER = 1;
+
   const getAllArtists = (artists) => {
     let allArtists = "";
     props.artists.map((artist) => {
@@ -15,6 +19,17 @@ function SavedAlbumItem({ props }) {
   };
 
   getAllArtists(props.artists);
+
+  const handleDeleteAlbum = async () => {
+    try {
+      const response = await axios.delete(
+        `http://localhost:3000/album/${TEMP_USER}/${props.db_id}`
+      );
+      console.log(response);
+    } catch (error) {
+      console.error("Error deleting album:", error);
+    }
+  };
 
   return (
     <div>
@@ -39,6 +54,9 @@ function SavedAlbumItem({ props }) {
         />
         <div className="flex-grow" />
         <ListItemText primary="10/10" />
+        <Button onClick={handleDeleteAlbum} variant="outlined">
+          Delete
+        </Button>
       </ListItemButton>
       <Divider />
     </div>

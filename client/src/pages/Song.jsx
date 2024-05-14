@@ -7,6 +7,7 @@ import { useParams } from "react-router-dom";
 import { getOneTrack, getOneTrackId } from "../services/Spotify";
 
 function Song() {
+  const TEMP_USER = 1; // TEMPORARY USER ID, WILL USE AUTH0 TO GET USER ID
   const [songInfo, setSongInfo] = useState(null);
   const songTitle = "Slow Dancing in the Dark";
 
@@ -36,7 +37,7 @@ function Song() {
         album: songInfo.album.name,
         release_date: songInfo.album.release_date,
         spotify_id: songInfo.id,
-        user_id: 1, // TEMPORARY USER ID, WILL USE AUTH0 TO GET USER ID
+        user_id: TEMP_USER, // TEMPORARY USER ID, WILL USE AUTH0 TO GET USER ID
       };
 
       const response = await axios.post(
