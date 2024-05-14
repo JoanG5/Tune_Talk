@@ -1,7 +1,7 @@
 const { Sequelize, DataTypes } = require("sequelize");
 const sequelize = require("../../database");
 
-const AlbumReview = sequelize.define("Review", {
+const AlbumReview = sequelize.define("AlbumReview", {
   review_id: {
     type: DataTypes.INTEGER,
     autoIncrement: true,
@@ -24,7 +24,7 @@ const AlbumReview = sequelize.define("Review", {
     defaultValue: DataTypes.NOW,
   },
   spotify_id: {
-    type: DataTypes.INTEGER,
+    type: DataTypes.STRING,
     allowNull: false,
   },
   user_id: {
@@ -33,14 +33,6 @@ const AlbumReview = sequelize.define("Review", {
     references: {
       model: "Users",
       key: "user_id",
-    },
-  },
-  album_id: {
-    type: DataTypes.INTEGER,
-    allowNull: false,
-    references: {
-      model: "Albums",
-      key: "album_id",
     },
   },
 });

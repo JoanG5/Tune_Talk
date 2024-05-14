@@ -9,6 +9,9 @@ import { getOneTrack, getOneTrackId } from "../services/Spotify";
 function Song() {
   const TEMP_USER = 1; // TEMPORARY USER ID, WILL USE AUTH0 TO GET USER ID
   const [songInfo, setSongInfo] = useState(null);
+  const [review, setReview] = useState("");
+  const [rating, setRating] = useState(0);
+
   const songTitle = "Slow Dancing in the Dark";
 
   // const songId = "6rY5FAWxCdAGllYEOZMbjW"; // "Slow Dancing in the Dark"
@@ -39,7 +42,6 @@ function Song() {
         spotify_id: songInfo.id,
         user_id: TEMP_USER, // TEMPORARY USER ID, WILL USE AUTH0 TO GET USER ID
       };
-
       const response = await axios.post(
         "http://localhost:3000/song/",
         songData
@@ -47,6 +49,24 @@ function Song() {
       console.log(response);
     } catch (error) {
       console.error("Error saving song:", error);
+    }
+  };
+
+  const handleSaveReview = async () => {
+    try {
+      const reviewData = {
+        review: review,
+        rating: rating,
+        user_id: TEMP_USER, // TEMPORARY USER ID, WILL USE AUTH0 TO GET USER ID
+        spotify_id: songId,
+      };
+      const response = await axios.post(
+        "http://localhost:3000/songReview/",
+        reviewData
+      );
+      console.log(response);
+    } catch (error) {
+      console.error("Error saving review:", error);
     }
   };
 
@@ -60,6 +80,22 @@ function Song() {
         <Button onClick={handleSaveSong} variant="outlined">
           TEST SAVE SONG
         </Button>
+      </div>
+      <div className="flex justify-center">
+        <Button variant="outlined" onClick={handleSaveReview}>
+          TEST REVIEW ALBUM
+        </Button>
+        <textarea
+          className="outline"
+          onChange={(e) => setReview(e.target.value)}
+        ></textarea>
+        <input
+          onChange={(e) => setRating(e.target.value)}
+          className="outline"
+          type="number"
+          min={0}
+          max={5}
+        ></input>
       </div>
     </div>
   );

@@ -9,6 +9,9 @@ import { Button } from "@mui/material";
 function Album() {
   const TEMP_USER = 1; // TEMPORARY USER ID, WILL USE AUTH0 TO GET USER ID
   const [AlbumInfo, setAlbumInfo] = useState(null);
+  const [review, setReview] = useState("");
+  const [rating, setRating] = useState(0);
+
   const albumTitle = "Nectar";
 
   // const albumId = "6gJ8VKn5PAFcCIVaf3B2uE"; // "Nectar"
@@ -38,7 +41,6 @@ function Album() {
         spotify_id: AlbumInfo.id,
         user_id: TEMP_USER, // TEMPORARY USER ID, WILL USE AUTH0 TO GET USER ID
       };
-
       const response = await axios.post(
         "http://localhost:3000/album/",
         albumData
@@ -46,6 +48,25 @@ function Album() {
       console.log(response);
     } catch (error) {
       console.error("Error saving album:", error);
+    }
+  };
+
+  const handleSaveReview = async () => {
+    try {
+      const reviewData = {
+        review: review,
+        rating: rating,
+        user_id: TEMP_USER, // TEMPORARY USER ID, WILL USE AUTH0 TO GET USER ID
+        spotify_id: albumId,
+      };
+
+      const response = await axios.post(
+        "http://localhost:3000/albumReview",
+        reviewData
+      );
+      console.log(response);
+    } catch (error) {
+      console.error("Error saving review:", error);
     }
   };
 
@@ -58,6 +79,22 @@ function Album() {
         <Button onClick={handleSaveAlbum} variant="outlined">
           TEST SAVE ALBUM
         </Button>
+      </div>
+      <div className="flex justify-center">
+        <Button variant="outlined" onClick={handleSaveReview}>
+          TEST REVIEW ALBUM
+        </Button>
+        <textarea
+          className="outline"
+          onChange={(e) => setReview(e.target.value)}
+        ></textarea>
+        <input
+          onChange={(e) => setRating(e.target.value)}
+          className="outline"
+          type="number"
+          min={0}
+          max={5}
+        ></input>
       </div>
     </div>
   );
