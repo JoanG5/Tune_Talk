@@ -75,6 +75,33 @@ function Album() {
     }
   };
 
+  const handleUpdateReview = async (review_id) => {
+    try {
+      const reviewData = {
+        review: review,
+        rating: rating,
+      };
+      const response = await axios.put(
+        `http://localhost:3000/albumReview/${TEMP_USER}/${review_id}`,
+        reviewData
+      );
+      console.log(response);
+    } catch (error) {
+      console.error("Error updating review:", error);
+    }
+  };
+
+  const handleDeleteReview = async (review_id) => {
+    try {
+      const response = await axios.delete(
+        `http://localhost:3000/albumReview/${TEMP_USER}/${review_id}`
+      );
+      console.log(response);
+    } catch (error) {
+      console.error("Error deleting review:", error);
+    }
+  };
+
   return (
     <div>
       <AlbumDisplay props={AlbumInfo} />
@@ -103,18 +130,32 @@ function Album() {
       </div>
 
       {/* PLACE HOLDER COMMENT SECTION, JUST TO TEST GET, CAN REPLACE */}
-      <div
-        className="flex flex-col justify-center"
-        style={{ textAlign: "center" }}
-      >
+      <div className="flex justify-center" style={{ textAlign: "center" }}>
         {reviews.map((review, index) => (
-          <div key={index}>
+          <div className="flex flex-row" key={index}>
             <p>
               {review.review}, {review.rating}*
             </p>
+            {review.user_id === TEMP_USER && (
+              <>
+                <Button
+                  variant="outlined"
+                  onClick={() => handleUpdateReview(review.user_id)}
+                >
+                  UPDATE
+                </Button>
+                <Button
+                  variant="outlined"
+                  onClick={() => handleDeleteReview(review.user_id)}
+                >
+                  DELETE
+                </Button>
+              </>
+            )}
           </div>
         ))}
       </div>
+      {/* END OF COMMENT SECTION */}
     </div>
   );
 }

@@ -33,4 +33,32 @@ router.get("/:spotify_id", (req, res) => {
     });
 });
 
+router
+  .route("/:userid/:review_id/")
+  .put((req, res) => {
+    SongReview.update(
+      { review: req.body.review, rating: req.body.rating },
+      { where: { user_id: req.params.userid, review_id: req.params.review_id } }
+    )
+      .then((review) => {
+        res.send(review);
+      })
+      .catch((error) => {
+        console.error("Error updating review:", error);
+        res.status(500).send("Error updating review");
+      });
+  })
+  .delete((req, res) => {
+    SongReview.destroy({
+      where: { user_id: req.params.userid, review_id: req.params.review_id },
+    })
+      .then(() => {
+        res.send("Deleted review");
+      })
+      .catch((error) => {
+        console.error("Error deleting review:", error);
+        res.status(500).send("Error deleting review");
+      });
+  });
+
 module.exports = router;
