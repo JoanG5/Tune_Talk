@@ -20,6 +20,7 @@ export const getToken = async () => {
     const { access_token } = response.data;
     return access_token;
   } catch (error) {
+    
     console.error("Error fetching access token:", error);
     throw error;
   }
