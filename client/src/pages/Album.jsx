@@ -70,6 +70,7 @@ function Album() {
         reviewData
       );
       console.log(response);
+      setReviews([...reviews, reviewData]);
     } catch (error) {
       console.error("Error saving review:", error);
     }

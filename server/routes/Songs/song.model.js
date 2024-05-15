@@ -27,6 +27,11 @@ const Song = sequelize.define("Song", {
     type: DataTypes.DATE,
     allowNull: false,
   },
+  status: {
+    type: DataTypes.STRING,
+    allowNull: false,
+    defaultValue: "Listening",
+  },
   createdAt: {
     type: DataTypes.DATE,
     defaultValue: Sequelize.NOW,

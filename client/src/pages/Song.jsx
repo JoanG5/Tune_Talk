@@ -70,7 +70,8 @@ function Song() {
         reviewData
       );
       console.log(response);
-    } catch (error) {
+      setReviews([...reviews, reviewData]);
+      } catch (error) {
       console.error("Error saving review:", error);
     }
   };
