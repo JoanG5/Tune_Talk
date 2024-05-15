@@ -23,8 +23,10 @@ sequelize
 const userRouter = require("./routes/Users/user");
 const songRouter = require("./routes/Songs/song");
 const albumRouter = require("./routes/Albums/album");
-const reviewRouter = require("./routes/Reviews/review");
+const songReviewRouter = require("./routes/SongReviews/songReview");
+const albumReviewRouter = require("./routes/AlbumReviews/albumReview");
 app.use("/user", userRouter);
 app.use("/song", songRouter);
 app.use("/album", albumRouter);
-app.use("/review", reviewRouter);
+app.use("/songReview", songReviewRouter);
+app.use("/albumReview", albumReviewRouter);

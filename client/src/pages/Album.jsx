@@ -1,32 +1,163 @@
-import React, { useState, useEffect }from 'react'
-import ReviewList from '../components/Reviews';
-import { getOneAlbum } from '../services/Spotify'
-import AlbumDisplay from '../components/AlbumPage/AlbumDisplay';
+import React, { useState, useEffect } from "react";
+import ReviewList from "../components/Reviews";
+import { getOneAlbumId } from "../services/Spotify";
+import AlbumDisplay from "../components/AlbumPage/AlbumDisplay";
+import { useParams } from "react-router-dom";
+import axios from "axios";
+import { Button } from "@mui/material";
 
 function Album() {
+  const TEMP_USER = 1; // TEMPORARY USER ID, WILL USE AUTH0 TO GET USER ID
   const [AlbumInfo, setAlbumInfo] = useState(null);
-  const albumTitle = "Nectar"; 
+  const [reviews, setReviews] = useState([]);
+  const [review, setReview] = useState("");
+  const [rating, setRating] = useState(0);
+
+  const albumTitle = "Nectar";
+
+  // const albumId = "6gJ8VKn5PAFcCIVaf3B2uE"; // "Nectar"
+  //FOR TESTING AND EASE OF USE, UNCOMMENT ABOVE AND COMMENT OUT BELOW
+  const { albumId } = useParams();
 
   useEffect(() => {
     const fetchAlbumInfo = async () => {
       try {
-        const trackData = await getOneAlbum(albumTitle);
-        setAlbumInfo(trackData)
+        const trackData = await getOneAlbumId(albumId);
+        setAlbumInfo(trackData);
+        const reviews = await axios.get(
+          `http://localhost:3000/albumReview/${albumId}`
+        );
+        setReviews(reviews.data);
       } catch (error) {
         console.error("Error fetching album info:", error);
       }
     };
 
     fetchAlbumInfo();
-  }, [albumTitle]); 
+  }, [albumTitle]);
+
+  const handleSaveAlbum = async () => {
+    try {
+      const albumData = {
+        title: AlbumInfo.name,
+        artist: AlbumInfo.artists[0].name,
+        genre: "Pop", // CANT FIND GENRE IN SPOTIFY API BRUH
+        release_date: AlbumInfo.release_date,
+        spotify_id: AlbumInfo.id,
+        user_id: TEMP_USER, // TEMPORARY USER ID, WILL USE AUTH0 TO GET USER ID
+      };
+      const response = await axios.post(
+        "http://localhost:3000/album/",
+        albumData
+      );
+      console.log(response);
+    } catch (error) {
+      console.error("Error saving album:", error);
+    }
+  };
+
+  const handleSaveReview = async () => {
+    try {
+      const reviewData = {
+        review: review,
+        rating: rating,
+        user_id: TEMP_USER, // TEMPORARY USER ID, WILL USE AUTH0 TO GET USER ID
+        spotify_id: albumId,
+      };
+
+      const response = await axios.post(
+        "http://localhost:3000/albumReview",
+        reviewData
+      );
+      console.log(response);
+    } catch (error) {
+      console.error("Error saving review:", error);
+    }
+  };
+
+  const handleUpdateReview = async (review_id) => {
+    try {
+      const reviewData = {
+        review: review,
+        rating: rating,
+      };
+      const response = await axios.put(
+        `http://localhost:3000/albumReview/${TEMP_USER}/${review_id}`,
+        reviewData
+      );
+      console.log(response);
+    } catch (error) {
+      console.error("Error updating review:", error);
+    }
+  };
+
+  const handleDeleteReview = async (review_id) => {
+    try {
+      const response = await axios.delete(
+        `http://localhost:3000/albumReview/${TEMP_USER}/${review_id}`
+      );
+      console.log(response);
+    } catch (error) {
+      console.error("Error deleting review:", error);
+    }
+  };
 
   return (
     <div>
-      <AlbumDisplay props={AlbumInfo}/>
-      
-      <ReviewList reviews={[0]}/>
+      <AlbumDisplay props={AlbumInfo} />
+
+      <ReviewList reviews={[0]} />
+      <div className="flex justify-center">
+        <Button onClick={handleSaveAlbum} variant="outlined">
+          TEST SAVE ALBUM
+        </Button>
+      </div>
+      <div className="flex justify-center">
+        <Button variant="outlined" onClick={handleSaveReview}>
+          TEST REVIEW ALBUM
+        </Button>
+        <textarea
+          className="outline"
+          onChange={(e) => setReview(e.target.value)}
+        ></textarea>
+        <input
+          onChange={(e) => setRating(e.target.value)}
+          className="outline"
+          type="number"
+          min={0}
+          max={5}
+        ></input>
+      </div>
+
+      {/* PLACE HOLDER COMMENT SECTION, JUST TO TEST GET, CAN REPLACE */}
+      <div className="flex justify-center" style={{ textAlign: "center" }}>
+        {reviews.map((review, index) => (
+          <div className="flex flex-row" key={index}>
+            <p>
+              {review.review}, {review.rating}*
+            </p>
+            {review.user_id === TEMP_USER && (
+              <>
+                <Button
+                  variant="outlined"
+                  onClick={() => handleUpdateReview(review.user_id)}
+                >
+                  UPDATE
+                </Button>
+                <Button
+                  variant="outlined"
+                  onClick={() => handleDeleteReview(review.user_id)}
+                >
+                  DELETE
+                </Button>
+              </>
+            )}
+          </div>
+        ))}
+      </div>
+      {/* END OF COMMENT SECTION */}
     </div>
-  )
+  );
 }
 
-export default Album
+export default Album;

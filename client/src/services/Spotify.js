@@ -129,12 +129,62 @@ export const getOneTrack = async (search) => {
       `https://api.spotify.com/v1/tracks/${trackId}`,
       searchParameters
     );
-    console.log(trackResponse.data)
+    // console.log(trackResponse.data);
     return trackResponse.data;
   } catch (error) {
     console.error("Error fetching data:", error);
     throw error;
   }
+};
+
+export const getOneTrackId = async (id) => {
+  try {
+    const response = await axios.get(
+      `https://api.spotify.com/v1/tracks/${id}`,
+      searchParameters
+    );
+    const trackData = response.data;
+    return trackData;
+  } catch (error) {
+    console.error("Error fetching data:", error);
+    throw error;
+  }
+};
+
+export const getTrackDataFromDB = async (tracks) => {
+  const trackData = [];
+  for (const track of tracks) {
+    const trackId = track.spotify_id;
+    const trackResponse = await getOneTrackId(trackId);
+    trackResponse.db_id = track.song_id;
+    trackData.push(trackResponse);
+  }
+  return trackData;
+};
+
+export const getOneAlbumId = async (id) => {
+  try {
+    const response = await axios.get(
+      `https://api.spotify.com/v1/albums/${id}`,
+      searchParameters
+    );
+    const albumData = response.data;
+    return albumData;
+  } catch (error) {
+    console.error("Error fetching data:", error);
+    throw error;
+  }
+};
+
+export const getAlbumDataFromDB = async (albums) => {
+  const albumData = [];
+  for (const album of albums) {
+    const albumId = album.spotify_id;
+    const albumResponse = await getOneAlbumId(albumId);
+    albumResponse.db_id = album.album_id;
+    albumData.push(albumResponse);
+  }
+  return albumData;
 };
 
 export const testData = async () => {
@@ -155,7 +205,7 @@ export const testAlbumData = async () => {
   data.push(await getOneAlbum("2093"));
   data.push(await getOneAlbum("Utopia"));
   data.push(await getOneAlbum("Heavens knows pinkpantheress"));
-  data.push(await getOneAlbum("Scrapyard"))
+  data.push(await getOneAlbum("Scrapyard"));
   return data;
 };
 

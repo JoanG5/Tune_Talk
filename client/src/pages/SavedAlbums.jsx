@@ -10,21 +10,21 @@ import TabPanel from "@mui/lab/TabPanel";
 import SavedAlbumSection from "../components/SavedAlbums/SavedAlbumSection";
 import Loading from "../components/Loading";
 
-import { testAlbumData } from "../services/Spotify";
-import { testCurrAlbumData } from "../services/Spotify";
+import { getAlbumDataFromDB } from "../services/Spotify";
+import axios from "axios";
 
 function SavedAlbum() {
+  const TEMP_USER = 1;
   const [albums, setAlbums] = useState([]);
-  const [currAlbums, setCurrAlbums] = useState([]);
   const [value, setValue] = useState("1");
 
   useEffect(() => {
     const searchAlbums = async () => {
       try {
-        const albums = await testAlbumData();
-        const currAlbums = await testCurrAlbumData();
-        setAlbums(albums);
-        setCurrAlbums(currAlbums);
+        const response = await axios.get(
+          `http://localhost:3000/album/${TEMP_USER}`
+        );
+        setAlbums(await getAlbumDataFromDB(response.data));
       } catch (error) {
         console.error("Error fetching access token:", error);
       }

@@ -4,8 +4,23 @@ import ListItemText from "@mui/material/ListItemText";
 import ListItemAvatar from "@mui/material/ListItemAvatar";
 import Divider from "@mui/material/Divider";
 import Avatar from "@mui/material/Avatar";
+import Button from "@mui/material/Button";
+import axios from "axios";
 
 function SavedSongItem({ props }) {
+  const TEMP_USER = 1;
+
+  const handleDeleteSong = async () => {
+    try {
+      const response = await axios.delete(
+        `http://localhost:3000/song/${TEMP_USER}/${props.db_id}`
+      );
+      console.log(response);
+    } catch (error) {
+      console.error("Error deleting song:", error);
+    }
+  };
+
   return (
     <div>
       <ListItemButton className="h-32 flex items-center justify-between">
@@ -30,6 +45,9 @@ function SavedSongItem({ props }) {
         />
         <div className="flex-grow" />
         <ListItemText primary="10/10" />
+        <Button onClick={handleDeleteSong} variant="outlined">
+          Delete
+        </Button>
       </ListItemButton>
       <Divider />
     </div>

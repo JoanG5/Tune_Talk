@@ -8,26 +8,28 @@ import TabContext from "@mui/lab/TabContext";
 import TabList from "@mui/lab/TabList";
 import TabPanel from "@mui/lab/TabPanel";
 import SavedSongSection from "../components/SavedSongs/SavedSongSection";
-import { testData } from "../services/Spotify";
 import Loading from "../components/Loading";
+import axios from "axios";
+import { getTrackDataFromDB } from "../services/Spotify";
 
 function SavedSongs() {
+  const TEMP_USER = 1;
   const [tracks, setTracks] = useState([]);
   const [value, setValue] = useState("1");
 
   useEffect(() => {
     const searchTracks = async () => {
       try {
-        const tracks = await testData();
-        setTracks(tracks);
+        const response = await axios.get(
+          `http://localhost:3000/song/${TEMP_USER}`
+        );
+        setTracks(await getTrackDataFromDB(response.data));
       } catch (error) {
         console.error("Error fetching access token:", error);
       }
     };
     searchTracks();
   }, []);
-
-  console.log(tracks);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
