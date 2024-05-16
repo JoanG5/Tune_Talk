@@ -4,6 +4,7 @@ import Divider from "@mui/material/Divider";
 import SavedSongItem from "./SavedSongItem";
 
 function SavedSongSection({ props }) {
+  console.log(props);
   return (
     <div className="flex justify-center items-center">
       <List
@@ -16,7 +17,7 @@ function SavedSongSection({ props }) {
       >
         <Divider />
         {props.map((track) => (
-          <SavedSongItem key={track.id} props={track} />
+          <SavedSongItem key={track.trackResponse.id} props={track} />
         ))}
       </List>
     </div>

@@ -68,4 +68,18 @@ router
     }
   });
 
+router.route("/status/:user_id/:album_id").put(async (req, res) => {
+  const user_id = req.params.user_id;
+  const album_id = req.params.album_id;
+  const { status } = req.body;
+  try {
+    const album = await Album.findOne({ where: { album_id, user_id } });
+    album.status = status;
+    await album.save();
+    res.send("Album status updated");
+  } catch (error) {
+    res.status(500).send(error);
+  }
+});
+
 module.exports = router;

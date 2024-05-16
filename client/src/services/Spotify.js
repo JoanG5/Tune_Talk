@@ -155,10 +155,11 @@ export const getOneTrackId = async (id) => {
 export const getTrackDataFromDB = async (tracks) => {
   const trackData = [];
   for (const track of tracks) {
+    const status = track.status;
     const trackId = track.spotify_id;
     const trackResponse = await getOneTrackId(trackId);
     trackResponse.db_id = track.song_id;
-    trackData.push(trackResponse);
+    trackData.push({ trackResponse, status });
   }
   return trackData;
 };
@@ -180,10 +181,11 @@ export const getOneAlbumId = async (id) => {
 export const getAlbumDataFromDB = async (albums) => {
   const albumData = [];
   for (const album of albums) {
+    const status = album.status;
     const albumId = album.spotify_id;
     const albumResponse = await getOneAlbumId(albumId);
     albumResponse.db_id = album.album_id;
-    albumData.push(albumResponse);
+    albumData.push({ albumResponse, status });
   }
   return albumData;
 };

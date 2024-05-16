@@ -30,7 +30,7 @@ export const Navbar = () => {
 
   return (
     <Box classname="top-0">
-      <AppBar sx={{ background: "black" }}>
+      <AppBar position="relative" sx={{ background: "black" }}>
         <Toolbar>
           <Box flexGrow={1}>
             <Box display={"flex"} alignItems={"center"} gap={0.5}>

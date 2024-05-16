@@ -70,4 +70,18 @@ router
     }
   });
 
+router.route("/status/:user_id/:song_id").put(async (req, res) => {
+  const user_id = req.params.user_id;
+  const song_id = req.params.song_id;
+  const { status } = req.body;
+  try {
+    const song = await Song.findOne({ where: { song_id, user_id } });
+    song.status = status;
+    await song.save();
+    res.send("Song status updated");
+  } catch (error) {
+    res.status(500).send(error);
+  }
+});
+
 module.exports = router;
