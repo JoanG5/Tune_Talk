@@ -1,4 +1,4 @@
-import * as React from "react";
+import React, { useState } from 'react';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import Divider from '@mui/material/Divider';
@@ -12,7 +12,13 @@ import PostReview from './PostReview';
 import Box from '@mui/material/Box';
 
 
-function ReviewList({ reviews }) {
+function ReviewList() {
+    const [reviews, setReviews] = useState([]);
+
+    const addReview = (review) => {
+        setReviews([...reviews, review]);
+    };
+    
     return (
         <div style={{paddingLeft:'24px'}}>
             <Grid container spacing={0} direction='row'>

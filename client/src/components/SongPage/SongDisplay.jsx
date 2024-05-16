@@ -56,7 +56,7 @@ function SongDisplay({props}) {
                 </Box>
               </Grid>
               <Grid item xs>
-                <Box sx={{ p: '12px', minWidth: '200px', minHeight: '120px', marginBottom: '8px', maxWidth: '400px' }}>
+                <Box sx={{ p: '12px', minWidth: '200px', minHeight: '120px', marginBottom: '8px', maxWidth: '300px' }}>
                   <Typography fontWeight={700} gutterBottom component={'legend'} >
                     User Score
                   </Typography>
@@ -65,7 +65,7 @@ function SongDisplay({props}) {
                     Based on 100 ratings
                   </Typography>
                 </Box>
-                <Box sx={{ p: '12px', minWidth: '200px', maxWidth: '400px' }}>
+                <Box sx={{ p: '12px', minWidth: '200px', maxWidth: '300px' }}>
                   <Typography fontWeight={700} gutterBottom variant="subtitle2" >
                     Details
                   </Typography>
