@@ -16,8 +16,8 @@ function SongDisplay({props}) {
     return `${minutes}:${seconds}`
   };
   const Img = styled('img')({
-    marginLeft: 'auto',
-    minWidth: '128px',
+    margin: 'auto',
+    minWidth: '72px',
     maxBlockSize: '256px',
     display: 'block',
     textAlign: "right"
@@ -30,15 +30,15 @@ function SongDisplay({props}) {
           sx={{
             p: 2,
             margin: '16px',
-            minWidth: '535px',
+            minWidth: '500px',
             flexGrow: 1,
           }}
           >
           <Grid container spacing={2} direction='row' justifyContent='center' alignItems='center' paddingRight={4}>
-            <Grid item xs={3} >
+            <Grid item xs={2} >
                 <Img alt={props.album.name} src={props.album.images[0].url} />
             </Grid>
-            <Grid item xs={3}>
+            <Grid item xs={6}>
                 <Typography fontWeight={700} gutterBottom variant="subtitle2" component="span">
                   Song
                 </Typography>
@@ -55,8 +55,8 @@ function SongDisplay({props}) {
                   <MusicPlayerSlider src={props.preview_url} />
                 </Box>
               </Grid>
-              <Grid item xs={4}>
-                <Box sx={{ border: '2px solid grey', p: '12px', minWidth: '200px', minHeight: '120px', marginBottom: '8px', maxWidth: '400px' }}>
+              <Grid item xs>
+                <Box sx={{ p: '12px', minWidth: '200px', minHeight: '120px', marginBottom: '8px', maxWidth: '400px' }}>
                   <Typography fontWeight={700} gutterBottom component={'legend'} >
                     User Score
                   </Typography>
@@ -65,7 +65,7 @@ function SongDisplay({props}) {
                     Based on 100 ratings
                   </Typography>
                 </Box>
-                <Box sx={{  border: '2px solid grey', p: '12px', minWidth: '200px', maxWidth: '400px' }}>
+                <Box sx={{ p: '12px', minWidth: '200px', maxWidth: '400px' }}>
                   <Typography fontWeight={700} gutterBottom variant="subtitle2" >
                     Details
                   </Typography>

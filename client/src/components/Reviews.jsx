@@ -9,6 +9,8 @@ import Paper from '@mui/material/Paper';
 import Rating from '@mui/material/Rating';
 import Grid from '@mui/material/Grid';
 import PostReview from './PostReview';
+import Box from '@mui/material/Box';
+
 
 function Reviews() {
     const [reviews, setReviews] = useState([]);
@@ -18,28 +20,28 @@ function Reviews() {
     };
 
     return (
-        <div>
+        <div style={{paddingLeft:'24px'}}>
             <Grid container spacing={0} direction='row'>
-                <Grid item xs={2} ></Grid>
-                <Grid item xs={5} >
+                <Grid item xs paddingLeft={2}>
+                    <Typography fontWeight={700} gutterBottom variant="subtitle1" component="span">
+                        User Reviews
+                    </Typography>
                     <Paper elevation={0}
                         sx={{
                             p: 2,
-                            margin: "auto",
+                            marginRight: "auto",
                             minWidth: '400px',
                             flexGrow: 1,
-                            maxWidth: '100%'
+                            overflow: 'auto',
+                            maxHeight: '500px',
                         }}
                         >
-                        <Typography fontWeight={700} gutterBottom variant="subtitle1" component="span">
-                        User Reviews
-                        </Typography>
-                        <Divider />
-
-                        {reviews.length === 0 ? (
-                            <p>No reviews yet.</p>
-                        ) : (
-                            <List sx={{ width: '100%', bgcolor: 'background.paper' }}>
+                        
+                    {reviews.length === 0 ? (
+                        <p>No reviews yet.</p>
+                    ) : (
+                        <Box sx={{ width: '100%', bgcolor: 'background.paper', overflow: 'auto' }}>
+                            <List>
                                 {reviews.map((review, index) => (
                                     <div key={index}>
                                         <ListItem alignItems="flex-start">
@@ -57,11 +59,13 @@ function Reviews() {
                                     </div>
                                 ))}
                             </List>
-                        )}
-                    </Paper>
-                </Grid>
+                        </Box>
+                    )}
+                </Paper>
             </Grid>
-            <PostReview addReview={addReview} />
+        </Grid>
+        <br />
+        <PostReview addReview={addReview} />
         </div>
     );
 };

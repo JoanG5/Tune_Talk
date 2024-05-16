@@ -33,9 +33,12 @@ function PostReview({ addReview }) {
 
     return (
         <div>
+            <div style={{textAlign:"right", marginRight:'16px'}}>
             <Button variant="outlined" color="primary" onClick={handleClickOpen}>
                 Add Review
             </Button>
+            </div>
+
             <Dialog open={open} onClose={handleClose}>
                 <DialogTitle>Add Review</DialogTitle>
                 <DialogContent>

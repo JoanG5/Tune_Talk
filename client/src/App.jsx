@@ -12,8 +12,8 @@ function App() {
     <Router>
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/album" element={<Album />} />
-        <Route path="/song" element={<Song />} />
+        <Route path="/album/:albumId" element={<Album />} />
+        <Route path="/song/:songId" element={<Song />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/profile/savedsong" element={<SavedSongs />} />
         <Route path="/profile/savedalbum" element={<SavedAlbums />} />
