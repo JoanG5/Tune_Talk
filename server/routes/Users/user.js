@@ -9,9 +9,9 @@ router
     res.status(200).json(users);
   })
   .post(async (req, res) => {
-    const user = User.findOne({ where: { user_id: req.body.sub } });
+    const user = await User.findOne({ where: { user_id: req.body.sub } });
     if (user) {
-      res.send("User already exists!");
+      res.send("User already exists");
       return;
     }
     User.create({
