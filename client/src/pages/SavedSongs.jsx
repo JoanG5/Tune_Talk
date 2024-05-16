@@ -45,9 +45,9 @@ function SavedSongs() {
     setValue(newValue);
   };
 
-  // if (tracks.length === 0) {
-  //   return <Loading />;
-  // }
+  if (tracks.length === 0) {
+    return <Loading />;
+  }
 
   return (
     <div>

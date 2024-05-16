@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemText from "@mui/material/ListItemText";
 import ListItemAvatar from "@mui/material/ListItemAvatar";
@@ -15,9 +15,26 @@ import { useAuth0 } from "@auth0/auth0-react";
 function SavedAlbumItem({ props }) {
   const { user, isAuthenticated } = useAuth0();
   const [status, setStatus] = useState(props.status);
+  const [review, setReview] = useState({});
   const handleChange = (event) => {
     setStatus(event.target.value);
   };
+
+  useEffect(() => {
+    const getReview = async () => {
+      try {
+        const response = await axios.get(
+          `http://localhost:3000/albumReview/${user.sub}/${props.albumResponse.id}`
+        );
+        setReview(response.data);
+      } catch (error) {
+        console.error("Error fetching review:", error);
+      }
+    };
+    getReview();
+  }, []);
+
+  console.log(review);
 
   const getAllArtists = (artists) => {
     let allArtists = "";
@@ -87,7 +104,7 @@ function SavedAlbumItem({ props }) {
           </Select>
         </FormControl>
         <div className="flex-grow" />
-        <ListItemText sx={{ m: 3 }} primary="10/10" />
+        <ListItemText sx={{ m: 3 }} primary={`${review.rating}/5`} />
         <Button onClick={handleDeleteAlbum} variant="outlined">
           Delete
         </Button>

@@ -53,9 +53,9 @@ function SavedAlbum() {
     setValue(newValue);
   };
 
-  // if (albums.length === 0) {
-  //   return <Loading />;
-  // }
+  if (albums.length === 0) {
+    return <Loading />;
+  }
 
   return (
     <div>
