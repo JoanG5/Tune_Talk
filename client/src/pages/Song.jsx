@@ -5,9 +5,10 @@ import Button from "@mui/material/Button";
 import axios from "axios";
 import { useParams } from "react-router-dom";
 import { getOneTrack, getOneTrackId } from "../services/Spotify";
+import { useAuth0 } from "@auth0/auth0-react";
 
 function Song() {
-  const TEMP_USER = 1; // TEMPORARY USER ID, WILL USE AUTH0 TO GET USER ID
+  const { user, isAuthenticated } = useAuth0();
   const [songInfo, setSongInfo] = useState(null);
   const [reviews, setReviews] = useState([]);
   const [review, setReview] = useState("");
@@ -45,7 +46,7 @@ function Song() {
         album: songInfo.album.name,
         release_date: songInfo.album.release_date,
         spotify_id: songInfo.id,
-        user_id: TEMP_USER, // TEMPORARY USER ID, WILL USE AUTH0 TO GET USER ID
+        user_id: user.sub,
       };
       const response = await axios.post(
         "http://localhost:3000/song/",
@@ -62,7 +63,7 @@ function Song() {
       const reviewData = {
         review: review,
         rating: rating,
-        user_id: TEMP_USER, // TEMPORARY USER ID, WILL USE AUTH0 TO GET USER ID
+        user_id: user.sub,
         spotify_id: songId,
       };
       const response = await axios.post(
@@ -71,7 +72,7 @@ function Song() {
       );
       console.log(response);
       setReviews([...reviews, reviewData]);
-      } catch (error) {
+    } catch (error) {
       console.error("Error saving review:", error);
     }
   };
@@ -83,7 +84,7 @@ function Song() {
         rating: rating,
       };
       const response = await axios.put(
-        `http://localhost:3000/songReview/${TEMP_USER}/${review_id}/`,
+        `http://localhost:3000/songReview/${user.sub}/${review_id}/`,
         reviewData
       );
       console.log(response);
@@ -95,7 +96,7 @@ function Song() {
   const handleDeleteReview = async (review_id) => {
     try {
       const response = await axios.delete(
-        `http://localhost:3000/songReview/${TEMP_USER}/${review_id}/`
+        `http://localhost:3000/songReview/${user.sub}/${review_id}/`
       );
       console.log(response);
     } catch (error) {
@@ -138,17 +139,17 @@ function Song() {
             <p>
               {review.review}, {review.rating}*
             </p>
-            {review.user_id === TEMP_USER && (
+            {review.user_id === user.sub && (
               <>
                 <Button
                   variant="outlined"
-                  onClick={() => handleUpdateReview(review.user_id)}
+                  onClick={() => handleUpdateReview(review.review_id)}
                 >
                   UPDATE
                 </Button>
                 <Button
                   variant="outlined"
-                  onClick={() => handleDeleteReview(review.user_id)}
+                  onClick={() => handleDeleteReview(review.review_id)}
                 >
                   DELETE
                 </Button>

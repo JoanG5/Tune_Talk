@@ -5,9 +5,10 @@ import AlbumDisplay from "../components/AlbumPage/AlbumDisplay";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import { Button } from "@mui/material";
+import { useAuth0 } from "@auth0/auth0-react";
 
 function Album() {
-  const TEMP_USER = 1; // TEMPORARY USER ID, WILL USE AUTH0 TO GET USER ID
+  const { user, isAuthenticated } = useAuth0();
   const [AlbumInfo, setAlbumInfo] = useState(null);
   const [reviews, setReviews] = useState([]);
   const [review, setReview] = useState("");
@@ -44,7 +45,7 @@ function Album() {
         genre: "Pop", // CANT FIND GENRE IN SPOTIFY API BRUH
         release_date: AlbumInfo.release_date,
         spotify_id: AlbumInfo.id,
-        user_id: TEMP_USER, // TEMPORARY USER ID, WILL USE AUTH0 TO GET USER ID
+        user_id: user.sub,
       };
       const response = await axios.post(
         "http://localhost:3000/album/",
@@ -61,7 +62,7 @@ function Album() {
       const reviewData = {
         review: review,
         rating: rating,
-        user_id: TEMP_USER, // TEMPORARY USER ID, WILL USE AUTH0 TO GET USER ID
+        user_id: user.sub,
         spotify_id: albumId,
       };
 
@@ -83,7 +84,7 @@ function Album() {
         rating: rating,
       };
       const response = await axios.put(
-        `http://localhost:3000/albumReview/${TEMP_USER}/${review_id}`,
+        `http://localhost:3000/albumReview/${user.sub}/${review_id}`,
         reviewData
       );
       console.log(response);
@@ -95,7 +96,7 @@ function Album() {
   const handleDeleteReview = async (review_id) => {
     try {
       const response = await axios.delete(
-        `http://localhost:3000/albumReview/${TEMP_USER}/${review_id}`
+        `http://localhost:3000/albumReview/${user.sub}/${review_id}`
       );
       console.log(response);
     } catch (error) {
@@ -137,17 +138,17 @@ function Album() {
             <p>
               {review.review}, {review.rating}*
             </p>
-            {review.user_id === TEMP_USER && (
+            {review.user_id === user.sub && (
               <>
                 <Button
                   variant="outlined"
-                  onClick={() => handleUpdateReview(review.user_id)}
+                  onClick={() => handleUpdateReview(review.review_id)}
                 >
                   UPDATE
                 </Button>
                 <Button
                   variant="outlined"
-                  onClick={() => handleDeleteReview(review.user_id)}
+                  onClick={() => handleDeleteReview(review.review_id)}
                 >
                   DELETE
                 </Button>

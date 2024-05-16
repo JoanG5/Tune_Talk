@@ -41,7 +41,7 @@ const Album = sequelize.define("Album", {
     allowNull: false,
   },
   user_id: {
-    type: DataTypes.INTEGER,
+    type: DataTypes.STRING,
     allowNull: false,
     references: {
       model: "Users",

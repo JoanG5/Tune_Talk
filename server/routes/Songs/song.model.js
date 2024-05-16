@@ -45,7 +45,7 @@ const Song = sequelize.define("Song", {
     allowNull: false,
   },
   user_id: {
-    type: DataTypes.INTEGER,
+    type: DataTypes.STRING,
     allowNull: false,
     references: {
       model: "Users",

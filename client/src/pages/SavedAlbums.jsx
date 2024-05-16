@@ -9,12 +9,12 @@ import TabList from "@mui/lab/TabList";
 import TabPanel from "@mui/lab/TabPanel";
 import SavedAlbumSection from "../components/SavedAlbums/SavedAlbumSection";
 import Loading from "../components/Loading";
-
 import { getAlbumDataFromDB } from "../services/Spotify";
 import axios from "axios";
+import { useAuth0 } from "@auth0/auth0-react";
 
 function SavedAlbum() {
-  const TEMP_USER = 1;
+  const { user, isAuthenticated } = useAuth0();
   const [albums, setAlbums] = useState([]);
   const [value, setValue] = useState("1");
 
@@ -22,7 +22,7 @@ function SavedAlbum() {
     const searchAlbums = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:3000/album/${TEMP_USER}`
+          `http://localhost:3000/album/${user.sub}`
         );
         setAlbums(await getAlbumDataFromDB(response.data));
       } catch (error) {
