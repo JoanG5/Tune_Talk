@@ -28,7 +28,7 @@ const SongReview = sequelize.define("SongReview", {
     allowNull: false,
   },
   user_id: {
-    type: DataTypes.INTEGER,
+    type: DataTypes.STRING,
     allowNull: false,
     references: {
       model: "Users",

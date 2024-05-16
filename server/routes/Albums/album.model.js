@@ -23,6 +23,11 @@ const Album = sequelize.define("Album", {
     type: DataTypes.DATE,
     allowNull: false,
   },
+  status: {
+    type: DataTypes.STRING,
+    allowNull: false,
+    defaultValue: "Listening",
+  },
   createdAt: {
     type: DataTypes.DATE,
     defaultValue: DataTypes.NOW,
@@ -36,7 +41,7 @@ const Album = sequelize.define("Album", {
     allowNull: false,
   },
   user_id: {
-    type: DataTypes.INTEGER,
+    type: DataTypes.STRING,
     allowNull: false,
     references: {
       model: "Users",

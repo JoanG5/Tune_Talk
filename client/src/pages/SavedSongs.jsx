@@ -11,9 +11,10 @@ import SavedSongSection from "../components/SavedSongs/SavedSongSection";
 import Loading from "../components/Loading";
 import axios from "axios";
 import { getTrackDataFromDB } from "../services/Spotify";
+import { useAuth0 } from "@auth0/auth0-react";
 
 function SavedSongs() {
-  const TEMP_USER = 1;
+  const { user, isAuthenticated } = useAuth0();
   const [tracks, setTracks] = useState([]);
   const [value, setValue] = useState("1");
 
@@ -21,7 +22,7 @@ function SavedSongs() {
     const searchTracks = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:3000/song/${TEMP_USER}`
+          `http://localhost:3000/song/${user.sub}`
         );
         setTracks(await getTrackDataFromDB(response.data));
       } catch (error) {

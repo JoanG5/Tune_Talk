@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import * as React from "react";
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import Divider from '@mui/material/Divider';
@@ -12,30 +12,29 @@ import PostReview from './PostReview';
 import Box from '@mui/material/Box';
 
 
-function Reviews() {
-    const [reviews, setReviews] = useState([]);
-
-    const addReview = (review) => {
-        setReviews([...reviews, review]);
-    };
-
+function ReviewList({ reviews }) {
     return (
         <div style={{paddingLeft:'24px'}}>
             <Grid container spacing={0} direction='row'>
                 <Grid item xs paddingLeft={2}>
-                    <Typography fontWeight={700} gutterBottom variant="subtitle1" component="span">
-                        User Reviews
-                    </Typography>
-                    <Paper elevation={0}
-                        sx={{
-                            p: 2,
-                            marginRight: "auto",
-                            minWidth: '400px',
-                            flexGrow: 1,
-                            overflow: 'auto',
-                            maxHeight: '500px',
-                        }}
-                        >
+                <Typography
+                  fontWeight={700}
+                  gutterBottom
+                  variant="subtitle1"
+                  component="span"
+                >
+                  User Reviews
+                </Typography>
+                <Paper elevation={0}
+                  sx={{
+                    p: 2,
+                    marginRight: "auto",
+                    minWidth: '400px',
+                    flexGrow: 1,
+                    overflow: 'auto',
+                    maxHeight: '500px',
+                  }}
+                >
                         
                     {reviews.length === 0 ? (
                         <p>No reviews yet.</p>
@@ -70,4 +69,4 @@ function Reviews() {
     );
 };
 
-export default Reviews;
+export default ReviewList;

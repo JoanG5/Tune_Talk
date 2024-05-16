@@ -1,5 +1,5 @@
-
-import React, { useState, useEffect } from "react";
+import React from "react";
+import { useState, useEffect } from "react";
 import Avatar from "@mui/material/Avatar";
 import Box from "@mui/material/Box";
 import Tabs from "@mui/material/Tabs";
@@ -10,35 +10,28 @@ import CardMedia from "@mui/material/CardMedia";
 import Typography from "@mui/material/Typography";
 import { Button, CardActionArea, CardActions } from "@mui/material";
 import { testAlbumData } from "../services/Spotify";
+import { useAuth0 } from "@auth0/auth0-react";
 
 function Profile() {
-  const [value, setValue] = React.useState(0);
+  const { user } = useAuth0();
+  const { name, picture } = user;
+  const [value, setValue] = useState(0);
   const [albums, setAlbums] = useState([]);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
 
-
-  console.log(testAlbumData);
-  console.log(albums);
-
   useEffect(() => {
-    const searchAlbums = async () => {
-      try {
-        const albums = await testAlbumData();
-        setAlbums(albums);
-      } catch (error) {
-        console.error("Error fetching access token:", error);
-      }
+    const fetchAlbums = async () => {
+      const albumData = await testAlbumData();
+      setAlbums(albumData);
     };
-    searchAlbums();
+    fetchAlbums();
   }, []);
 
-  
-  
   return (
-    <div>
+    <div style={{ fontFamily: "Roboto,Helvetica,Arial,sans-serif" }}>
       <body className="h-full">
         <header></header>
         <div className="content py-10 px-0">
@@ -58,7 +51,7 @@ function Profile() {
               >
                 <div className="profile-avatar" style={{ gridArea: "avatar" }}>
                   <span>
-                    <Avatar sx={{ width: 100, height: 100 }} />
+                    <Avatar sx={{ width: 100, height: 100 }} src={picture} />
                   </span>
                 </div>
                 <div
@@ -71,7 +64,7 @@ function Profile() {
                   }}
                 >
                   <h1 className="display-name text-[30px] font-semibold">
-                    <span className="inline-flex max-w-md">vitsions</span>
+                    <span className="inline-flex max-w-md">{name}</span>
                   </h1>
                 </div>
                 <div
@@ -144,7 +137,7 @@ function Profile() {
                   className="section-heading"
                   style={{
                     color: "DimGray",
-                    fontFamily: "Graphik-Regular-Web, sans-serif",
+                    fontFamily: "Roboto,Helvetica,Arial,sans-serif",
                     fontSize: "1rem",
                     fontWeight: "550",
                     letterSpacing: ".05em",
@@ -157,108 +150,31 @@ function Profile() {
                   Recent Activity
                 </h2>
                 <ul className="flex flex-wrap justify-between">
-                  <Card sx={{ maxWidth: 250 }}>
-                    <CardActionArea>
-                      <CardMedia
-                        component="img"
-                        height="140"
-                        image="/static/images/cards/contemplative-reptile.jpg"
-                        alt="green iguana"
-                      />
-                      <CardContent>
-                        <Typography gutterBottom variant="h5" component="div">
-                          Lizard
-                        </Typography>
-                      </CardContent>
-                    </CardActionArea>
-                    <CardActions>
-                      <Button size="small" color="primary">
-                        Share
-                      </Button>
-                    </CardActions>
-                  </Card>
-                  <Card sx={{ maxWidth: 250 }}>
-                    <CardActionArea>
-                      <CardMedia
-                        component="img"
-                        height="140"
-                        image="/static/images/cards/contemplative-reptile.jpg"
-                        alt="green iguana"
-                      />
-                      <CardContent>
-                        <Typography gutterBottom variant="h5" component="div">
-                          Lizard
-                        </Typography>
-                      </CardContent>
-                    </CardActionArea>
-                    <CardActions>
-                      <Button size="small" color="primary">
-                        Share
-                      </Button>
-                    </CardActions>
-                  </Card>
-                  <Card sx={{ maxWidth: 250 }}>
-                    <CardActionArea>
-                      <CardMedia
-                        component="img"
-                        height="140"
-                        image="/static/images/cards/contemplative-reptile.jpg"
-                        alt="green iguana"
-                      />
-                      <CardContent>
-                        <Typography gutterBottom variant="h5" component="div">
-                          Lizard
-                        </Typography>
-                      </CardContent>
-                    </CardActionArea>
-                    <CardActions>
-                      <Button size="small" color="primary">
-                        Share
-                      </Button>
-                    </CardActions>
-                  </Card>
-
-                  <Card sx={{ maxWidth: 250 }}>
-                    <CardActionArea>
-                      <CardMedia
-                        component="img"
-                        height="140"
-                        image="/static/images/cards/contemplative-reptile.jpg"
-                        alt="green iguana"
-                      />
-                      <CardContent>
-                        <Typography gutterBottom variant="h5" component="div">
-                          Lizard
-                        </Typography>
-                      </CardContent>
-                    </CardActionArea>
-                    <CardActions>
-                      <Button size="small" color="primary">
-                        Share
-                      </Button>
-                    </CardActions>
-                  </Card>
-                  <Card sx={{ maxWidth: 250 }}>
-                    <CardActionArea>
-                      <CardMedia
-                        component="img"
-                        height="140"
-                        image="/static/images/cards/contemplative-reptile.jpg"
-                        alt="green iguana"
-                      />
-                      <CardContent>
-                        <Typography gutterBottom variant="h5" component="div">
-                          Lizard
-                        </Typography>
-                      </CardContent>
-                    </CardActionArea>
-                    <CardActions>
-                      <Button size="small" color="primary">
-                        Share
-                      </Button>
-                    </CardActions>
-                  </Card>
-
+                  {albums.map((album, index) => (
+                    <Card key={index} sx={{ maxWidth: 250, marginY: 2 }}>
+                      <CardActionArea>
+                        <CardMedia
+                          component="img"
+                          height="140"
+                          image={album.images[0].url}
+                          alt={`Cover of the album "${album.name}"`}
+                        />
+                        <CardContent>
+                          <Typography gutterBottom variant="h5" component="div">
+                            {album.name}
+                          </Typography>
+                          <Typography variant="body2" color="text.secondary">
+                            {album.artistNames}
+                          </Typography>
+                        </CardContent>
+                      </CardActionArea>
+                      <CardActions>
+                        <Button size="small" color="primary">
+                          Share
+                        </Button>
+                      </CardActions>
+                    </Card>
+                  ))}
                 </ul>
               </section>
             </div>

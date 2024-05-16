@@ -2,13 +2,13 @@ import React, { useState, useEffect } from "react";
 import SongDisplay from "../components/SongPage/SongDisplay";
 import ReviewList from "../components/Reviews";
 import Button from "@mui/material/Button";
-import Grid from '@mui/material/Grid';
 import axios from "axios";
 import { useParams } from "react-router-dom";
 import { getOneTrack, getOneTrackId } from "../services/Spotify";
+import { useAuth0 } from "@auth0/auth0-react";
 
 function Song() {
-  const TEMP_USER = 1; // TEMPORARY USER ID, WILL USE AUTH0 TO GET USER ID
+  const { user, isAuthenticated } = useAuth0();
   const [songInfo, setSongInfo] = useState(null);
   const [reviews, setReviews] = useState([]);
   const [review, setReview] = useState("");
@@ -46,7 +46,7 @@ function Song() {
         album: songInfo.album.name,
         release_date: songInfo.album.release_date,
         spotify_id: songInfo.id,
-        user_id: TEMP_USER, // TEMPORARY USER ID, WILL USE AUTH0 TO GET USER ID
+        user_id: user.sub,
       };
       const response = await axios.post(
         "http://localhost:3000/song/",
@@ -63,7 +63,7 @@ function Song() {
       const reviewData = {
         review: review,
         rating: rating,
-        user_id: TEMP_USER, // TEMPORARY USER ID, WILL USE AUTH0 TO GET USER ID
+        user_id: user.sub,
         spotify_id: songId,
       };
       const response = await axios.post(
@@ -71,33 +71,44 @@ function Song() {
         reviewData
       );
       console.log(response);
+      setReviews([...reviews, reviewData]);
     } catch (error) {
       console.error("Error saving review:", error);
     }
   };
 
-  const handleUpdateReview = async (review_id) => {
+  const handleUpdateReview = async (review_id, index) => {
+    console.log(reviews[index]);
     try {
       const reviewData = {
         review: review,
         rating: rating,
       };
       const response = await axios.put(
-        `http://localhost:3000/songReview/${TEMP_USER}/${review_id}/`,
+        `http://localhost:3000/songReview/${user.sub}/${review_id}/`,
         reviewData
       );
-      console.log(response);
+      setReviews((prevReviews) => {
+        const updatedReviews = [...prevReviews];
+        updatedReviews[index] = {
+          ...updatedReviews[index],
+          review: review,
+          rating: rating,
+        };
+        return updatedReviews;
+      });
     } catch (error) {
       console.error("Error updating review:", error);
     }
   };
 
-  const handleDeleteReview = async (review_id) => {
+  const handleDeleteReview = async (review_id, index) => {
     try {
       const response = await axios.delete(
-        `http://localhost:3000/songReview/${TEMP_USER}/${review_id}/`
+        `http://localhost:3000/songReview/${user.sub}/${review_id}/`
       );
       console.log(response);
+      setReviews((prevReviews) => prevReviews.filter((_, i) => i !== index));
     } catch (error) {
       console.error("Error deleting review:", error);
     }
@@ -106,6 +117,7 @@ function Song() {
   return (
     <div>
       <SongDisplay props={songInfo} />
+      
       <Grid container spacing={2} direction='row' justifyContent='center' alignItems='center' paddingRight={4}>
         <Grid item xs={6} >
           <ReviewList reviews={[0]} />
@@ -143,17 +155,17 @@ function Song() {
             <p>
               {review.review}, {review.rating}*
             </p>
-            {review.user_id === TEMP_USER && (
+            {review.user_id === user.sub && (
               <>
                 <Button
                   variant="outlined"
-                  onClick={() => handleUpdateReview(review.user_id)}
+                  onClick={() => handleUpdateReview(review.review_id, index)}
                 >
                   UPDATE
                 </Button>
                 <Button
                   variant="outlined"
-                  onClick={() => handleDeleteReview(review.user_id)}
+                  onClick={() => handleDeleteReview(review.review_id, index)}
                 >
                   DELETE
                 </Button>

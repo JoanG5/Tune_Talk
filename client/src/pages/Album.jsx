@@ -6,11 +6,12 @@ import PostReview from "../components/PostReview";
 import { getOneAlbumId } from "../services/Spotify";
 import { useParams } from "react-router-dom";
 import axios from "axios";
+import { useAuth0 } from "@auth0/auth0-react";
 import { Box, Button, List, ListItem, Divider, ListItemAvatar, Avatar, Typography, Paper, Rating, Grid } from "@mui/material";
 
 
 function Album() {
-  const TEMP_USER = 1; // TEMPORARY USER ID, WILL USE AUTH0 TO GET USER ID
+  const { user, isAuthenticated } = useAuth0();
   const [AlbumInfo, setAlbumInfo] = useState(null);
   const [reviews, setReviews] = useState([]);
   const [review, setReview] = useState("");
@@ -47,7 +48,7 @@ function Album() {
         genre: "Pop", // CANT FIND GENRE IN SPOTIFY API BRUH
         release_date: AlbumInfo.release_date,
         spotify_id: AlbumInfo.id,
-        user_id: TEMP_USER, // TEMPORARY USER ID, WILL USE AUTH0 TO GET USER ID
+        user_id: user.sub,
       };
       const response = await axios.post(
         "http://localhost:3000/album/",
@@ -64,7 +65,7 @@ function Album() {
       const reviewData = {
         review: review,
         rating: rating,
-        user_id: TEMP_USER, // TEMPORARY USER ID, WILL USE AUTH0 TO GET USER ID
+        user_id: user.sub,
         spotify_id: albumId,
       };
 
@@ -73,33 +74,44 @@ function Album() {
         reviewData
       );
       console.log(response);
+      setReviews([...reviews, reviewData]);
     } catch (error) {
       console.error("Error saving review:", error);
     }
   };
 
-  const handleUpdateReview = async (review_id) => {
+  const handleUpdateReview = async (review_id, index) => {
     try {
       const reviewData = {
         review: review,
         rating: rating,
       };
       const response = await axios.put(
-        `http://localhost:3000/albumReview/${TEMP_USER}/${review_id}`,
+        `http://localhost:3000/albumReview/${user.sub}/${review_id}`,
         reviewData
       );
       console.log(response);
+      setReviews((prevReviews) => {
+        const updatedReviews = [...prevReviews];
+        updatedReviews[index] = {
+          ...updatedReviews[index],
+          review: review,
+          rating: rating,
+        };
+        return updatedReviews;
+      });
     } catch (error) {
       console.error("Error updating review:", error);
     }
   };
 
-  const handleDeleteReview = async (review_id) => {
+  const handleDeleteReview = async (review_id, index) => {
     try {
       const response = await axios.delete(
-        `http://localhost:3000/albumReview/${TEMP_USER}/${review_id}`
+        `http://localhost:3000/albumReview/${user.sub}/${review_id}`
       );
       console.log(response);
+      setReviews((prevReviews) => prevReviews.filter((_, i) => i !== index));
     } catch (error) {
       console.error("Error deleting review:", error);
     }
@@ -108,6 +120,7 @@ function Album() {
   return (
     <div>
       <AlbumDisplay props={AlbumInfo} />
+
       <Grid container spacing={2} direction='row' alignItems='flex-start' paddingRight={4}>
         <Grid item xs={6} >
           <ReviewList reviews={[0]} />
@@ -116,9 +129,9 @@ function Album() {
           <Box sx={{minWidth: '380px'}}>
             <TrackList props={AlbumInfo} />
           </Box>
-
         </Grid>
       </Grid>
+      
       <div className="flex justify-center">
         <Button onClick={handleSaveAlbum} variant="outlined">
           TEST SAVE ALBUM
