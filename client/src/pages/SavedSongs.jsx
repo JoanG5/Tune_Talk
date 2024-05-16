@@ -36,15 +36,15 @@ function SavedSongs() {
       }
     };
     searchTracks();
-  }, []);
+  }, [tracks]);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
 
-  // if (tracks.length === 0) {
-  //   return <Loading />;
-  // }
+  if (tracks.length === 0) {
+    return <Loading />;
+  }
 
   return (
     <div>

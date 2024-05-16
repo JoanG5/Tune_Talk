@@ -42,7 +42,7 @@ function SavedAlbum() {
       }
     };
     searchAlbums();
-  }, []);
+  }, [albums]);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);

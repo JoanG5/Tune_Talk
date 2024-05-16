@@ -20,7 +20,6 @@ export const getToken = async () => {
     const { access_token } = response.data;
     return access_token;
   } catch (error) {
-    
     console.error("Error fetching access token:", error);
     throw error;
   }
@@ -107,7 +106,9 @@ export const getOneAlbum = async (search) => {
       `https://api.spotify.com/v1/albums/${albumId}`,
       searchParameters
     );
-    const artistNames = albumResponse.data.artists.map(artist => artist.name).join(', ');
+    const artistNames = albumResponse.data.artists
+      .map((artist) => artist.name)
+      .join(", ");
     return {
       ...albumResponse.data,
       artistNames: artistNames,
@@ -185,6 +186,21 @@ export const getAlbumDataFromDB = async (albums) => {
     albumData.push(albumResponse);
   }
   return albumData;
+};
+
+export const spotifySearch = async (search) => {
+  try {
+    const response = await axios.get(
+      `https://api.spotify.com/v1/search?q=${search}&type=track,album&limit=5`,
+      searchParameters
+    );
+    const tracks = response.data.tracks.items;
+    const albums = response.data.albums.items;
+    return { tracks, albums };
+  } catch (error) {
+    console.error("Error fetching data:", error);
+    throw error;
+  }
 };
 
 export const testData = async () => {

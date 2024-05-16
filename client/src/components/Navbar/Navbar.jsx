@@ -30,7 +30,7 @@ export const Navbar = () => {
 
   return (
     <Box classname="top-0">
-      <AppBar position="" sx={{ background: "black" }}>
+      <AppBar sx={{ background: "black" }}>
         <Toolbar>
           <Box flexGrow={1}>
             <Box display={"flex"} alignItems={"center"} gap={0.5}>
@@ -44,7 +44,7 @@ export const Navbar = () => {
                 aria-label="navigation tabs"
               >
                 <Tab label="Home" />
-                <Link to="/Home">
+                <Link to="/">
                   <Tab label="Home" />
                 </Link>
                 <Link to="/profile">
