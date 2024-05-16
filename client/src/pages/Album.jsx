@@ -77,7 +77,7 @@ function Album() {
     }
   };
 
-  const handleUpdateReview = async (review_id) => {
+  const handleUpdateReview = async (review_id, index) => {
     try {
       const reviewData = {
         review: review,
@@ -88,17 +88,27 @@ function Album() {
         reviewData
       );
       console.log(response);
+      setReviews((prevReviews) => {
+        const updatedReviews = [...prevReviews];
+        updatedReviews[index] = {
+          ...updatedReviews[index],
+          review: review,
+          rating: rating,
+        };
+        return updatedReviews;
+      });
     } catch (error) {
       console.error("Error updating review:", error);
     }
   };
 
-  const handleDeleteReview = async (review_id) => {
+  const handleDeleteReview = async (review_id, index) => {
     try {
       const response = await axios.delete(
         `http://localhost:3000/albumReview/${user.sub}/${review_id}`
       );
       console.log(response);
+      setReviews((prevReviews) => prevReviews.filter((_, i) => i !== index));
     } catch (error) {
       console.error("Error deleting review:", error);
     }
@@ -142,13 +152,13 @@ function Album() {
               <>
                 <Button
                   variant="outlined"
-                  onClick={() => handleUpdateReview(review.review_id)}
+                  onClick={() => handleUpdateReview(review.review_id, index)}
                 >
                   UPDATE
                 </Button>
                 <Button
                   variant="outlined"
-                  onClick={() => handleDeleteReview(review.review_id)}
+                  onClick={() => handleDeleteReview(review.review_id, index)}
                 >
                   DELETE
                 </Button>

@@ -41,7 +41,7 @@ router
       { where: { user_id: req.params.userid, review_id: req.params.review_id } }
     )
       .then((review) => {
-        res.send(review);
+        res.send({ review: req.body.review, rating: req.body.rating });
       })
       .catch((error) => {
         console.error("Error updating review:", error);
