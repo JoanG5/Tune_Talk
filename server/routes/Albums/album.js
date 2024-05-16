@@ -3,7 +3,8 @@ const router = express.Router();
 const Album = require("./album.model");
 
 router.post("/", async (req, res) => {
-  const { title, artist, genre, release_date, spotify_id, user_id } = req.body;
+  const { title, artist, genre, release_date, spotify_id, user_id, status } =
+    req.body;
   const existingAlbum = await Album.findOne({ where: { spotify_id, user_id } });
   if (existingAlbum) {
     return res.send("Album already exists");
@@ -15,6 +16,7 @@ router.post("/", async (req, res) => {
     release_date,
     spotify_id,
     user_id,
+    status,
   });
   try {
     await album.save();

@@ -6,14 +6,15 @@ import Divider from "@mui/material/Divider";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import axios from "axios";
+import { useAuth0 } from "@auth0/auth0-react";
 
 function SavedSongItem({ props }) {
-  const TEMP_USER = 1;
+  const { user, isAuthenticated } = useAuth0();
 
   const handleDeleteSong = async () => {
     try {
       const response = await axios.delete(
-        `http://localhost:3000/song/${TEMP_USER}/${props.db_id}`
+        `http://localhost:3000/song/${user.sub}/${props.db_id}`
       );
       console.log(response);
     } catch (error) {

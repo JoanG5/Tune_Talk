@@ -7,12 +7,22 @@ import axios from "axios";
 import { Button } from "@mui/material";
 import { useAuth0 } from "@auth0/auth0-react";
 
+import InputLabel from "@mui/material/InputLabel";
+import MenuItem from "@mui/material/MenuItem";
+import FormControl from "@mui/material/FormControl";
+import Select from "@mui/material/Select";
+
 function Album() {
   const { user, isAuthenticated } = useAuth0();
   const [AlbumInfo, setAlbumInfo] = useState(null);
   const [reviews, setReviews] = useState([]);
   const [review, setReview] = useState("");
   const [rating, setRating] = useState(0);
+
+  const [status, setStatus] = useState("");
+  const handleChange = (event) => {
+    setStatus(event.target.value);
+  };
 
   const albumTitle = "Nectar";
 
@@ -38,6 +48,10 @@ function Album() {
   }, [albumTitle]);
 
   const handleSaveAlbum = async () => {
+    if (status === "") {
+      alert("Please select a status");
+      return;
+    }
     try {
       const albumData = {
         title: AlbumInfo.name,
@@ -46,6 +60,7 @@ function Album() {
         release_date: AlbumInfo.release_date,
         spotify_id: AlbumInfo.id,
         user_id: user.sub,
+        status: status,
       };
       const response = await axios.post(
         "http://localhost:3000/album/",
@@ -125,6 +140,19 @@ function Album() {
         </Button>
       </div>
       <div className="flex justify-center">
+        {/*  */}
+        <FormControl>
+          <InputLabel>Status</InputLabel>
+          <Select value={status} label="Status" onChange={handleChange}>
+            <MenuItem value={"Listened"}>Listened</MenuItem>
+            <MenuItem value={"Currently Listening"}>
+              Currently Listening
+            </MenuItem>
+            <MenuItem value={"Plan On Listening"}>Plan On Listening</MenuItem>
+          </Select>
+        </FormControl>
+        {/*  */}
+
         <Button variant="outlined" onClick={handleSaveReview}>
           TEST REVIEW ALBUM
         </Button>

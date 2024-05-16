@@ -6,9 +6,10 @@ import Divider from "@mui/material/Divider";
 import Avatar from "@mui/material/Avatar";
 import axios from "axios";
 import { Button } from "@mui/material";
+import { useAuth0 } from "@auth0/auth0-react";
 
 function SavedAlbumItem({ props }) {
-  const TEMP_USER = 1;
+  const { user, isAuthenticated } = useAuth0();
 
   const getAllArtists = (artists) => {
     let allArtists = "";
@@ -23,7 +24,7 @@ function SavedAlbumItem({ props }) {
   const handleDeleteAlbum = async () => {
     try {
       const response = await axios.delete(
-        `http://localhost:3000/album/${TEMP_USER}/${props.db_id}`
+        `http://localhost:3000/album/${user.sub}/${props.db_id}`
       );
       console.log(response);
     } catch (error) {
