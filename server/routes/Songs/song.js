@@ -3,8 +3,16 @@ const router = express.Router();
 const Song = require("./song.model");
 
 router.post("/", async (req, res) => {
-  const { title, artist, genre, album, release_date, spotify_id, user_id } =
-    req.body;
+  const {
+    title,
+    artist,
+    genre,
+    album,
+    release_date,
+    spotify_id,
+    user_id,
+    status,
+  } = req.body;
   const existingSong = await Song.findOne({ where: { spotify_id, user_id } });
   if (existingSong) {
     return res.send("Song already exists");
@@ -17,6 +25,7 @@ router.post("/", async (req, res) => {
     release_date,
     spotify_id,
     user_id,
+    status,
   });
   try {
     await song.save();
@@ -29,11 +38,16 @@ router.post("/", async (req, res) => {
 router.get("/:user_id", async (req, res) => {
   const user_id = req.params.user_id;
   try {
-    const songs = await Song.findAll({ where: { user_id } });
-    if (songs.length === 0) {
+    const listened_songs = await Song.findAll({
+      where: { user_id, status: "Listened To" },
+    });
+    const planned_songs = await Song.findAll({
+      where: { user_id, status: "Plan On Listening" },
+    });
+    if (listened_songs.length === 0 && planned_songs.length === 0) {
       return res.send([{ empty: true }]);
     }
-    res.send(songs);
+    res.send({ listened_songs, planned_songs });
   } catch (error) {
     res.status(500).send(error);
   }

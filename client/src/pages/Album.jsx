@@ -141,10 +141,10 @@ function Album() {
       </div>
       <div className="flex justify-center">
         {/*  */}
-        <FormControl>
+        <FormControl sx={{ m: 1, minWidth: 190 }}>
           <InputLabel>Status</InputLabel>
           <Select value={status} label="Status" onChange={handleChange}>
-            <MenuItem value={"Listened"}>Listened</MenuItem>
+            <MenuItem value={"Listened To"}>Listened To</MenuItem>
             <MenuItem value={"Currently Listening"}>
               Currently Listening
             </MenuItem>

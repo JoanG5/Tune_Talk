@@ -29,11 +29,23 @@ router.post("/", async (req, res) => {
 router.get("/:user_id", async (req, res) => {
   const user_id = req.params.user_id;
   try {
-    const albums = await Album.findAll({ where: { user_id } });
-    if (albums.length === 0) {
+    const listened_albums = await Album.findAll({
+      where: { user_id, status: "Listened To" },
+    });
+    const currently_albums = await Album.findAll({
+      where: { user_id, status: "Currently Listening" },
+    });
+    const planned_albums = await Album.findAll({
+      where: { user_id, status: "Plan On Listening" },
+    });
+    if (
+      listened_albums.length === 0 &&
+      planned_albums.length === 0 &&
+      currently_albums.length === 0
+    ) {
       return res.send([{ empty: true }]);
     }
-    res.send(albums);
+    res.send({ listened_albums, currently_albums, planned_albums });
   } catch (error) {
     res.status(500).send(error);
   }
