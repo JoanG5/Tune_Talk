@@ -26,11 +26,14 @@ function SavedSongs() {
         const response = await axios.get(
           `http://localhost:3000/song/${user.sub}`
         );
-        setListenedTracks(
-          await getTrackDataFromDB(response.data.listened_songs)
-        );
-        setPlannedTracks(await getTrackDataFromDB(response.data.planned_songs));
-        setTracks([...listenedTracks, ...plannedTracks]);
+        const [listenedTracksData, plannedTracksData] = await Promise.all([
+          getTrackDataFromDB(response.data.listened_songs),
+          getTrackDataFromDB(response.data.planned_songs),
+        ]);
+
+        setListenedTracks(listenedTracksData);
+        setPlannedTracks(plannedTracksData);
+        setTracks([...listenedTracksData, ...plannedTracksData]);
       } catch (error) {
         console.error("Error fetching access token:", error);
       }

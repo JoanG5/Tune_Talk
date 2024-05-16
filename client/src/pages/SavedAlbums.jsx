@@ -27,16 +27,21 @@ function SavedAlbum() {
         const response = await axios.get(
           `http://localhost:3000/album/${user.sub}`
         );
-        setListenedAlbums(
-          await getAlbumDataFromDB(response.data.listened_albums)
-        );
-        setCurrentlyAlbums(
-          await getAlbumDataFromDB(response.data.currently_albums)
-        );
-        setPlannedAlbums(
-          await getAlbumDataFromDB(response.data.planned_albums)
-        );
-        setAlbums([...listenedAlbums, ...currentlyAlbums, ...plannedAlbums]);
+        const [listenedAlbumsData, currentlyAlbumsData, plannedAlbumsData] =
+          await Promise.all([
+            getAlbumDataFromDB(response.data.listened_albums),
+            getAlbumDataFromDB(response.data.currently_albums),
+            getAlbumDataFromDB(response.data.planned_albums),
+          ]);
+
+        setListenedAlbums(listenedAlbumsData);
+        setCurrentlyAlbums(currentlyAlbumsData);
+        setPlannedAlbums(plannedAlbumsData);
+        setAlbums([
+          ...listenedAlbumsData,
+          ...currentlyAlbumsData,
+          ...plannedAlbumsData,
+        ]);
       } catch (error) {
         console.error("Error fetching access token:", error);
       }
