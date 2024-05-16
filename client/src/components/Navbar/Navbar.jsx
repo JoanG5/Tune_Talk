@@ -1,65 +1,52 @@
-import { React, useState } from "react";
-import { AppBar, Toolbar, Box, Typography, Tab, Tabs } from "@mui/material";
-import { Link, useNavigate } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { AppBar, Toolbar, Box, Typography, Button } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 import LoginButton from "../LoginButton/LoginButton";
 import LogoutButton from "../LogoutButton/LogoutButton";
 import { useAuth0 } from "@auth0/auth0-react";
+import Navigation from "./Navigation";
 
 export const Navbar = () => {
   const { user, isAuthenticated } = useAuth0();
   const navigate = useNavigate();
-
   const [value, setValue] = useState(0);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
-    switch (newValue) {
-      case 0:
-        navigate("/songs");
-        break;
-      case 1:
-        navigate("/albums");
-        break;
-      case 2:
-        navigate("/profile");
-        break;
-      default:
-        break;
-    }
+    navigate(navigationItems[newValue].route);
   };
 
   return (
-    <Box classname="top-0">
-      <AppBar position="" sx={{ background: "black" }}>
-        <Toolbar>
+    <Box className="top-0">
+      <AppBar position="fixed" sx={{ background: "black", height: "70px" }}>
+        <Toolbar sx={{ minHeight: "80px", alignItems: "center" }}>
           <Box flexGrow={1}>
             <Box display={"flex"} alignItems={"center"} gap={0.5}>
-              <img width={"54px"} height={"54px"} src={""} alt="logo"></img>
-              <Typography variant="h5" sx={{ width: "fit-content" }}>
+              <img width={"54px"} height={"54px"} src={""} alt="logo" />
+              <Typography
+                variant="h5"
+                sx={{ width: "fit-content", color: "white" }}
+              >
                 TuneTalk
               </Typography>
-              <Tabs
-                value={value}
-                onChange={handleChange}
-                aria-label="navigation tabs"
+              <Navigation value={value} handleChange={handleChange} />
+              <Box
+                sx={{
+                  marginLeft: 2,
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 1,
+                }}
               >
-                <Tab label="Home" />
-                <Link to="/Home">
-                  <Tab label="Home" />
-                </Link>
-                <Link to="/profile">
-                  <Tab label="Profile" />
-                </Link>
-                <Link to="/profile/savedsong">
-                  <Tab label="Saved Songs" />
-                </Link>
-                <Link to="/profile/savedalbum">
-                  <Tab label="Saved Albums" />
-                </Link>
-                <Tab label="Songs" />
-                <Tab label="Profile" />
-              </Tabs>
-              {isAuthenticated ? <LogoutButton /> : <LoginButton />}
+                {isAuthenticated ? (
+                  <>
+                    <Avatar src={user.picture} alt={user.name} />
+                    <LogoutButton />
+                  </>
+                ) : (
+                  <LoginButton />
+                )}
+              </Box>
             </Box>
           </Box>
         </Toolbar>
