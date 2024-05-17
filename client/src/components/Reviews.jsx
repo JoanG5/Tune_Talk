@@ -10,8 +10,8 @@ import Rating from '@mui/material/Rating';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import { Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, TextField, Button, Menu, MenuItem, IconButton } from '@mui/material';
-import { getOneAlbumId } from "../services/Spotify";
-import { useParams } from "react-router-dom";
+import { getOneAlbumId, getOneTrackId } from "../services/Spotify";
+import { useParams, useLocation } from "react-router-dom";
 import axios from "axios";
 import { useAuth0 } from "@auth0/auth0-react";
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
@@ -33,38 +33,42 @@ function ReviewList() {
     const [reviews, setReviews] = useState([]);
     const [review, setReview] = useState("");
 
-    const albumTitle = "Nectar";
     const { albumId } = useParams();
+    const { songId } = useParams();
 
 
+  // For Menu
     const [anchorEl, setAnchorEl] = useState(null);
-
     const handleClick = (event) => {
         setAnchorEl(event.currentTarget);
     };
-
     const handleCloseMenu = () => {
         setAnchorEl(null);
     };
 
+    const location = useLocation();
+    const isAlbumPage = location.pathname.includes('/album/');
 
     useEffect(() => {
-        const fetchAlbumInfo = async () => {
-          try {
+      const fetchData = async () => {
+        try {
+          if (isAlbumPage) {
             const trackData = await getOneAlbumId(albumId);
-            const reviews = await axios.get(
-              `http://localhost:3000/albumReview/${albumId}`
-            );
+            const reviews = await axios.get(`http://localhost:3000/albumReview/${albumId}`);
             setReviews(reviews.data);
-          } catch (error) {
-            console.error("Error fetching album info:", error);
+          } else {
+            const trackData = await getOneTrackId(songId);
+            const reviews = await axios.get(`http://localhost:3000/songReview/${songId}`);
+            setReviews(reviews.data);
           }
-        };
+        } catch (error) {
+          console.error("Error fetching data:", error);
+        }
+      };
     
-        fetchAlbumInfo();
-      }, [albumTitle]);
-
-
+      fetchData();
+    }, [albumId, songId, isAlbumPage]);
+    
 
     const handleClickOpen = () => {
         setOpen(true);
@@ -76,25 +80,27 @@ function ReviewList() {
 
 
     const handleSaveReview = async () => {
-        try {
-          const reviewData = {
-            review: review,
-            rating: rating,
-            user_id: user.sub,
-            spotify_id: albumId,
-          };
+      try {
+        let reviewData = {
+          review: review,
+          rating: rating,
+          user_id: user.sub,
+          spotify_id: isAlbumPage ? albumId : songId,
+        };
     
-          const response = await axios.post(
-            "http://localhost:3000/albumReview",
-            reviewData
-          );
-          console.log(response);
-          setReviews([...reviews, reviewData]);
-          setOpen(false);
-        } catch (error) {
-          console.error("Error saving review:", error);
-        }
-      };
+        const response = await axios.post(
+          isAlbumPage ? "http://localhost:3000/albumReview" : "http://localhost:3000/songReview",
+          reviewData
+        );
+    
+        console.log(response);
+        setReviews([...reviews, reviewData]);
+        setOpen(false);
+      } catch (error) {
+        console.error("Error saving review:", error);
+      }
+    };
+    
 
       const handleEditClick = (reviewId, index) => {
         setSelectedReviewIndex(index);
@@ -111,43 +117,46 @@ function ReviewList() {
     };
 
     const handleUpdateReview = async (review_id, index) => {
-        try {
-          const reviewData = {
-            review: editedRating,
-            rating: editedReview,
+      try {
+        const reviewData = {
+          review: editedReview,
+          rating: editedRating,
+        };
+    
+        const response = await axios.put(
+          isAlbumPage ? `http://localhost:3000/albumReview/${user.sub}/${review_id}` : `http://localhost:3000/songReview/${user.sub}/${review_id}/`,
+          reviewData
+        );
+    
+        console.log(response);
+        setReviews((prevReviews) => {
+          const updatedReviews = [...prevReviews];
+          updatedReviews[index] = {
+            ...updatedReviews[index],
+            review: editedReview,
+            rating: editedRating,
           };
-          const response = await axios.put(
-            `http://localhost:3000/albumReview/${user.sub}/${review_id}`,
-            reviewData
-          );
-          console.log(response);
-          setReviews((prevReviews) => {
-            const updatedReviews = [...prevReviews];
-            updatedReviews[index] = {
-              ...updatedReviews[index],
-              review: editedReview,
-              rating: editedRating,
-            };
-            handleEditClose();
-            return updatedReviews;
-          });
-        } catch (error) {
-          console.error("Error updating review:", error);
-        }
-      };
-
+          handleEditClose();
+          return updatedReviews;
+        });
+      } catch (error) {
+        console.error("Error updating review:", error);
+      }
+    };
+    
     const handleDeleteReview = async (review_id, index) => {
-        try {
-          const response = await axios.delete(
-            `http://localhost:3000/albumReview/${user.sub}/${review_id}`
-          );
-          console.log(response);
-          setReviews((prevReviews) => prevReviews.filter((_, i) => i !== index));
-        } catch (error) {
-          console.error("Error deleting review:", error);
-        }
-      };
-
+      try {
+        const response = await axios.delete(
+          isAlbumPage ? `http://localhost:3000/albumReview/${user.sub}/${review_id}` : `http://localhost:3000/songReview/${user.sub}/${review_id}/`
+        );
+    
+        console.log(response);
+        setReviews((prevReviews) => prevReviews.filter((_, i) => i !== index));
+      } catch (error) {
+        console.error("Error deleting review:", error);
+      }
+    };
+    
 
 
     return (
@@ -278,7 +287,7 @@ function ReviewList() {
                     </DialogContentText>
                     <Rating
                         name="rating"
-                        value={rating}
+                        value={editedRating}
                         onChange={(event, newValue) => {
                             setEditedRating(newValue);
                         }}
@@ -292,7 +301,7 @@ function ReviewList() {
                         rows={6}
                         type="text"
                         fullWidth
-                        value={review}
+                        value={editedReview}
                         onChange={(event) => setEditedReview(event.target.value)}
                     />
                 </DialogContent>

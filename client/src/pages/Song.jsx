@@ -135,7 +135,7 @@ function Song() {
       
       <Grid container spacing={2} direction='row' justifyContent='center' alignItems='center' paddingRight={4}>
         <Grid item xs={6} >
-          <ReviewList reviews={[0]} />
+          <ReviewList />
         </Grid>
         <Grid item xs>
         </Grid>
