@@ -9,11 +9,16 @@ import Paper from '@mui/material/Paper';
 import Rating from '@mui/material/Rating';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
-import { Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, TextField, Button } from '@mui/material';
+import { Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, TextField, Button, Menu, MenuItem, IconButton } from '@mui/material';
 import { getOneAlbumId } from "../services/Spotify";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import { useAuth0 } from "@auth0/auth0-react";
+import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
+import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
+import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined';
+
+
 
 
 function ReviewList() {
@@ -30,6 +35,17 @@ function ReviewList() {
 
     const albumTitle = "Nectar";
     const { albumId } = useParams();
+
+
+    const [anchorEl, setAnchorEl] = useState(null);
+
+    const handleClick = (event) => {
+        setAnchorEl(event.currentTarget);
+    };
+
+    const handleCloseMenu = () => {
+        setAnchorEl(null);
+    };
 
 
     useEffect(() => {
@@ -97,8 +113,8 @@ function ReviewList() {
     const handleUpdateReview = async (review_id, index) => {
         try {
           const reviewData = {
-            review: review,
-            rating: rating,
+            review: editedRating,
+            rating: editedReview,
           };
           const response = await axios.put(
             `http://localhost:3000/albumReview/${user.sub}/${review_id}`,
@@ -165,18 +181,41 @@ function ReviewList() {
                                 {reviews.map((review, index) => (
                                     <div key={index}>
                                         <ListItem alignItems="flex-start">
-                                            <ListItemAvatar>
-                                                <Avatar alt="User Avatar" src="/static/images/avatar/1.jpg" />
-                                            </ListItemAvatar>
-                                            <div className="grid grid-flow-row-dense">
-                                                <div className="col-span-2">User <br />
-                                                    <Rating name="read-only" value={review.rating} readOnly size='small' /> <br />
-                                                </div>
-                                                <div className="col-span-2">{review.review}</div>
-                                                <Button onClick={() => handleEditClick(review.review_id, index)}>Edit</Button>
-                                                <Button onClick={() => handleDeleteReview(review.review_id, index)}>Delete</Button>
-                                            </div>
-                                        </ListItem>
+                                          <ListItemAvatar>
+                                              <Avatar alt="User Avatar" src="/static/images/avatar/1.jpg" />
+                                          </ListItemAvatar>
+                                          <div className="grid grid-flow-row-dense">
+                                              <div className="col-span-2">User <br />
+                                                  <Rating name="read-only" value={review.rating} readOnly size='small' /> <br />
+                                              </div>
+                                              <div className="col-span-2">{review.review}</div>
+                                              <IconButton 
+                                                style={{ position: 'absolute', top: 0, right: 0 }}
+                                                aria-controls={`menu-${index}`} aria-haspopup="true" onClick={handleClick}
+                                                >
+                                                  <MoreHorizIcon />
+                                              </IconButton>
+                                              <Menu
+                                                  id={`menu-${index}`}
+                                                  anchorEl={anchorEl}
+                                                  keepMounted
+                                                  open={Boolean(anchorEl)}
+                                                  onClose={handleCloseMenu}
+                                              >
+                                                  <MenuItem onClick={() => { handleEditClick(review.review_id, index); handleCloseMenu(); }}>
+                                                    <EditOutlinedIcon sx={{ marginRight: 1 }}/>
+                                                    Edit
+                                                    </MenuItem>
+                                                  <MenuItem 
+                                                    sx={{ color:'error.main' }}
+                                                    onClick={() => { handleDeleteReview(review.review_id, index); handleCloseMenu(); }}
+                                                    >
+                                                    <DeleteOutlinedIcon sx={{ marginRight: 1 }}/>
+                                                    Delete
+                                                    </MenuItem>
+                                              </Menu>
+                                          </div>
+                                      </ListItem>
                                         <Divider />
                                     </div>
                                 ))}
@@ -189,7 +228,7 @@ function ReviewList() {
         <br />
         <div>
             <div style={{textAlign:"right", marginRight:'16px'}}>
-            <Button variant="outlined" color="primary" onClick={handleClickOpen}>
+            <Button variant="contained" sx={ { borderRadius: 6 } } color="primary" onClick={handleClickOpen}>
                 Add Review
             </Button>
             </div>

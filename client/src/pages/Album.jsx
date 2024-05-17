@@ -2,12 +2,11 @@ import React, { useState, useEffect } from "react";
 import TrackList from "../components/AlbumPage/TrackList";
 import ReviewList from "../components/Reviews";
 import AlbumDisplay from "../components/AlbumPage/AlbumDisplay";
-import PostReview from "../components/PostReview";
 import { getOneAlbumId } from "../services/Spotify";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import { useAuth0 } from "@auth0/auth0-react";
-import { Box, Button, List, ListItem, Divider, ListItemAvatar, Avatar, Typography, Paper, Rating, Grid } from "@mui/material";
+import { Box, Button, Grid } from "@mui/material";
 
 
 import InputLabel from "@mui/material/InputLabel";
@@ -138,7 +137,7 @@ function Album() {
 
       <Grid container spacing={2} direction='row' alignItems='flex-start' paddingRight={4}>
         <Grid item xs={6} >
-          <ReviewList reviews={[0]} />
+          <ReviewList />
         </Grid>
         <Grid item xs>
           <Box sx={{minWidth: '380px'}}>
