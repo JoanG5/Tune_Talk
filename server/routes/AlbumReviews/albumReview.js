@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const AlbumReview = require("./albumReview.model");
+const Album = require("../Albums/album.model");
 
 router.post("/", (req, res) => {
   AlbumReview.findOne({
@@ -41,6 +42,54 @@ router.get("/:spotify_id", (req, res) => {
       res.status(500).send("Error fetching reviews");
     });
 });
+
+router
+  .route("/:userid/:spotify_id")
+  .get((req, res) => {
+    AlbumReview.findOne({
+      where: { user_id: req.params.userid, spotify_id: req.params.spotify_id },
+    })
+      .then((review) => {
+        if (!review) {
+          return res.send({ rating: "-" });
+        }
+        res.send(review);
+      })
+      .catch((error) => {
+        console.error("Error fetching review:", error);
+        res.status(500).send("Error fetching review");
+      });
+  })
+  .put((req, res) => {
+    AlbumReview.findOne({
+      where: { user_id: req.params.userid, spotify_id: req.params.spotify_id },
+    })
+      .then((review) => {
+        if (!review) {
+          AlbumReview.create({
+            review: req.body.review,
+            rating: req.body.rating,
+            user_id: req.params.userid,
+            spotify_id: req.params.spotify_id,
+          })
+            .then((review) => {
+              review.save();
+              res.send(review);
+            })
+            .catch((error) => {
+              console.error("Error saving review:", error);
+              res.status(500).send("Error saving review");
+            });
+        } else {
+          review.update({ review: req.body.review, rating: req.body.rating });
+          res.send(review);
+        }
+      })
+      .catch((error) => {
+        console.error("Error updating review:", error);
+        res.status(500).send("Error updating review");
+      });
+  });
 
 router
   .route("/:userid/:review_id/")

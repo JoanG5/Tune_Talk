@@ -43,6 +43,54 @@ router.get("/:spotify_id", (req, res) => {
 });
 
 router
+  .route("/:userid/:spotify_id")
+  .get((req, res) => {
+    SongReview.findOne({
+      where: { user_id: req.params.userid, spotify_id: req.params.spotify_id },
+    })
+      .then((review) => {
+        if (!review) {
+          return res.send({ rating: "-" });
+        }
+        res.send(review);
+      })
+      .catch((error) => {
+        console.error("Error fetching review:", error);
+        res.status(500).send("Error fetching review");
+      });
+  })
+  .put((req, res) => {
+    SongReview.findOne({
+      where: { user_id: req.params.userid, spotify_id: req.params.spotify_id },
+    })
+      .then((review) => {
+        if (!review) {
+          SongReview.create({
+            review: req.body.review,
+            rating: req.body.rating,
+            user_id: req.params.userid,
+            spotify_id: req.params.spotify_id,
+          })
+            .then((review) => {
+              review.save();
+              res.send(review);
+            })
+            .catch((error) => {
+              console.error("Error saving review:", error);
+              res.status(500).send("Error saving review");
+            });
+        } else {
+          review.update({ review: req.body.review, rating: req.body.rating });
+          res.send(review);
+        }
+      })
+      .catch((error) => {
+        console.error("Error updating review:", error);
+        res.status(500).send("Error updating review");
+      });
+  });
+
+router
   .route("/:userid/:review_id/")
   .put((req, res) => {
     SongReview.update(

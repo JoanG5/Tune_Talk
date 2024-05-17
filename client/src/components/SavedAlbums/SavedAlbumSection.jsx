@@ -16,7 +16,7 @@ function SavedAlbumSection({ props }) {
       >
         <Divider />
         {props.map((album) => (
-          <SavedAlbumItem key={album.id} props={album} />
+          <SavedAlbumItem key={album.albumResponse.id} props={album} />
         ))}
       </List>
     </div>

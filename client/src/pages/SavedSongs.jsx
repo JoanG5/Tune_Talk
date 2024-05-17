@@ -16,6 +16,8 @@ import { useAuth0 } from "@auth0/auth0-react";
 function SavedSongs() {
   const { user, isAuthenticated } = useAuth0();
   const [tracks, setTracks] = useState([]);
+  const [listenedTracks, setListenedTracks] = useState([]);
+  const [plannedTracks, setPlannedTracks] = useState([]);
   const [value, setValue] = useState("1");
 
   useEffect(() => {
@@ -24,7 +26,14 @@ function SavedSongs() {
         const response = await axios.get(
           `http://localhost:3000/song/${user.sub}`
         );
-        setTracks(await getTrackDataFromDB(response.data));
+        const [listenedTracksData, plannedTracksData] = await Promise.all([
+          getTrackDataFromDB(response.data.listened_songs),
+          getTrackDataFromDB(response.data.planned_songs),
+        ]);
+
+        setListenedTracks(listenedTracksData);
+        setPlannedTracks(plannedTracksData);
+        setTracks([...listenedTracksData, ...plannedTracksData]);
       } catch (error) {
         console.error("Error fetching access token:", error);
       }
@@ -68,15 +77,20 @@ function SavedSongs() {
         >
           <TabList onChange={handleChange} aria-label="lab API tabs example">
             <Tab label="All Songs" value="1" />
-            <Tab label="Currently Listening" value="2" />
+            <Tab label="Listened To" value="2" />
             <Tab label="Plan On Listening" value="3" />
           </TabList>
         </Box>
         <TabPanel value="1">
           <SavedSongSection props={tracks} />
         </TabPanel>
-        <TabPanel value="2">Item Two</TabPanel>
-        <TabPanel value="3">Item Three</TabPanel>
+        <TabPanel value="2">
+          <SavedSongSection props={listenedTracks} />
+        </TabPanel>
+        <TabPanel value="3">
+          {" "}
+          <SavedSongSection props={plannedTracks} />
+        </TabPanel>
       </TabContext>
     </div>
   );
