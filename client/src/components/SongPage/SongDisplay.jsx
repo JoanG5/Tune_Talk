@@ -20,7 +20,8 @@ function SongDisplay({props}) {
     minWidth: '72px',
     maxBlockSize: '364px',
     display: 'block',
-    textAlign: "right"
+    textAlign: "right", 
+    borderRadius: 6
   });
 
   return (

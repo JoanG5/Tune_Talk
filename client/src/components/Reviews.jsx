@@ -103,7 +103,7 @@ function ReviewList() {
     
 
       const handleEditClick = (reviewId, index) => {
-        setSelectedReviewIndex(index);
+        setSelectedReviewIndex(index, reviewId);
         setEditedRating(reviews[index].rating);
         setEditedReview(reviews[index].review);
         setEditOpen(true);
@@ -236,7 +236,7 @@ function ReviewList() {
         </Grid>
         <br />
         <div>
-            <div style={{textAlign:"right", marginRight:'16px'}}>
+            <div style={{textAlign:"right", marginRight:'4px'}}>
             <Button variant="contained" sx={ { borderRadius: 6 } } color="primary" onClick={handleClickOpen}>
                 Add Review
             </Button>
