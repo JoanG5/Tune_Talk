@@ -16,6 +16,7 @@
     "@mui/icons-material": "^5.15.17",
     "@mui/lab": "^5.0.0-alpha.170",
     "@mui/material": "^5.15.15",
+    "amqplib": "^0.10.4",
     "axios": "^1.6.8",
     "dotenv": "^16.4.5",
     "react": "^18.2.0",
@@ -23,6 +24,7 @@
     "react-router-dom": "^6.22.3",
     "spotify": "^0.3.0",
     "spotify-web-api-js": "^1.5.2",
+    "spotify-web-api-node": "^5.0.2",
     "tailwind": "^4.0.0"
   },
   "devDependencies": {
