@@ -10,7 +10,23 @@ import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
+import Box from "@mui/material/Box";
+import Modal from "@mui/material/Modal";
+import TextField from "@mui/material/TextField";
 import { useAuth0 } from "@auth0/auth0-react";
+
+const style = {
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  width: 500,
+  height: 300,
+  bgcolor: "background.paper",
+  border: "2px solid #000",
+  boxShadow: 24,
+  p: 4,
+};
 
 function SavedAlbumItem({ props }) {
   const { user, isAuthenticated } = useAuth0();
@@ -20,6 +36,10 @@ function SavedAlbumItem({ props }) {
   const handleChange = (event) => {
     setStatus(event.target.value);
   };
+
+  const [open, setOpen] = React.useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
 
   useEffect(() => {
     const getReview = async () => {
@@ -72,7 +92,7 @@ function SavedAlbumItem({ props }) {
     try {
       const response = await axios.put(
         `http://localhost:3000/albumReview/${user.sub}/${props.albumResponse.id}`,
-        { rating: rating, review: ""}
+        { rating: rating, review: "" }
       );
       console.log(response);
     } catch (error) {
@@ -81,7 +101,7 @@ function SavedAlbumItem({ props }) {
   };
 
   return (
-    <div>
+    <div className="flex justify-center items-center">
       <ListItemButton className="h-32 flex items-center justify-between">
         <ListItemAvatar>
           <Avatar
@@ -101,36 +121,82 @@ function SavedAlbumItem({ props }) {
           sx={{ width: "30%" }}
           primary={`${props.albumResponse.total_tracks}/${props.albumResponse.total_tracks} Tracks`}
         />
-        <Button variant="outlined" onClick={handleUpdateStatus}>
-          Update
-        </Button>
-        <FormControl sx={{ m: 2, minWidth: 190 }}>
-          <InputLabel>Status</InputLabel>
-          <Select value={status} label="Status" onChange={handleChange}>
-            <MenuItem value={"Listened To"}>Listened To</MenuItem>
-            <MenuItem value={"Currently Listening"}>
-              Currently Listening
-            </MenuItem>
-            <MenuItem value={"Plan On Listening"}>Plan On Listening</MenuItem>
-          </Select>
-        </FormControl>
+        <ListItemText sx={{ width: "30%" }} primary={props.status} />
         <div className="flex-grow" />
         <ListItemText sx={{ m: 3 }} primary={`${review.rating}/5`} />
-        <Button onClick={handleDeleteAlbum} variant="outlined">
-          Delete
-        </Button>
+        <Button onClick={handleOpen}>Update Album</Button>
       </ListItemButton>
       <Divider />
-      <input
-        onChange={(e) => setRating(e.target.value)}
-        className="outline"
-        type="number"
-        min={0}
-        max={5}
-      ></input>
-      <Button onClick={handleUpdateReview} variant="outlined">
-        Update Review
-      </Button>
+
+      <Modal
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box sx={style}>
+          <div className="flex justify-center">
+            <Button
+              sx={{
+                position: "absolute",
+                right: "0",
+                top: "0",
+              }}
+              onClick={handleClose}
+            >
+              Close
+            </Button>
+            <FormControl className="w-1/2" sx={{ m: 2 }}>
+              <InputLabel>Status</InputLabel>
+              <Select value={status} label="Status" onChange={handleChange}>
+                <MenuItem value={"Listened To"}>Listened To</MenuItem>
+                <MenuItem value={"Currently Listening"}>
+                  Currently Listening
+                </MenuItem>
+                <MenuItem value={"Plan On Listening"}>
+                  Plan On Listening
+                </MenuItem>
+              </Select>
+            </FormControl>
+            <Button
+              className="m-2 w-1/2"
+              variant="outlined"
+              onClick={handleUpdateStatus}
+              sx={{ m: 2 }}
+            >
+              Update
+            </Button>
+          </div>
+          <div className="flex justify-center">
+            <TextField
+              onChange={(e) => setRating(e.target.value)}
+              label="Rating"
+              type="number"
+              min={0}
+              max={5}
+              className="m-2 w-1/2"
+              sx={{ m: 2 }}
+            ></TextField>
+            <Button
+              className="m-2 w-1/2"
+              onClick={handleUpdateReview}
+              variant="outlined"
+              sx={{ m: 2 }}
+            >
+              Update Review
+            </Button>
+          </div>
+          <div className="flex justify-end m-2 w-1/2">
+            <Button
+              onClick={handleDeleteAlbum}
+              variant="outlined"
+              sx={{ m: 2, position: "absolute", right: "0", bottom: "0" }}
+            >
+              Delete
+            </Button>
+          </div>
+        </Box>
+      </Modal>
     </div>
   );
 }

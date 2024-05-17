@@ -19,7 +19,7 @@ export const Navbar = () => {
 
   return (
     <Box className="top-0">
-      <AppBar position="fixed" sx={{ background: "black", height: "70px" }}>
+      <AppBar position="relative" sx={{ background: "black", height: "70px" }}>
         <Toolbar sx={{ minHeight: "80px", alignItems: "center" }}>
           <Box flexGrow={1}>
             <Box display={"flex"} alignItems={"center"} gap={0.5}>
