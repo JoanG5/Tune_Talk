@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React from 'react';
 import { styled } from '@mui/material/styles';
 import Paper from '@mui/material/Paper';
 import Grid from '@mui/material/Grid';
@@ -9,11 +9,12 @@ import Rating from '@mui/material/Rating';
 
 function AlbumDisplay({props}) {
   const Img = styled('img')({
-    marginLeft: 'auto',
-    minWidth: '128px',
-    maxBlockSize: '256px',
+    margin: 'auto',
+    minWidth: '72px',
+    maxBlockSize: '364px',
     display: 'block',
-    textAlign: "right"
+    textAlign: "right", 
+    borderRadius: 6
   });
 
   return (
@@ -23,14 +24,15 @@ function AlbumDisplay({props}) {
           sx={{
             p: 2,
             margin: '16px',
+            minWidth: '500px',
             flexGrow: 1,
           }}
           >
-          <Grid container spacing={2} direction='row' justifyContent='center' alignItems='center' paddingRight={4}>
-            <Grid item xs={3} >
+          <Grid container spacing={2} direction='row' justifyContent='center' alignItems='center'>
+            <Grid item xs={2} >
                 <Img alt={props.name} src={props.images[0].url} />
             </Grid>
-            <Grid item xs={3}>
+            <Grid item xs={6}>
                 <Typography fontWeight={700} gutterBottom variant="subtitle2" component="span">
                   Album
                 </Typography>
@@ -42,8 +44,8 @@ function AlbumDisplay({props}) {
                 </Typography>
               </Grid>
                 
-            <Grid item xs={4}>
-              <Box sx={{ border: '2px solid grey', p: '12px', minWidth: '200px', minHeight: '120px', marginBottom: '8px', maxWidth: '400px'}}>
+            <Grid item xs>
+              <Box sx={{ p: '12px', minWidth: '200px', minHeight: '120px', marginBottom: '8px', maxWidth: '300px'}}>
                 <Typography fontWeight={700} gutterBottom component={'legend'} >
                   User Score
                 </Typography>
@@ -52,7 +54,7 @@ function AlbumDisplay({props}) {
                   Based on 100 ratings
                 </Typography>
               </Box>
-              <Box sx={{ border: '2px solid grey', p: '12px', minWidth: '200px', maxWidth: '400px' }}>
+              <Box sx={{ p: '12px', minWidth: '200px', maxWidth: '300px' }}>
                 <Typography fontWeight={700} gutterBottom variant="subtitle2" >
                   Details
                 </Typography>

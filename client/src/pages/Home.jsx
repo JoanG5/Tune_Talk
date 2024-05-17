@@ -1,32 +1,53 @@
-import React, { useEffect } from "react";
+import React from "react";
+import React, { useEffect, useState } from "react";
+import { Link, useLocation, Outlet  } from 'react-router-dom';
 import axios from "axios";
 import { useAuth0 } from "@auth0/auth0-react";
 import { spotifySearch } from "../services/Spotify";
-import Searchbar from "../components/Searchbar/Searchbar";
 import { Typography } from "@mui/material";
 import Button from '@mui/material/Button';
 import { testAlbumData, testData } from "../services/Spotify";
 
 function Home() {
-  const { user, isAuthenticated } = useAuth0();
+  const location = useLocation();
+  const path = location.pathname;
 
-  useEffect(() => {
-    if (user) {
-      const request = axios.post("http://localhost:3000/user", user);
-      request
-        .then((response) => {
-          console.log(response.data);
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    }
-  }, []);
+  const [open, setOpen] = React.useState(false);
 
-  const spotifyQuery = async (searchTerm) => {
-    const response = await spotifySearch(searchTerm);
-    console.log(response);
+  const toggleDrawer = (newOpen) => () => {
+    setOpen(newOpen);
   };
+
+const menu1 = [
+  {title: 'Home', path: '/'},
+  {title: 'Album', path: '/album'},
+  {title: 'SavedAlbum', path: '/savedalbum'},
+  {title: 'SavedSongs', path: '/savedsongs'},
+  {title: 'Song', path: '/song'},
+  {title: 'Test', path: '/test'},
+  {title: 'Profile', path: '/profile'}
+]
+
+const DrawerList = (
+  <div>
+      <Box sx={{ width: 250 }} role="presentation" onClick={toggleDrawer(false)}>
+        <List>
+          {menu1.map((item, index) => (
+            <ListItem key={item.title}  disablePadding
+            component = {Link}
+            to = { item.path }
+            button
+            selected = { item.path === path }
+            >
+              <ListItemButton>
+                <ListItemText primary={item.title}/>
+              </ListItemButton>
+            </ListItem>
+          ))}
+        </List>
+      </Box>
+    </div>
+);
 
   return (
     <>

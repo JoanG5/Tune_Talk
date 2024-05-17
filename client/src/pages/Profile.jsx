@@ -16,6 +16,8 @@ function Profile() {
   const { name, picture } = user;
   const [value, setValue] = useState(0);
   const [albums, setAlbums] = useState([]);
+  const [favoriteTracks, setFavoriteTracks] = useState([]);
+  const [recentActivity, setRecentActivity] = useState([]);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -24,163 +26,199 @@ function Profile() {
   useEffect(() => {
     const fetchAlbums = async () => {
       const albumData = await testAlbumData();
-      setAlbums(albumData);
+      setAlbums(albumData.slice(0, 15));
+      setFavoriteTracks(albumData.slice(0, 4));
+      setRecentActivity(albumData.slice(5, 10));
     };
     fetchAlbums();
   }, []);
 
+  const sectionHeadingStyle = {
+    color: "DimGray",
+    fontFamily: "Roboto,Helvetica,Arial,sans-serif",
+    fontSize: "1rem",
+    fontWeight: "550",
+    letterSpacing: ".05em",
+    marginBottom: ".76923077rem",
+    marginTop: "0",
+    paddingBottom: "5px",
+    textTransform: "uppercase",
+  };
+
+  const displayTracks = (tracks) => (
+    <Box display="flex" justifyContent="space-between" flexWrap="wrap">
+      {tracks.map((track, index) => (
+        <Card key={index} sx={{ maxWidth: 200, marginY: 2 }}>
+          <CardActionArea>
+            <CardMedia
+              component="img"
+              height="200"
+              image={track.images[0].url}
+              alt={`Cover of the track "${track.name}"`}
+            />
+            <CardContent sx={{ padding: 2 }}>
+              <Typography gutterBottom variant="h6" component="div">
+                {track.name}
+              </Typography>
+              <Typography variant="body2" color="text.secondary">
+                {track.artistNames}
+              </Typography>
+            </CardContent>
+          </CardActionArea>
+        </Card>
+      ))}
+    </Box>
+  );
+
   return (
     <div style={{ fontFamily: "Roboto,Helvetica,Arial,sans-serif" }}>
-      <body className="h-full">
-        <header></header>
-        <div className="content py-10 px-0">
-          <div
-            className="content-wrap mt-0 mb-auto"
-            style={{ width: "950px", margin: "0 auto" }}
-          >
-            <section className="profile-header block ml-0 mr-0">
+      <header></header>
+      <div className="content py-10 px-0">
+        <div
+          className="content-wrap mt-0 mb-auto"
+          style={{ width: "950px", margin: "0 auto" }}
+        >
+          <section className="profile-header block ml-0 mr-0">
+            <div
+              className="profile-summary grid"
+              style={{
+                gridTemplateAreas: `'avatar name info'`,
+                gridTemplateColumns: "100px 1fr 1fr",
+                alignItems: "center",
+                marginBottom: "40px",
+              }}
+            >
+              <div className="profile-avatar" style={{ gridArea: "avatar" }}>
+                <span>
+                  <Avatar sx={{ width: 100, height: 100 }} src={picture} />
+                </span>
+              </div>
               <div
-                className="profile-summary grid"
+                className="profile-name inline-flex"
                 style={{
-                  gridTemplateAreas: `'avatar name info'`,
-                  gridTemplateColumns: "100px 1fr 1fr",
-                  alignItems: "center", // This will vertically center all items in the row
-                  marginBottom: "40px",
+                  gridArea: "name",
+                  justifySelf: "start",
+                  alignSelf: "center",
+                  paddingLeft: "18%",
                 }}
               >
-                <div className="profile-avatar" style={{ gridArea: "avatar" }}>
-                  <span>
-                    <Avatar sx={{ width: 100, height: 100 }} src={picture} />
-                  </span>
-                </div>
+                <h1 className="display-name text-[30px] font-semibold">
+                  <span className="inline-flex max-w-md">{name}</span>
+                </h1>
+              </div>
+              <div
+                className="profile-info self-start"
+                style={{
+                  gridArea: "info",
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "center",
+                  height: "100%",
+                }}
+              >
                 <div
-                  className="profile-name inline-flex"
+                  className="profile-stats flex"
                   style={{
-                    gridArea: "name",
-                    justifySelf: "start", // Horizontally center the name within the grid area
-                    alignSelf: "center", // Vertically center the name within the grid area
-                    paddingLeft: "18%",
+                    justifyContent: "center",
                   }}
                 >
-                  <h1 className="display-name text-[30px] font-semibold">
-                    <span className="inline-flex max-w-md">{name}</span>
-                  </h1>
-                </div>
-                <div
-                  className="profile-info self-start"
-                  style={{
-                    gridArea: "info",
-                    display: "flex",
-                    flexDirection: "column", // Stack the items vertically
-                    justifyContent: "center", // Center the items horizontally within the area
-                    height: "100%", // Take full height of the grid area
-                  }}
-                >
-                  <div
-                    className="profile-stats flex"
-                    style={{
-                      justifyContent: "center", // Horizontally center the stats within the info area
-                    }}
-                  >
-                    <h4 className="text-center px-7 ">
-                      <a href="">
-                        <span>5</span>
-                        <span className="definition block tracking-wider mt-3 uppercase ">
-                          Info
-                        </span>
-                      </a>
-                    </h4>
-                    <h4 className="text-center px-7">
-                      <a href="">
-                        <span>0</span>
-                        <span className="definition block tracking-wider mt-3 uppercase">
-                          Followers
-                        </span>
-                      </a>
-                    </h4>
-                    <h4 className="text-center px-7">
-                      <a href="">
-                        <span>0</span>
-                        <span className="definition block tracking-wider mt-3 uppercase">
-                          Following
-                        </span>
-                      </a>
-                    </h4>
-                  </div>
+                  <h4 className="text-center px-7 ">
+                    <a href="">
+                      <span>5</span>
+                      <span className="definition block tracking-wider mt-3 uppercase ">
+                        Reviews
+                      </span>
+                    </a>
+                  </h4>
+                  <h4 className="text-center px-7">
+                    <a href="">
+                      <span>0</span>
+                      <span className="definition block tracking-wider mt-3 uppercase">
+                        Followers
+                      </span>
+                    </a>
+                  </h4>
+                  <h4 className="text-center px-7">
+                    <a href="">
+                      <span>0</span>
+                      <span className="definition block tracking-wider mt-3 uppercase">
+                        Following
+                      </span>
+                    </a>
+                  </h4>
                 </div>
               </div>
-              <nav className="profile-navigation">
-                <Box
-                  sx={{
-                    width: "100%",
-                    bgcolor: "background.paper",
-                    fontFamily: "",
-                    border: 1,
-                    borderColor: "divider",
-                  }}
-                >
-                  <Tabs value={value} onChange={handleChange} centered>
-                    <Tab label="Profile" />
-                    <Tab label="Activity" />
-                    <Tab label="Tracks" />
-                  </Tabs>
-                </Box>
-              </nav>
-            </section>
-            <div>
+            </div>
+            <nav className="profile-navigation">
+              <Box
+                sx={{
+                  width: "100%",
+                  bgcolor: "background.paper",
+                  fontFamily: "",
+                  border: 1,
+                  borderColor: "divider",
+                }}
+              >
+                <Tabs value={value} onChange={handleChange} centered>
+                  <Tab label="Profile" />
+                  <Tab label="Activity" />
+                  <Tab label="Tracks" />
+                </Tabs>
+              </Box>
+            </nav>
+          </section>
+          {value === 0 && (
+            <>
+              <section
+                className="favorite-tracks"
+                style={{ marginTop: "40px" }}
+              >
+                <h2 style={sectionHeadingStyle}>Favorite Tracks</h2>
+                {displayTracks(favoriteTracks)}
+              </section>
               <section
                 className="recent-activity"
                 style={{ marginTop: "40px" }}
               >
-                <h2
-                  className="section-heading"
-                  style={{
-                    color: "DimGray",
-                    fontFamily: "Roboto,Helvetica,Arial,sans-serif",
-                    fontSize: "1rem",
-                    fontWeight: "550",
-                    letterSpacing: ".05em",
-                    marginBottom: ".76923077rem",
-                    marginTop: "0",
-                    paddingBottom: "5px",
-                    textTransform: "uppercase",
-                  }}
-                >
-                  Recent Activity
-                </h2>
-                <ul className="flex flex-wrap justify-between">
-                  {albums.map((album, index) => (
-                    <Card key={index} sx={{ maxWidth: 250, marginY: 2 }}>
-                      <CardActionArea>
-                        <CardMedia
-                          component="img"
-                          height="140"
-                          image={album.images[0].url}
-                          alt={`Cover of the album "${album.name}"`}
-                        />
-                        <CardContent>
-                          <Typography gutterBottom variant="h5" component="div">
-                            {album.name}
-                          </Typography>
-                          <Typography variant="body2" color="text.secondary">
-                            {album.artistNames}
-                          </Typography>
-                        </CardContent>
-                      </CardActionArea>
-                      <CardActions>
-                        <Button size="small" color="primary">
-                          Share
-                        </Button>
-                      </CardActions>
-                    </Card>
-                  ))}
-                </ul>
+                <h2 style={sectionHeadingStyle}>Recent Activity</h2>
+                {displayTracks(recentActivity)}
               </section>
-            </div>
-          </div>
+            </>
+          )}
+          {value === 2 && (
+            <section className="all-tracks" style={{ marginTop: "40px" }}>
+              <h2 style={sectionHeadingStyle}>All Tracks</h2>
+              <Box
+                display="flex"
+                justifyContent="space-between"
+                flexWrap="wrap"
+              >
+                {albums.map((album, index) => (
+                  <Card key={index} sx={{ maxWidth: 200, marginY: 2 }}>
+                    <CardActionArea>
+                      <CardMedia
+                        component="img"
+                        height="200"
+                        image={album.images[0].url}
+                        alt={`Cover of the track "${album.name}"`}
+                      />
+                      <CardContent sx={{ padding: 2 }}>
+                        <Typography gutterBottom variant="h6" component="div">
+                          {album.name}
+                        </Typography>
+                        <Typography variant="body2" color="text.secondary">
+                          {album.artistNames}
+                        </Typography>
+                      </CardContent>
+                    </CardActionArea>
+                  </Card>
+                ))}
+              </Box>
+            </section>
+          )}
         </div>
-        <footer></footer>
-      </body>
+      </div>
+      <footer></footer>
     </div>
   );
 }
