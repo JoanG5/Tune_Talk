@@ -67,6 +67,16 @@ export const Navbar = () => {
             >
               TuneTalk
             </Typography>
+            <Box 
+              sx={{
+                display: "flex",
+                margin: 4,
+                height: "40px",
+                wkdtn: "fit-content",
+              }}
+            >
+              <Searchbar/>
+            </Box>
           </Box>
           <Navigation value={value} handleChange={handleChange} />
           <Box
