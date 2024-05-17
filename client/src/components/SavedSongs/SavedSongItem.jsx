@@ -25,7 +25,7 @@ function SavedSongItem({ props }) {
     const getReview = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:3000/songReview/${user.sub}/${props.trackResponse.id}`
+          `http://localhost:3000/songReview/profile/${user.sub}/${props.trackResponse.id}`
         );
         setReview(response.data);
       } catch (error) {
@@ -61,7 +61,7 @@ function SavedSongItem({ props }) {
   const handleUpdateReview = async () => {
     try {
       const response = await axios.put(
-        `http://localhost:3000/songReview/${user.sub}/${props.trackResponse.id}`,
+        `http://localhost:3000/songReview/profile/${user.sub}/${props.trackResponse.id}`,
         { rating: rating, review: "" }
       );
       console.log(response);

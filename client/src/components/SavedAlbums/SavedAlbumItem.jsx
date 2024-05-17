@@ -25,7 +25,7 @@ function SavedAlbumItem({ props }) {
     const getReview = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:3000/albumReview/${user.sub}/${props.albumResponse.id}`
+          `http://localhost:3000/albumReview/profile/${user.sub}/${props.albumResponse.id}`
         );
         setReview(response.data);
       } catch (error) {
@@ -71,8 +71,8 @@ function SavedAlbumItem({ props }) {
   const handleUpdateReview = async () => {
     try {
       const response = await axios.put(
-        `http://localhost:3000/albumReview/${user.sub}/${props.albumResponse.id}`,
-        { rating: rating, review: ""}
+        `http://localhost:3000/albumReview/profile/${user.sub}/${props.albumResponse.id}`,
+        { rating: rating, review: "" }
       );
       console.log(response);
     } catch (error) {
