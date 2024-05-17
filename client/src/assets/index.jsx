@@ -1,6 +1,5 @@
-import logo from './logo.png';
+import logo from "./logo.png";
 
-/* Project logo will be placed here */
+/* If you want to change logo image, place the png in this folder and change the import to the name of your new png above */
 
 export const logoImg = logo;
-
