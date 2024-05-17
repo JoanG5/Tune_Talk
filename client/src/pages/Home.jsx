@@ -2,6 +2,8 @@ import React, { useEffect } from "react";
 import axios from "axios";
 import { useAuth0 } from "@auth0/auth0-react";
 import { spotifySearch } from "../services/Spotify";
+import Searchbar from "../components/Searchbar/Searchbar";
+import { Typography } from "@mui/material";
 
 function Home() {
   const { user, isAuthenticated } = useAuth0();
@@ -26,12 +28,27 @@ function Home() {
 
   return (
     <>
-      <input
-        type="text"
-        placeholder="Search for a song"
-        onChange={(e) => spotifyQuery(e.target.value)}
-      />
-      <div className="text-3xl font-bold underline">Home</div>
+    <div className="text-3xl font-bold underline flex justify-center">Home</div>
+      <div className="bg-gray-500 bg-cover w-screen h-screen">
+        TESTETSTEST
+        <div className="bg=black bg-cover background-black font-bold text-3x1">
+          HELLO WORLD TESTING
+        </div>
+        <div className="text-3xl font-bold flex justify-center">
+          <Typography variant="h5" sx={{ width: "fit-content" }}>
+              Welcome to TuneTalk
+          </Typography>
+          </div>
+          <div className="flex justify-center">
+            <Typography variant="h5" sx={{ width: "fit-content" }}>
+              Where we talk about your favorite tunes
+            </Typography>
+          </div>
+
+
+
+      </div>
+      
     </>
   );
 }
