@@ -11,7 +11,7 @@ function AlbumDisplay({props}) {
   const Img = styled('img')({
     margin: 'auto',
     minWidth: '72px',
-    maxBlockSize: '256px',
+    maxBlockSize: '364px',
     display: 'block',
     textAlign: "right"
   });
@@ -27,7 +27,7 @@ function AlbumDisplay({props}) {
             flexGrow: 1,
           }}
           >
-          <Grid container spacing={2} direction='row' justifyContent='center' alignItems='center' paddingRight={4}>
+          <Grid container spacing={2} direction='row' justifyContent='center' alignItems='center'>
             <Grid item xs={2} >
                 <Img alt={props.name} src={props.images[0].url} />
             </Grid>

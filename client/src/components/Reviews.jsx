@@ -31,7 +31,7 @@ function ReviewList() {
                 >
                   User Reviews
                 </Typography>
-                <Paper elevation={0}
+                <Paper elevation={1}
                   sx={{
                     p: 2,
                     marginRight: "auto",
