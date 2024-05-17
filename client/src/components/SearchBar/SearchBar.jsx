@@ -20,6 +20,7 @@ export const Searchbar = () => {
   }, []);
 
   const spotifyQuery = async (searchTerm) => {
+    if (!searchTerm) return;
     const response = await spotifySearch(searchTerm);
     console.log(response);
   };

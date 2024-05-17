@@ -12,7 +12,7 @@ app.listen(PORT, () => {
 });
 
 sequelize
-  .sync({ force: true })
+  .sync({ force: false })
   .then(() => {
     console.log("Database is connected");
   })

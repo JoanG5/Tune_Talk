@@ -44,7 +44,7 @@ router.get("/:spotify_id", (req, res) => {
 });
 
 router
-  .route("/:userid/:spotify_id")
+  .route("/profile/:userid/:spotify_id")
   .get((req, res) => {
     AlbumReview.findOne({
       where: { user_id: req.params.userid, spotify_id: req.params.spotify_id },
