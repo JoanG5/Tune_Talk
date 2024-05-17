@@ -20,7 +20,6 @@ export const getToken = async () => {
     const { access_token } = response.data;
     return access_token;
   } catch (error) {
-    
     console.error("Error fetching access token:", error);
     throw error;
   }
@@ -107,7 +106,9 @@ export const getOneAlbum = async (search) => {
       `https://api.spotify.com/v1/albums/${albumId}`,
       searchParameters
     );
-    const artistNames = albumResponse.data.artists.map(artist => artist.name).join(', ');
+    const artistNames = albumResponse.data.artists
+      .map((artist) => artist.name)
+      .join(", ");
     return {
       ...albumResponse.data,
       artistNames: artistNames,
@@ -154,10 +155,11 @@ export const getOneTrackId = async (id) => {
 export const getTrackDataFromDB = async (tracks) => {
   const trackData = [];
   for (const track of tracks) {
+    const status = track.status;
     const trackId = track.spotify_id;
     const trackResponse = await getOneTrackId(trackId);
     trackResponse.db_id = track.song_id;
-    trackData.push(trackResponse);
+    trackData.push({ trackResponse, status });
   }
   return trackData;
 };
@@ -179,12 +181,28 @@ export const getOneAlbumId = async (id) => {
 export const getAlbumDataFromDB = async (albums) => {
   const albumData = [];
   for (const album of albums) {
+    const status = album.status;
     const albumId = album.spotify_id;
     const albumResponse = await getOneAlbumId(albumId);
     albumResponse.db_id = album.album_id;
-    albumData.push(albumResponse);
+    albumData.push({ albumResponse, status });
   }
   return albumData;
+};
+
+export const spotifySearch = async (search) => {
+  try {
+    const response = await axios.get(
+      `https://api.spotify.com/v1/search?q=${search}&type=track,album&limit=5`,
+      searchParameters
+    );
+    const tracks = response.data.tracks.items;
+    const albums = response.data.albums.items;
+    return { tracks, albums };
+  } catch (error) {
+    console.error("Error fetching data:", error);
+    throw error;
+  }
 };
 
 export const testData = async () => {
