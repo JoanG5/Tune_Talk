@@ -13,7 +13,7 @@ import { useNavigate } from "react-router-dom";
 import LoginButton from "../LoginButton/LoginButton";
 import { useAuth0 } from "@auth0/auth0-react";
 import Navigation from "./Navigation";
-import Searchbar from "../SearchBar/SearchBar";
+import Searchbar from "../Searchbar/SearchBar";
 
 export const Navbar = () => {
   const { user, isAuthenticated, logout } = useAuth0();
