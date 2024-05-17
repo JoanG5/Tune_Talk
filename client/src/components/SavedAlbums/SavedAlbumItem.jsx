@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemText from "@mui/material/ListItemText";
 import ListItemAvatar from "@mui/material/ListItemAvatar";
@@ -104,13 +105,15 @@ function SavedAlbumItem({ props }) {
     <div>
       <ListItemButton className="h-32 flex items-center justify-between">
         <ListItemAvatar>
-          <Avatar
-            alt={props.albumResponse.name}
-            src={props.albumResponse.images[0].url}
-            sx={{ width: 100, height: 100, borderRadius: 2 }}
-            className="m-5"
-            variant="square"
-          />
+          <Link to={`/album/${props.albumResponse.id}`}>
+            <Avatar
+              alt={props.albumResponse.name}
+              src={props.albumResponse.images[0].url}
+              sx={{ width: 100, height: 100, borderRadius: 2 }}
+              className="m-5"
+              variant="square"
+            />
+          </Link>
         </ListItemAvatar>
         <ListItemText
           sx={{ width: "30%" }}

@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemText from "@mui/material/ListItemText";
 import ListItemAvatar from "@mui/material/ListItemAvatar";
@@ -94,14 +95,17 @@ function SavedSongItem({ props }) {
     <div>
       <ListItemButton className="h-32 flex items-center justify-between">
         <ListItemAvatar>
-          <Avatar
-            alt={props.trackResponse.name}
-            src={props.trackResponse.album.images[0].url}
-            sx={{ width: 100, height: 100, borderRadius: 2 }}
-            className="m-5"
-            variant="square"
-          />
+          <Link to={`/song/${props.trackResponse.id}`}>
+            <Avatar
+              alt={props.trackResponse.name}
+              src={props.trackResponse.album.images[0].url}
+              sx={{ width: 100, height: 100, borderRadius: 2 }}
+              className="m-5"
+              variant="square"
+            />
+          </Link>
         </ListItemAvatar>
+
         <ListItemText
           sx={{ width: "30%" }}
           primary={props.trackResponse.name}
