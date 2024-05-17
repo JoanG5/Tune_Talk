@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import axios from "axios";
 import { useAuth0 } from "@auth0/auth0-react";
 import { spotifySearch } from "../services/Spotify";
+import Searchbar from "../components/Searchbar/Searchbar";
 
 function Home() {
   const { user, isAuthenticated } = useAuth0();
@@ -32,6 +33,7 @@ function Home() {
         onChange={(e) => spotifyQuery(e.target.value)}
       />
       <div className="text-3xl font-bold underline">Home</div>
+      <Searchbar/>
     </>
   );
 }

@@ -59,9 +59,9 @@ export const Navbar = () => {
                 <Link>
                   <Tab label="Songs" />
                 </Link>
-                <Link>
-                  <div><Searchbar/></div>
-                </Link>
+                <div class = "flex justify-center items-center">
+                  <Searchbar/>
+                </div>
               </Tabs>
               {isAuthenticated ? <LogoutButton /> : <LoginButton />}
             </Box>
