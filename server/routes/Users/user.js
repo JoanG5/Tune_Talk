@@ -9,18 +9,20 @@ router
     res.status(200).json(users);
   })
   .post(async (req, res) => {
-    const { username, email, password } = {
-      username: "test",
-      email: "test",
-      password: "test",
-    };
+    const user = await User.findOne({ where: { user_id: req.body.sub } });
+    if (user) {
+      res.send("User already exists");
+      return;
+    }
     User.create({
-      username,
-      email,
-      password,
+      user_id: req.body.sub,
+      name: req.body.name,
+      nickname: req.body.nickname,
+      picture: req.body.picture,
     })
       .then((user) => {
-        res.status(201).json(user);
+        user.save();
+        res.send(user);
       })
       .catch((err) => {
         res.status(400).send(err);

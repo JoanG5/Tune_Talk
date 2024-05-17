@@ -19,16 +19,22 @@ function App() {
 
   return (
     <Router>
-      <Navbar />
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/album/:albumId" element={<Album />} />
-        <Route path="/song/:songId" element={<Song />} />
-        <Route path="/profile" element={<Profile />} />
-        <Route path="/profile/savedsong" element={<SavedSongs />} />
-        <Route path="/profile/savedalbum" element={<SavedAlbums />} />
-        <Route path="/test" element={<Test />} />
-      </Routes>
+      {error && <div> There is an Error: {error.message}</div>}
+      {!error && isLoading && <Loading />}
+      {!error && !isLoading && (
+        <>
+          <Navbar />
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/album/:albumId" element={<Album />} />
+            <Route path="/song/:songId" element={<Song />} />
+            <Route path="/profile" element={<Profile />} />
+            <Route path="/profile/savedsong" element={<SavedSongs />} />
+            <Route path="/profile/savedalbum" element={<SavedAlbums />} />
+            <Route path="/test" element={<Test />} />
+          </Routes>
+        </>
+      )}
     </Router>
   );
 }

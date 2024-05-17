@@ -9,22 +9,39 @@ import TabList from "@mui/lab/TabList";
 import TabPanel from "@mui/lab/TabPanel";
 import SavedAlbumSection from "../components/SavedAlbums/SavedAlbumSection";
 import Loading from "../components/Loading";
-
 import { getAlbumDataFromDB } from "../services/Spotify";
 import axios from "axios";
+import { useAuth0 } from "@auth0/auth0-react";
 
 function SavedAlbum() {
-  const TEMP_USER = 1;
+  const { user, isAuthenticated } = useAuth0();
   const [albums, setAlbums] = useState([]);
+  const [listenedAlbums, setListenedAlbums] = useState([]);
+  const [currentlyAlbums, setCurrentlyAlbums] = useState([]);
+  const [plannedAlbums, setPlannedAlbums] = useState([]);
   const [value, setValue] = useState("1");
 
   useEffect(() => {
     const searchAlbums = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:3000/album/${TEMP_USER}`
+          `http://localhost:3000/album/${user.sub}`
         );
-        setAlbums(await getAlbumDataFromDB(response.data));
+        const [listenedAlbumsData, currentlyAlbumsData, plannedAlbumsData] =
+          await Promise.all([
+            getAlbumDataFromDB(response.data.listened_albums),
+            getAlbumDataFromDB(response.data.currently_albums),
+            getAlbumDataFromDB(response.data.planned_albums),
+          ]);
+
+        setListenedAlbums(listenedAlbumsData);
+        setCurrentlyAlbums(currentlyAlbumsData);
+        setPlannedAlbums(plannedAlbumsData);
+        setAlbums([
+          ...listenedAlbumsData,
+          ...currentlyAlbumsData,
+          ...plannedAlbumsData,
+        ]);
       } catch (error) {
         console.error("Error fetching access token:", error);
       }
@@ -68,18 +85,22 @@ function SavedAlbum() {
         >
           <TabList onChange={handleChange} aria-label="lab API tabs example">
             <Tab label="All Albums" value="1" />
-            <Tab label="Currently Listening" value="2" />
-            <Tab label="Plan On Listening" value="3" />
+            <Tab label="Listened To" value="2" />
+            <Tab label="Currently Listening" value="3" />
+            <Tab label="Plan On Listening" value="4" />
           </TabList>
         </Box>
         <TabPanel value="1">
-          <SavedAlbumSection props={albums.slice(0, 4)} />
+          <SavedAlbumSection props={albums} />
         </TabPanel>
         <TabPanel value="2">
-          <SavedAlbumSection props={albums.slice(4, 7)} />
+          <SavedAlbumSection props={listenedAlbums} />
         </TabPanel>
         <TabPanel value="3">
-          <SavedAlbumSection props={albums.slice(7)} />
+          <SavedAlbumSection props={currentlyAlbums} />
+        </TabPanel>
+        <TabPanel value="4">
+          <SavedAlbumSection props={plannedAlbums} />
         </TabPanel>
       </TabContext>
     </div>
