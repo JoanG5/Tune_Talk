@@ -1,28 +1,36 @@
 import * as React from 'react';
-import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
-import Divider from '@mui/material/Divider';
 import Typography from '@mui/material/Typography';
-import Paper from '@mui/material/Paper';
-import Rating from '@mui/material/Rating';
-
+import Accordion from '@mui/material/Accordion';
+import AccordionSummary from '@mui/material/AccordionSummary';
+import AccordionDetails from '@mui/material/AccordionDetails';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 
 function TrackList({props}) {
-
+    let tracklist = [];
+    if (props && props.tracks.items) {
+        tracklist = props.tracks.items.map(track => track.name);
+    
+    };
+    
     return(
         <div>
-            <Typography fontWeight={700} gutterBottom variant="subtitle1" component="span">
-                Track List
-            </Typography>
-            <Divider />
-            <List sx={{ width: '100%', bgcolor: 'background.paper' }}>
-                <ListItem alignItems="flex-start">
-                    <div class="grid grid-flow-row-dense">
-                        <div class="col-span-2">{props.tracks.items}</div>
-                    </div>
-                </ListItem>
-                <Divider/>
-            </List>
+            <Accordion style={{ minWidth:'120px', maxWidth: '384px', margin:'auto' }}>
+                <AccordionSummary
+                expandIcon={<ExpandMoreIcon />}
+                aria-controls="panel2-content"
+                id="panel2-header"
+                >
+                <Typography>Track List</Typography>
+                </AccordionSummary>
+                <AccordionDetails>
+                    {tracklist.map((track,index) => (
+                        <Typography key={index}>
+                            {`${index + 1}. ${track}`}
+                        </Typography>
+                    )) }
+                    
+                </AccordionDetails>
+            </Accordion>
         </div>
     );
 

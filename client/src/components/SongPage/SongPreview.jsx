@@ -61,8 +61,8 @@ export default function MusicPlayerSlider({ src }) {
   const mainIconColor = theme.palette.mode === 'dark' ? '#fff' : '#000';
 
   return (
-    <Box sx={{ width: '100%', overflow: 'hidden', left: '10px'}}>
-      <Widget>
+    <Box sx={{ width: '100%', overflow: 'hidden' }}>
+      <Widget sx={{ marginLeft: 0 }}>
         <Slider
           aria-label="time-indicator"
           size="small"
