@@ -101,7 +101,7 @@ function SavedAlbumItem({ props }) {
   };
 
   return (
-    <div className="flex justify-center items-center">
+    <div>
       <ListItemButton className="h-32 flex items-center justify-between">
         <ListItemAvatar>
           <Avatar
@@ -119,7 +119,7 @@ function SavedAlbumItem({ props }) {
         />
         <ListItemText
           sx={{ width: "30%" }}
-          primary={`${props.albumResponse.total_tracks}/${props.albumResponse.total_tracks} Tracks`}
+          primary={`${props.albumResponse.total_tracks} Tracks`}
         />
         <ListItemText sx={{ width: "30%" }} primary={props.status} />
         <div className="flex-grow" />
