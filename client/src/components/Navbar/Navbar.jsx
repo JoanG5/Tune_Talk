@@ -13,6 +13,7 @@ import { useNavigate } from "react-router-dom";
 import LoginButton from "../LoginButton/LoginButton";
 import { useAuth0 } from "@auth0/auth0-react";
 import Navigation from "./Navigation";
+import { logoImg } from "../../assets";
 
 export const Navbar = () => {
   const { user, isAuthenticated, logout } = useAuth0();
@@ -54,12 +55,7 @@ export const Navbar = () => {
           }}
         >
           <Box display="flex" alignItems="center">
-            <img
-              width={"54px"}
-              height={"54px"}
-              src={"path/to/logo.png"}
-              alt="logo"
-            />
+            <img width={"54px"} height={"54px"} src={logoImg} alt="logo" />
             <Typography
               variant="h5"
               sx={{ width: "fit-content", color: "white", marginLeft: 1 }}
