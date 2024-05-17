@@ -1,54 +1,107 @@
-import React, { useState, useEffect } from "react";
-import { AppBar, Toolbar, Box, Typography, Button } from "@mui/material";
+import React, { useState } from "react";
+import {
+  AppBar,
+  Toolbar,
+  Box,
+  Typography,
+  Avatar,
+  Menu,
+  MenuItem,
+  IconButton,
+} from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import LoginButton from "../LoginButton/LoginButton";
-import LogoutButton from "../LogoutButton/LogoutButton";
 import { useAuth0 } from "@auth0/auth0-react";
 import Navigation from "./Navigation";
-import { Avatar } from "@mui/material";
 
 export const Navbar = () => {
-  const { user, isAuthenticated } = useAuth0();
+  const { user, isAuthenticated, logout } = useAuth0();
   const navigate = useNavigate();
   const [value, setValue] = useState(0);
+  const [anchorEl, setAnchorEl] = useState(null);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
-    navigate(navigationItems[newValue].route);
+    navigate(navigationItems[newValue].to);
+  };
+
+  const handleMenu = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  const handleProfile = () => {
+    navigate("/profile");
+    handleClose();
+  };
+
+  const handleLogout = () => {
+    handleClose();
+    logout({ returnTo: window.location.origin });
   };
 
   return (
     <Box className="top-0">
       <AppBar position="relative" sx={{ background: "black", height: "70px" }}>
-        <Toolbar sx={{ minHeight: "80px", alignItems: "center" }}>
-          <Box flexGrow={1}>
-            <Box display={"flex"} alignItems={"center"} gap={0.5}>
-              <img width={"54px"} height={"54px"} src={""} alt="logo" />
-              <Typography
-                variant="h5"
-                sx={{ width: "fit-content", color: "white" }}
-              >
-                TuneTalk
-              </Typography>
-              <Navigation value={value} handleChange={handleChange} />
-              <Box
-                sx={{
-                  marginLeft: 2,
-                  display: "flex",
-                  alignItems: "center",
-                  gap: 1,
-                }}
-              >
-                {isAuthenticated ? (
-                  <>
-                    <Avatar src={user.picture} alt={user.name} />
-                    <LogoutButton />
-                  </>
-                ) : (
-                  <LoginButton />
-                )}
-              </Box>
-            </Box>
+        <Toolbar
+          sx={{
+            minHeight: "70px",
+            display: "flex",
+            justifyContent: "space-between",
+          }}
+        >
+          <Box display="flex" alignItems="center">
+            <img
+              width={"54px"}
+              height={"54px"}
+              src={"path/to/logo.png"}
+              alt="logo"
+            />
+            <Typography
+              variant="h5"
+              sx={{ width: "fit-content", color: "white", marginLeft: 1 }}
+            >
+              TuneTalk
+            </Typography>
+          </Box>
+          <Navigation value={value} handleChange={handleChange} />
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              gap: 2,
+              marginRight: 3,
+            }}
+          >
+            {isAuthenticated ? (
+              <>
+                <IconButton onClick={handleMenu} sx={{ paddingLeft: 2 }}>
+                  <Avatar src={user.picture} alt={user.name} />
+                </IconButton>
+                <Menu
+                  anchorEl={anchorEl}
+                  anchorOrigin={{
+                    vertical: "bottom",
+                    horizontal: "right",
+                  }}
+                  keepMounted
+                  transformOrigin={{
+                    vertical: "top",
+                    horizontal: "right",
+                  }}
+                  open={Boolean(anchorEl)}
+                  onClose={handleClose}
+                >
+                  <MenuItem onClick={handleProfile}>Profile</MenuItem>
+                  <MenuItem onClick={handleLogout}>Logout</MenuItem>
+                </Menu>
+              </>
+            ) : (
+              <LoginButton />
+            )}
           </Box>
         </Toolbar>
       </AppBar>

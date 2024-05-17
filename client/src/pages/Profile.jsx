@@ -1,5 +1,4 @@
-import React from "react";
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import Avatar from "@mui/material/Avatar";
 import Box from "@mui/material/Box";
 import Tabs from "@mui/material/Tabs";
@@ -17,6 +16,8 @@ function Profile() {
   const { name, picture } = user;
   const [value, setValue] = useState(0);
   const [albums, setAlbums] = useState([]);
+  const [favoriteTracks, setFavoriteTracks] = useState([]);
+  const [recentActivity, setRecentActivity] = useState([]);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -25,14 +26,52 @@ function Profile() {
   useEffect(() => {
     const fetchAlbums = async () => {
       const albumData = await testAlbumData();
-      setAlbums(albumData);
+      setAlbums(albumData.slice(0, 4)); // dummy data for recent activity
+      setFavoriteTracks(albumData.slice(5, 10)); // dummy data for favorites
     };
     fetchAlbums();
   }, []);
 
+  const sectionHeadingStyle = {
+    color: "DimGray",
+    fontFamily: "Roboto,Helvetica,Arial,sans-serif",
+    fontSize: "1rem",
+    fontWeight: "550",
+    letterSpacing: ".05em",
+    marginBottom: ".76923077rem",
+    marginTop: "0",
+    paddingBottom: "5px",
+    textTransform: "uppercase",
+  };
+
+  const displayTracks = (tracks) => (
+    <Box display="flex" justifyContent="space-between" flexWrap="wrap">
+      {tracks.map((track, index) => (
+        <Card key={index} sx={{ maxWidth: 200, marginY: 2 }}>
+          <CardActionArea>
+            <CardMedia
+              component="img"
+              height="200"
+              image={track.images[0].url}
+              alt={`Cover of the track "${track.name}"`}
+            />
+            <CardContent sx={{ padding: 2 }}>
+              <Typography gutterBottom variant="h6" component="div">
+                {track.name}
+              </Typography>
+              <Typography variant="body2" color="text.secondary">
+                {track.artistNames}
+              </Typography>
+            </CardContent>
+          </CardActionArea>
+        </Card>
+      ))}
+    </Box>
+  );
+
   return (
     <div style={{ fontFamily: "Roboto,Helvetica,Arial,sans-serif" }}>
-      <body className="h-full">
+      <div className="h-full">
         <header></header>
         <div className="content py-10 px-0">
           <div
@@ -45,7 +84,7 @@ function Profile() {
                 style={{
                   gridTemplateAreas: `'avatar name info'`,
                   gridTemplateColumns: "100px 1fr 1fr",
-                  alignItems: "center", // This will vertically center all items in the row
+                  alignItems: "center",
                   marginBottom: "40px",
                 }}
               >
@@ -58,8 +97,8 @@ function Profile() {
                   className="profile-name inline-flex"
                   style={{
                     gridArea: "name",
-                    justifySelf: "start", // Horizontally center the name within the grid area
-                    alignSelf: "center", // Vertically center the name within the grid area
+                    justifySelf: "start",
+                    alignSelf: "center",
                     paddingLeft: "18%",
                   }}
                 >
@@ -72,22 +111,22 @@ function Profile() {
                   style={{
                     gridArea: "info",
                     display: "flex",
-                    flexDirection: "column", // Stack the items vertically
-                    justifyContent: "center", // Center the items horizontally within the area
-                    height: "100%", // Take full height of the grid area
+                    flexDirection: "column",
+                    justifyContent: "center",
+                    height: "100%",
                   }}
                 >
                   <div
                     className="profile-stats flex"
                     style={{
-                      justifyContent: "center", // Horizontally center the stats within the info area
+                      justifyContent: "center",
                     }}
                   >
                     <h4 className="text-center px-7 ">
                       <a href="">
                         <span>5</span>
                         <span className="definition block tracking-wider mt-3 uppercase ">
-                          Info
+                          Reviews
                         </span>
                       </a>
                     </h4>
@@ -129,59 +168,19 @@ function Profile() {
               </nav>
             </section>
             <div>
-              <section
-                className="recent-activity"
-                style={{ marginTop: "40px" }}
-              >
-                <h2
-                  className="section-heading"
-                  style={{
-                    color: "DimGray",
-                    fontFamily: "Roboto,Helvetica,Arial,sans-serif",
-                    fontSize: "1rem",
-                    fontWeight: "550",
-                    letterSpacing: ".05em",
-                    marginBottom: ".76923077rem",
-                    marginTop: "0",
-                    paddingBottom: "5px",
-                    textTransform: "uppercase",
-                  }}
-                >
-                  Recent Activity
-                </h2>
-                <ul className="flex flex-wrap justify-between">
-                  {albums.map((album, index) => (
-                    <Card key={index} sx={{ maxWidth: 250, marginY: 2 }}>
-                      <CardActionArea>
-                        <CardMedia
-                          component="img"
-                          height="140"
-                          image={album.images[0].url}
-                          alt={`Cover of the album "${album.name}"`}
-                        />
-                        <CardContent>
-                          <Typography gutterBottom variant="h5" component="div">
-                            {album.name}
-                          </Typography>
-                          <Typography variant="body2" color="text.secondary">
-                            {album.artistNames}
-                          </Typography>
-                        </CardContent>
-                      </CardActionArea>
-                      <CardActions>
-                        <Button size="small" color="primary">
-                          Share
-                        </Button>
-                      </CardActions>
-                    </Card>
-                  ))}
-                </ul>
+              <section style={{ marginTop: "40px" }}>
+                <h2 style={sectionHeadingStyle}>Favorite Tracks</h2>
+                {displayTracks(favoriteTracks)}
+              </section>
+              <section style={{ marginTop: "80px" }}>
+                <h2 style={sectionHeadingStyle}>Recent Activity</h2>
+                {displayTracks(albums)}
               </section>
             </div>
           </div>
         </div>
         <footer></footer>
-      </body>
+      </div>
     </div>
   );
 }
