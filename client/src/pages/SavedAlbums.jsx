@@ -19,6 +19,7 @@ function SavedAlbum() {
   const [listenedAlbums, setListenedAlbums] = useState([]);
   const [currentlyAlbums, setCurrentlyAlbums] = useState([]);
   const [plannedAlbums, setPlannedAlbums] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [value, setValue] = useState("1");
 
   useEffect(() => {
@@ -32,6 +33,7 @@ function SavedAlbum() {
             getAlbumDataFromDB(response.data.listened_albums),
             getAlbumDataFromDB(response.data.currently_albums),
             getAlbumDataFromDB(response.data.planned_albums),
+            setLoading(false),
           ]);
 
         setListenedAlbums(listenedAlbumsData);
@@ -53,7 +55,7 @@ function SavedAlbum() {
     setValue(newValue);
   };
 
-  if (albums.length === 0) {
+  if (loading) {
     return <Loading />;
   }
 
