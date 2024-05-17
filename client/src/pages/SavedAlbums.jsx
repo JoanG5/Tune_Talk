@@ -28,6 +28,13 @@ function SavedAlbum() {
         const response = await axios.get(
           `http://localhost:3000/album/${user.sub}`
         );
+        if (
+          !response.data.listened_albums &&
+          !response.data.currently_albums &&
+          !response.data.planned_albums
+        ) {
+          return setLoading(false);
+        }
         const [listenedAlbumsData, currentlyAlbumsData, plannedAlbumsData] =
           await Promise.all([
             getAlbumDataFromDB(response.data.listened_albums),
