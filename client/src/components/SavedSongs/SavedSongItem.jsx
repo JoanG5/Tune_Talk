@@ -16,6 +16,7 @@ function SavedSongItem({ props }) {
   const { user, isAuthenticated } = useAuth0();
   const [status, setStatus] = useState(props.status);
   const [review, setReview] = useState({});
+  const [rating, setRating] = useState(0);
   const handleChange = (event) => {
     setStatus(event.target.value);
   };
@@ -54,6 +55,18 @@ function SavedSongItem({ props }) {
       console.log(response);
     } catch (error) {
       console.error("Error updating status:", error);
+    }
+  };
+
+  const handleUpdateReview = async () => {
+    try {
+      const response = await axios.put(
+        `http://localhost:3000/songReview/${user.sub}/${props.trackResponse.id}`,
+        { rating: rating, review: "" }
+      );
+      console.log(response);
+    } catch (error) {
+      console.error("Error updating review:", error);
     }
   };
 
@@ -96,6 +109,16 @@ function SavedSongItem({ props }) {
         </Button>
       </ListItemButton>
       <Divider />
+      <input
+        onChange={(e) => setRating(e.target.value)}
+        className="outline"
+        type="number"
+        min={0}
+        max={5}
+      ></input>
+      <Button onClick={handleUpdateReview} variant="outlined">
+        Update Review
+      </Button>
     </div>
   );
 }

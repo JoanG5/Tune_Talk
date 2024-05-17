@@ -16,6 +16,7 @@ function SavedAlbumItem({ props }) {
   const { user, isAuthenticated } = useAuth0();
   const [status, setStatus] = useState(props.status);
   const [review, setReview] = useState({});
+  const [rating, setRating] = useState(0);
   const handleChange = (event) => {
     setStatus(event.target.value);
   };
@@ -33,8 +34,6 @@ function SavedAlbumItem({ props }) {
     };
     getReview();
   }, []);
-
-  console.log(review);
 
   const getAllArtists = (artists) => {
     let allArtists = "";
@@ -66,6 +65,18 @@ function SavedAlbumItem({ props }) {
       console.log(response);
     } catch (error) {
       console.error("Error updating status:", error);
+    }
+  };
+
+  const handleUpdateReview = async () => {
+    try {
+      const response = await axios.put(
+        `http://localhost:3000/albumReview/${user.sub}/${props.albumResponse.id}`,
+        { rating: rating, review: ""}
+      );
+      console.log(response);
+    } catch (error) {
+      console.error("Error updating review:", error);
     }
   };
 
@@ -110,6 +121,16 @@ function SavedAlbumItem({ props }) {
         </Button>
       </ListItemButton>
       <Divider />
+      <input
+        onChange={(e) => setRating(e.target.value)}
+        className="outline"
+        type="number"
+        min={0}
+        max={5}
+      ></input>
+      <Button onClick={handleUpdateReview} variant="outlined">
+        Update Review
+      </Button>
     </div>
   );
 }
