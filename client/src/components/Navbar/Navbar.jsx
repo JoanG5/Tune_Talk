@@ -13,6 +13,7 @@ import { useNavigate } from "react-router-dom";
 import LoginButton from "../LoginButton/LoginButton";
 import { useAuth0 } from "@auth0/auth0-react";
 import Navigation from "./Navigation";
+import Searchbar from "../SearchBar/SearchBar";
 
 export const Navbar = () => {
   const { user, isAuthenticated, logout } = useAuth0();
@@ -66,6 +67,16 @@ export const Navbar = () => {
             >
               TuneTalk
             </Typography>
+            <Box 
+              sx={{
+                display: "flex",
+                margin: 4,
+                height: "40px",
+                wkdtn: "fit-content",
+              }}
+            >
+              <Searchbar/>
+            </Box>
           </Box>
           <Navigation value={value} handleChange={handleChange} />
           <Box
