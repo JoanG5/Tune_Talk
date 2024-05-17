@@ -4,6 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import LoginButton from "../LoginButton/LoginButton";
 import LogoutButton from "../LogoutButton/LogoutButton";
 import { useAuth0 } from "@auth0/auth0-react";
+import Searchbar from "../Searchbar/Searchbar"
 
 export const Navbar = () => {
   const { user, isAuthenticated } = useAuth0();
@@ -43,7 +44,6 @@ export const Navbar = () => {
                 onChange={handleChange}
                 aria-label="navigation tabs"
               >
-                <Tab label="Home" />
                 <Link to="/">
                   <Tab label="Home" />
                 </Link>
@@ -56,8 +56,12 @@ export const Navbar = () => {
                 <Link to="/profile/savedalbum">
                   <Tab label="Saved Albums" />
                 </Link>
-                <Tab label="Songs" />
-                <Tab label="Profile" />
+                <Link>
+                  <Tab label="Songs" />
+                </Link>
+                <Link>
+                  <div><Searchbar/></div>
+                </Link>
               </Tabs>
               {isAuthenticated ? <LogoutButton /> : <LoginButton />}
             </Box>
