@@ -193,7 +193,7 @@ export const getAlbumDataFromDB = async (albums) => {
 export const spotifySearch = async (search) => {
   try {
     const response = await axios.get(
-      `https://api.spotify.com/v1/search?q=${search}&type=track,album&limit=5`,
+      `https://api.spotify.com/v1/search?q=${search}&type=track,album&limit=3`,
       searchParameters
     );
     const tracks = response.data.tracks.items;
