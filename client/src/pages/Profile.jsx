@@ -7,15 +7,23 @@ import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
 import Typography from "@mui/material/Typography";
-import { Button, CardActionArea, CardActions } from "@mui/material";
+import { CardActionArea } from "@mui/material";
 import { testAlbumData } from "../services/Spotify";
 import { useAuth0 } from "@auth0/auth0-react";
+import ActivityCard from "../components/ActivityCard/ActivityCard";
+import axios from "axios";
+import {
+  getAlbumDataFromDB,
+  getTrackDataFromDB,
+  getOneAlbumId,
+} from "../services/Spotify";
 
 function Profile() {
   const { user } = useAuth0();
   const { name, picture } = user;
   const [value, setValue] = useState(0);
   const [albums, setAlbums] = useState([]);
+  const [activities, setActivities] = useState([]);
   const [favoriteTracks, setFavoriteTracks] = useState([]);
   const [recentActivity, setRecentActivity] = useState([]);
 
@@ -25,21 +33,89 @@ function Profile() {
 
   useEffect(() => {
     const fetchAlbums = async () => {
-      const albumData = await testAlbumData();
-      setAlbums(albumData.slice(0, 15));
-      setFavoriteTracks(albumData.slice(0, 4));
-      setRecentActivity(albumData.slice(5, 10));
+      const response = await axios.get(
+        `http://localhost:3000/album/${user.sub}`
+      );
+      const [listenedAlbumsData, currentlyAlbumsData, plannedAlbumsData] =
+        await Promise.all([
+          getAlbumDataFromDB(response.data.listened_albums),
+          getAlbumDataFromDB(response.data.currently_albums),
+          getAlbumDataFromDB(response.data.planned_albums),
+        ]);
+      setAlbums([
+        ...listenedAlbumsData,
+        ...currentlyAlbumsData,
+        ...plannedAlbumsData,
+      ]);
     };
+
+    const fetchTracks = async () => {
+      const response = await axios.get(
+        `http://localhost:3000/song/${user.sub}`
+      );
+      const [listenedSongsData, plannedSongsData] = await Promise.all([
+        getTrackDataFromDB(response.data.listened_songs),
+        getTrackDataFromDB(response.data.planned_songs),
+      ]);
+      setFavoriteTracks([...listenedSongsData, ...plannedSongsData]);
+      setRecentActivity([...listenedSongsData, ...plannedSongsData]);
+    };
+
+    /* const fetchActivities = async () => {
+      const albumData = await testAlbumData();
+      const activityData = albumData.map((album, index) => ({
+        id: index + 1,
+        image: album.images[0].url,
+        title: album.name,
+        year: new Date().getFullYear(),
+        review: "Review it here",
+        username: user.name,
+        userAvatar: user.picture,
+      }));
+      setActivities(activityData);
+    };
+    */
+
+    const fetchReviews = async () => {
+      const response = await axios.get(
+        `http://localhost:3000/albumReview/profile/${user.sub}`
+      );
+
+      const reviewsData = await Promise.all(
+        response.data.map(async (review, index) => {
+          const albumData = await getOneAlbumId(review.spotify_id);
+          return {
+            id: review.review_id,
+            image: albumData.images[0].url,
+            title: albumData.name,
+            rating: review.rating,
+            review: review.review,
+            username: user.name,
+            userAvatar: user.picture,
+            year: new Date(review.createdAt).toLocaleDateString(),
+            spotifyId: review.spotify_id,
+          };
+        })
+      );
+      setActivities(reviewsData);
+    };
+
     fetchAlbums();
-  }, []);
+    fetchTracks();
+    fetchReviews();
+  }, [user]);
+
+  // console.log(albums);
+  // console.log(favoriteTracks);
+  // console.log(activities);
 
   const sectionHeadingStyle = {
     color: "DimGray",
     fontFamily: "Roboto,Helvetica,Arial,sans-serif",
-    fontSize: "1rem",
+    fontSize: "16px",
     fontWeight: "550",
-    letterSpacing: ".05em",
-    marginBottom: ".76923077rem",
+    letterSpacing: "1px",
+    marginBottom: "3px",
     marginTop: "0",
     paddingBottom: "5px",
     textTransform: "uppercase",
@@ -53,15 +129,15 @@ function Profile() {
             <CardMedia
               component="img"
               height="200"
-              image={track.images[0].url}
+              image={track.trackResponse.album.images[0].url}
               alt={`Cover of the track "${track.name}"`}
             />
             <CardContent sx={{ padding: 2 }}>
               <Typography gutterBottom variant="h6" component="div">
-                {track.name}
+                {track.trackResponse.name}
               </Typography>
               <Typography variant="body2" color="text.secondary">
-                {track.artistNames}
+                {track.trackResponse.artists[0].name}
               </Typography>
             </CardContent>
           </CardActionArea>
@@ -123,20 +199,18 @@ function Profile() {
                   }}
                 >
                   <h4 className="text-center px-7 ">
-                    <a href="">
-                      <span>5</span>
+                    <button onClick={() => setValue(1)}>
+                      <span>{activities.length}</span>
                       <span className="definition block tracking-wider mt-3 uppercase ">
                         Reviews
                       </span>
-                    </a>
+                    </button>
                   </h4>
                   <h4 className="text-center px-7">
-                    <a href="">
-                      <span>0</span>
-                      <span className="definition block tracking-wider mt-3 uppercase">
-                        Followers
-                      </span>
-                    </a>
+                    <span>0</span>
+                    <span className="definition block tracking-wider mt-3 uppercase">
+                      Followers
+                    </span>
                   </h4>
                   <h4 className="text-center px-7">
                     <a href="">
@@ -185,6 +259,14 @@ function Profile() {
               </section>
             </>
           )}
+          {value === 1 && (
+            <section className="activity" style={{ marginTop: "40px" }}>
+              <h2 style={sectionHeadingStyle}>User Activity</h2>
+              {activities.map((activity) => (
+                <ActivityCard key={activity.id} activity={activity} />
+              ))}
+            </section>
+          )}
           {value === 2 && (
             <section className="all-tracks" style={{ marginTop: "40px" }}>
               <h2 style={sectionHeadingStyle}>All Tracks</h2>
@@ -199,15 +281,15 @@ function Profile() {
                       <CardMedia
                         component="img"
                         height="200"
-                        image={album.images[0].url}
-                        alt={`Cover of the track "${album.name}"`}
+                        image={album.albumResponse.images[0].url}
+                        alt={`Cover of the track "${album.albumResponse.name}"`}
                       />
                       <CardContent sx={{ padding: 2 }}>
                         <Typography gutterBottom variant="h6" component="div">
-                          {album.name}
+                          {album.albumResponse.name}
                         </Typography>
                         <Typography variant="body2" color="text.secondary">
-                          {album.artistNames}
+                          {album.albumResponse.artists[0].name}
                         </Typography>
                       </CardContent>
                     </CardActionArea>

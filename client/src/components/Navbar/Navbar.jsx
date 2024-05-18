@@ -45,6 +45,10 @@ export const Navbar = () => {
     logout({ returnTo: window.location.origin });
   };
 
+  const handleHome = () => {
+    navigate("/");
+  };
+
   return (
     <Box className="top-0">
       <AppBar position="relative" sx={{ background: "black", height: "70px" }}>
@@ -55,7 +59,12 @@ export const Navbar = () => {
             justifyContent: "space-between",
           }}
         >
-          <Box display="flex" alignItems="center">
+          <Box
+            display="flex"
+            alignItems="center"
+            onClick={handleHome}
+            sx={{ cursor: "pointer" }}
+          >
             <img width={"54px"} height={"54px"} src={logoImg} alt="logo" />
             <Typography
               variant="h5"
@@ -63,16 +72,16 @@ export const Navbar = () => {
             >
               TuneTalk
             </Typography>
-            <Box 
-              sx={{
-                display: "flex",
-                margin: 4,
-                height: "40px",
-                wkdtn: "fit-content",
-              }}
-            >
-              <Searchbar/>
-            </Box>
+          </Box>
+          <Box
+            sx={{
+              display: "flex",
+              margin: 4,
+              height: "40px",
+              wkdtn: "fit-content",
+            }}
+          >
+            <Searchbar />
           </Box>
           <Navigation value={value} handleChange={handleChange} />
           <Box

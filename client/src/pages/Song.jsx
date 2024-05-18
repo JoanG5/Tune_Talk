@@ -74,31 +74,49 @@ function Song() {
   return (
     <div>
       <SongDisplay props={songInfo} />
-      
-      <Grid container spacing={2} direction='row' justifyContent='center' alignItems='center' paddingRight={4}>
-        <Grid item xs={6} >
-          <ReviewList reviews={[0]} />
+
+      <Grid
+        container
+        spacing={2}
+        direction="row"
+        justifyContent="center"
+        alignItems="flex-start"
+        paddingRight={4}
+      >
+        <Grid item xs={8}>
+          <ReviewList />
         </Grid>
-        <Grid item xs>
+        <Grid
+          item
+          xs
+          container
+          direction="row"
+          justifyContent="center"
+          minWidth="400px"
+        >
+        <div class="grid grid-cols-2 gap-4">
+
+          <div>
+            {/*  */}
+            <FormControl sx={{ m: 1, minWidth: 190 }}>
+              <InputLabel>Status</InputLabel>
+              <Select value={status} label="Status" onChange={handleChange}>
+                <MenuItem value={"Listened To"}>Listened To</MenuItem>
+                <MenuItem value={"Plan On Listening"}>
+                  Plan On Listening
+                </MenuItem>
+              </Select>
+            </FormControl>
+            {/*  */}
+          </div>
+          <div>
+            <Button onClick={handleSaveSong} variant="outlined">
+              TEST SAVE SONG
+            </Button>
+          </div>
+          </div>
         </Grid>
       </Grid>
-
-      <div className="flex justify-center">
-        <Button onClick={handleSaveSong} variant="outlined">
-          TEST SAVE SONG
-        </Button>
-      </div>
-      <div className="flex justify-center">
-        {/*  */}
-        <FormControl sx={{ m: 1, minWidth: 190 }}>
-          <InputLabel>Status</InputLabel>
-          <Select value={status} label="Status" onChange={handleChange}>
-            <MenuItem value={"Listened To"}>Listened To</MenuItem>
-            <MenuItem value={"Plan On Listening"}>Plan On Listening</MenuItem>
-          </Select>
-        </FormControl>
-        {/*  */}
-      </div>
     </div>
   );
 }
