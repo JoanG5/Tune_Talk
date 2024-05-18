@@ -47,7 +47,7 @@ function Home() {
         </div>
         <div className="Wrapper for each song">
           <div class="grid grid-cols-3 gap-4 px-4">
-            <div class="bg-blue-200 p-4 ">
+            <div class="bg-gray-200 p-4">
               <Button color="secondary">
                 Song <br/>
                 Picture <br/>
@@ -59,51 +59,51 @@ function Home() {
             </div>
             <div class="bg-gray-200 p-4">
             <Button color="secondary">
-                Song
-                Picture
-                Title
-                Artist
-                Rating
+            Song <br/>
+                Picture <br/>
+                Title <br/>
+                Artist <br/>
+                Rating <br/>
                 Clicking on any part of this element and leads to the song page
               </Button>
             </div>
             <div class="bg-gray-200 p-4">
             <Button color="secondary">
-                Song
-                Picture
-                Title
-                Artist
-                Rating
+            Song <br/>
+                Picture <br/>
+                Title <br/>
+                Artist <br/>
+                Rating <br/>
                 Clicking on any part of this element and leads to the song page
               </Button>
             </div>
             <div class="bg-gray-200 p-4">
             <Button color="secondary">
-                Song
-                Picture
-                Title
-                Artist
-                Rating
+                Song <br/>
+                Picture <br/>
+                Title <br/>
+                Artist <br/>
+                Rating <br/>
                 Clicking on any part of this element and leads to the song page
               </Button>
             </div>
             <div class="bg-gray-200 p-4">
             <Button color="secondary">
-                Song
-                Picture
-                Title
-                Artist
-                Rating
+                Song <br/>
+                Picture <br/>
+                Title <br/>
+                Artist <br/>
+                Rating <br/>
                 Clicking on any part of this element and leads to the song page
               </Button>
             </div>
             <div class="bg-gray-200 p-4">
             <Button color="secondary">
-                Song
-                Picture
-                Title
-                Artist
-                Rating
+                Song <br/>
+                Picture <br/>
+                Title <br/>
+                Artist <br/>
+                Rating <br/>
                 Clicking on any part of this element and leads to the song page
               </Button>
             </div>
@@ -117,6 +117,15 @@ function Home() {
           <div class="grid grid-cols-3 gap-4 px-4">
             <div class="bg-gray-200 p-4">
             <Button color="secondary">
+            Album <br/>
+              Picture <br/>
+              Title <br/>
+              Artist <br/>
+              Clicking on any part of this element and leads to the album page
+            </Button>
+            </div>
+            <div class="bg-gray-200 p-4">
+            <Button color="secondary">
               Album <br/>
               Picture <br/>
               Title <br/>
@@ -126,46 +135,37 @@ function Home() {
             </div>
             <div class="bg-gray-200 p-4">
             <Button color="secondary">
-              Album
-              Picture
-              Title
-              Artist
+              Album <br/>
+              Picture <br/>
+              Title <br/>
+              Artist <br/>
               Clicking on any part of this element and leads to the album page
             </Button>
             </div>
             <div class="bg-gray-200 p-4">
             <Button color="secondary">
-              Album
-              Picture
-              Title
-              Artist
+              Album <br/>
+              Picture <br/>
+              Title <br/>
+              Artist <br/>
               Clicking on any part of this element and leads to the album page
             </Button>
             </div>
             <div class="bg-gray-200 p-4">
             <Button color="secondary">
-              Album
-              Picture
-              Title
-              Artist
+              Album <br/>
+              Picture <br/>
+              Title <br/>
+              Artist <br/>
               Clicking on any part of this element and leads to the album page
             </Button>
             </div>
             <div class="bg-gray-200 p-4">
             <Button color="secondary">
-              Album
-              Picture
-              Title
-              Artist
-              Clicking on any part of this element and leads to the album page
-            </Button>
-            </div>
-            <div class="bg-gray-200 p-4">
-            <Button color="secondary">
-              Album
-              Picture
-              Title
-              Artist
+              Album <br/>
+              Picture <br/>
+              Title <br/>
+              Artist <br/>
               Clicking on any part of this element and leads to the album page
             </Button>
             </div>
@@ -174,5 +174,6 @@ function Home() {
     </>
   );
 }
+
 
 export default Home;
