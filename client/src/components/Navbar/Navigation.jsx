@@ -3,8 +3,8 @@ import { Box, Button } from "@mui/material";
 import { Link } from "react-router-dom";
 
 const navigationItems = [
-  { text: "Saved Songs", to: "/profile/savedsong" },
-  { text: "Saved Albums", to: "/profile/savedalbum" },
+  { text: "Songs", to: "/profile/savedsong" },
+  { text: "Albums", to: "/profile/savedalbum" },
 ];
 
 const Navigation = ({ value, handleChange }) => {

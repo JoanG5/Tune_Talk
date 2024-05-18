@@ -61,21 +61,6 @@ function Profile() {
       setRecentActivity([...listenedSongsData, ...plannedSongsData]);
     };
 
-    /* const fetchActivities = async () => {
-      const albumData = await testAlbumData();
-      const activityData = albumData.map((album, index) => ({
-        id: index + 1,
-        image: album.images[0].url,
-        title: album.name,
-        year: new Date().getFullYear(),
-        review: "Review it here",
-        username: user.name,
-        userAvatar: user.picture,
-      }));
-      setActivities(activityData);
-    };
-    */
-
     const fetchReviews = async () => {
       const response = await axios.get(
         `http://localhost:3000/albumReview/profile/${user.sub}`

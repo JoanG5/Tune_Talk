@@ -94,9 +94,11 @@ export const Navbar = () => {
           >
             {isAuthenticated ? (
               <>
-                <IconButton onClick={handleMenu} sx={{ paddingLeft: 2 }}>
-                  <Avatar src={user.picture} alt={user.name} />
-                </IconButton>
+                <Box sx={{ marginLeft: 2 }}>
+                  <IconButton onClick={handleMenu}>
+                    <Avatar src={user.picture} alt={user.name} />
+                  </IconButton>
+                </Box>
                 <Menu
                   anchorEl={anchorEl}
                   anchorOrigin={{
