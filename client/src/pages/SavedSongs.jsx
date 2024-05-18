@@ -27,6 +27,9 @@ function SavedSongs() {
         const response = await axios.get(
           `http://localhost:3000/song/${user.sub}`
         );
+        if (!response.data.listenened_songs && !response.data.planned_songs) {
+          return setLoading(false);
+        }
         const [listenedTracksData, plannedTracksData] = await Promise.all([
           getTrackDataFromDB(response.data.listened_songs),
           getTrackDataFromDB(response.data.planned_songs),
