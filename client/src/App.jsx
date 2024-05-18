@@ -11,15 +11,22 @@ import Loading from "./components/Loading";
 import { useAuth0 } from "@auth0/auth0-react";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
+import { Box, FormControlLabel, Switch } from "@mui/material";
+import { useState } from "react";
 
 function App() {
   const { isLoading, error } = useAuth0();
+  const [darkMode, setDarkMode] = useState(false);
 
   const darkTheme = createTheme({
     palette: {
-      mode: "dark",
+      mode: darkMode ? "dark" : "light",
     },
   });
+
+  const handleDarkModeChange = () => {
+    setDarkMode((prevMode) => !prevMode);
+  };
 
   if (isLoading) {
     return <Loading />;
@@ -45,6 +52,13 @@ function App() {
             </Routes>
           </>
         )}
+        <Box sx={{ position: "fixed", right: 20, bottom: 20 }}>
+          <FormControlLabel
+            control={
+              <Switch checked={darkMode} onChange={handleDarkModeChange} />
+            }
+          />
+        </Box>
       </ThemeProvider>
     </Router>
   );
