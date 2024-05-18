@@ -8,6 +8,7 @@ import {
   Box,
   Avatar,
 } from "@mui/material";
+import Rating from "@mui/material/Rating";
 
 const ActivityCard = ({ activity }) => {
   return (
@@ -34,6 +35,12 @@ const ActivityCard = ({ activity }) => {
           >
             {activity.title}
           </Typography>
+          <Rating
+            name="read-only"
+            value={activity.rating}
+            readOnly
+            sx={{ margin: "3px 0px" }}
+          />
           <Typography
             variant="subtitle1"
             color="text.secondary"
@@ -41,7 +48,12 @@ const ActivityCard = ({ activity }) => {
           >
             {activity.year}
           </Typography>
-          <Typography variant="body2" color="text.secondary" component="p">
+          <Typography
+            variant="body2"
+            color="text.secondary"
+            component="p"
+            sx={{ marginTop: "3px" }}
+          >
             {activity.review}
           </Typography>
         </CardContent>

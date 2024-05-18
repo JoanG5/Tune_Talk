@@ -81,22 +81,22 @@ function Profile() {
         `http://localhost:3000/albumReview/profile/${user.sub}`
       );
 
-      // const albumData = await Promise.all([
-      //   getOneAlbumId(response.data.spotify_id),
-      // ]);
-
-      console.log(response.data.spotify_id);
-
-      const reviewsData = response.data.map((review, index) => ({
-        id: review.review_id,
-        image: albumData.albumResponse.image[0].url,
-        title: review.review,
-        rating: review.rating,
-        username: user.name,
-        userAvatar: user.picture,
-        date: new Date(review.createdAt).toLocaleDateString(),
-        spotifyId: review.spotify_id,
-      }));
+      const reviewsData = await Promise.all(
+        response.data.map(async (review, index) => {
+          const albumData = await getOneAlbumId(review.spotify_id);
+          return {
+            id: review.review_id,
+            image: albumData.images[0].url,
+            title: albumData.name,
+            rating: review.rating,
+            review: review.review,
+            username: user.name,
+            userAvatar: user.picture,
+            year: new Date(review.createdAt).toLocaleDateString(),
+            spotifyId: review.spotify_id,
+          };
+        })
+      );
       setActivities(reviewsData);
     };
 
@@ -199,20 +199,18 @@ function Profile() {
                   }}
                 >
                   <h4 className="text-center px-7 ">
-                    <a href="">
-                      <span>5</span>
+                    <button onClick={() => setValue(1)}>
+                      <span>{activities.length}</span>
                       <span className="definition block tracking-wider mt-3 uppercase ">
                         Reviews
                       </span>
-                    </a>
+                    </button>
                   </h4>
                   <h4 className="text-center px-7">
-                    <a href="">
-                      <span>0</span>
-                      <span className="definition block tracking-wider mt-3 uppercase">
-                        Followers
-                      </span>
-                    </a>
+                    <span>0</span>
+                    <span className="definition block tracking-wider mt-3 uppercase">
+                      Followers
+                    </span>
                   </h4>
                   <h4 className="text-center px-7">
                     <a href="">
