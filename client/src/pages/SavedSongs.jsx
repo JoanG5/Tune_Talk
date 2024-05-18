@@ -18,6 +18,7 @@ function SavedSongs() {
   const [tracks, setTracks] = useState([]);
   const [listenedTracks, setListenedTracks] = useState([]);
   const [plannedTracks, setPlannedTracks] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [value, setValue] = useState("1");
 
   useEffect(() => {
@@ -29,8 +30,8 @@ function SavedSongs() {
         const [listenedTracksData, plannedTracksData] = await Promise.all([
           getTrackDataFromDB(response.data.listened_songs),
           getTrackDataFromDB(response.data.planned_songs),
+          setLoading(false),
         ]);
-
         setListenedTracks(listenedTracksData);
         setPlannedTracks(plannedTracksData);
         setTracks([...listenedTracksData, ...plannedTracksData]);
@@ -45,7 +46,7 @@ function SavedSongs() {
     setValue(newValue);
   };
 
-  if (tracks.length === 0) {
+  if (loading) {
     return <Loading />;
   }
 
