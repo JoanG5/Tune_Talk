@@ -8,7 +8,6 @@ import axios from "axios";
 import { useAuth0 } from "@auth0/auth0-react";
 import { Box, Button, Grid } from "@mui/material";
 
-
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
@@ -76,37 +75,54 @@ function Album() {
     <div>
       <AlbumDisplay props={AlbumInfo} />
 
-      <Grid container spacing={2} direction='row' alignItems='flex-start' paddingRight={4}>
-        <Grid item xs={6} >
+      <Grid
+        container
+        spacing={2}
+        direction="row"
+        alignItems="flex-start"
+        paddingRight={4}
+      >
+        <Grid item xs={8}>
           <ReviewList />
         </Grid>
-        <Grid item xs>
-          <Box sx={{minWidth: '380px'}}>
-            <TrackList props={AlbumInfo} />
-          </Box>
+        <Grid
+          item
+          xs
+          container
+          direction="row"
+          justifyContent="center"
+          minWidth="400px"
+        >
+          <div class="grid grid-cols-2 gap-4">
+            <div>
+              {/*  */}
+              <FormControl sx={{ m: 1, minWidth: 190 }}>
+                <InputLabel>Status</InputLabel>
+                <Select value={status} label="Status" onChange={handleChange}>
+                  <MenuItem value={"Listened To"}>Listened To</MenuItem>
+                  <MenuItem value={"Currently Listening"}>
+                    Currently Listening
+                  </MenuItem>
+                  <MenuItem value={"Plan On Listening"}>
+                    Plan On Listening
+                  </MenuItem>
+                </Select>
+              </FormControl>
+              {/*  */}
+            </div>
+            <div>
+              <Button onClick={handleSaveAlbum} variant="outlined">
+                TEST SAVE ALBUM
+              </Button>
+            </div>
+            <div className="col-span-2">
+              <Box sx={{ minWidth: "380px" }}>
+                <TrackList props={AlbumInfo} />
+              </Box>
+            </div>
+          </div>
         </Grid>
       </Grid>
-      
-      <div className="flex justify-center">
-        <Button onClick={handleSaveAlbum} variant="outlined">
-          TEST SAVE ALBUM
-        </Button>
-      </div>
-      <div className="flex justify-center">
-        {/*  */}
-        <FormControl sx={{ m: 1, minWidth: 190 }}>
-          <InputLabel>Status</InputLabel>
-          <Select value={status} label="Status" onChange={handleChange}>
-            <MenuItem value={"Listened To"}>Listened To</MenuItem>
-            <MenuItem value={"Currently Listening"}>
-              Currently Listening
-            </MenuItem>
-            <MenuItem value={"Plan On Listening"}>Plan On Listening</MenuItem>
-          </Select>
-        </FormControl>
-        {/*  */}
-
-      </div>
     </div>
   );
 }

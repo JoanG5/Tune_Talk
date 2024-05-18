@@ -172,7 +172,7 @@ function ReviewList() {
   return (
     <div style={{ paddingLeft: "24px" }}>
       <Grid container spacing={0} direction="row">
-        <Grid item xs paddingLeft={2}>
+        <Grid item xs paddingLeft={1}>
           <Typography
             fontWeight={700}
             gutterBottom
@@ -182,7 +182,7 @@ function ReviewList() {
             User Reviews
           </Typography>
           <Paper
-            elevation={1}
+            elevation={0}
             sx={{
               p: 2,
               marginRight: "auto",
