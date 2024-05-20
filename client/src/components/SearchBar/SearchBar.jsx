@@ -55,7 +55,7 @@ export const Searchbar = () => {
     <div className="z-10">
       <input
         type="text"
-        placeholder="Search for a song or album"
+        placeholder="Search for a song or album..."
         className="text-black rounded outline-none border-2 pl-2 pr-4 py-2 w-64"
         onChange={(e) => spotifyQuery(e.target.value)}
       />

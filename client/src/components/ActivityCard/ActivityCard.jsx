@@ -15,7 +15,7 @@ const ActivityCard = ({ activity }) => {
     <Card sx={{ display: "flex", marginBottom: 3, padding: 3 }}>
       <CardMedia
         component="img"
-        sx={{ width: 150 }}
+        sx={{ width: 200, height: 200, objectFit: "cover", borderRadius: 2}}
         image={activity.image}
         alt={activity.title}
       />

@@ -16,6 +16,7 @@ import {
   getAlbumDataFromDB,
   getTrackDataFromDB,
   getOneAlbumId,
+  getOneTrackId,
 } from "../services/Spotify";
 
 function Profile() {
@@ -61,22 +62,7 @@ function Profile() {
       setRecentActivity([...listenedSongsData, ...plannedSongsData]);
     };
 
-    /* const fetchActivities = async () => {
-      const albumData = await testAlbumData();
-      const activityData = albumData.map((album, index) => ({
-        id: index + 1,
-        image: album.images[0].url,
-        title: album.name,
-        year: new Date().getFullYear(),
-        review: "Review it here",
-        username: user.name,
-        userAvatar: user.picture,
-      }));
-      setActivities(activityData);
-    };
-    */
-
-    const fetchReviews = async () => {
+    const fetchAlbumReviews = async () => {
       const response = await axios.get(
         `http://localhost:3000/albumReview/profile/${user.sub}`
       );
@@ -100,9 +86,35 @@ function Profile() {
       setActivities(reviewsData);
     };
 
+    const fetchSongReviews = async () => {
+      const response = await axios.get(
+        `http://localhost:3000/songReview/profile/${user.sub}`
+      );
+      console.log(response.data);
+
+      const reviewsData = await Promise.all(
+        response.data.map(async (review, index) => {
+          const songData = await getOneTrackId(review.spotify_id);
+          return {
+            id: review.review_id,
+            image: songData.album.images[0].url,
+            title: songData.name,
+            rating: review.rating,
+            review: review.review,
+            username: user.name,
+            userAvatar: user.picture,
+            year: new Date(review.createdAt).toLocaleDateString(),
+            spotifyId: review.spotify_id,
+          };
+        })
+      );
+      setActivities((prev) => [...prev, ...reviewsData]);
+    };
+
     fetchAlbums();
     fetchTracks();
-    fetchReviews();
+    fetchAlbumReviews();
+    fetchSongReviews();
   }, [user]);
 
   // console.log(albums);

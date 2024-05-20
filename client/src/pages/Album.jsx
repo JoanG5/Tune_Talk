@@ -6,7 +6,11 @@ import { getOneAlbumId } from "../services/Spotify";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import { useAuth0 } from "@auth0/auth0-react";
-import { Box, Button, Grid } from "@mui/material";
+import { Box, Grid, CircularProgress } from "@mui/material";
+import SaveIcon from "@mui/icons-material/Save";
+import CheckIcon from "@mui/icons-material/Check";
+import Fab from "@mui/material/Fab";
+import { green } from "@mui/material/colors";
 
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
@@ -47,10 +51,6 @@ function Album() {
   }, [albumTitle]);
 
   const handleSaveAlbum = async () => {
-    if (status === "") {
-      alert("Please select a status");
-      return;
-    }
     try {
       const albumData = {
         title: AlbumInfo.name,
@@ -69,6 +69,46 @@ function Album() {
     } catch (error) {
       console.error("Error saving album:", error);
     }
+  };
+
+  // For save button
+  const [loading, setLoading] = React.useState(false);
+  const [success, setSuccess] = React.useState(false);
+  const timer = React.useRef();
+
+  const buttonSx = {
+    ...(success && {
+      bgcolor: green[500],
+      "&:hover": {
+        bgcolor: green[700],
+      },
+    }),
+  };
+
+  React.useEffect(() => {
+    return () => {
+      clearTimeout(timer.current);
+    };
+  }, []);
+
+  const handleButtonClick = () => {
+    if (!loading) {
+      setSuccess(false);
+      setLoading(true);
+      timer.current = setTimeout(() => {
+        setSuccess(true);
+        setLoading(false);
+      }, 1000);
+    }
+  };
+
+  const handleSave = async () => {
+    if (status === "") {
+      alert("Please select a status");
+      return;
+    }
+    handleButtonClick();
+    await handleSaveAlbum();
   };
 
   return (
@@ -93,8 +133,33 @@ function Album() {
           justifyContent="center"
           minWidth="400px"
         >
-          <div class="grid grid-cols-2 gap-4">
-            <div>
+          <div class="grid grid-cols-6 gap-6 pt-8 ml-4">
+            <div class="col-span-1 flex justify-start">
+              <Box sx={{ m: 1, position: "relative" }}>
+                <Fab
+                  aria-label="save"
+                  color="primary"
+                  sx={buttonSx}
+                  onClick={handleSave}
+                >
+                  {success ? <CheckIcon /> : <SaveIcon />}
+                </Fab>
+                {loading && (
+                  <CircularProgress
+                    size={68}
+                    sx={{
+                      color: green[500],
+                      position: "absolute",
+                      top: -6,
+                      left: -6,
+                      zIndex: 1,
+                    }}
+                  />
+                )}
+              </Box>
+              
+            </div>
+            <div class="col-span-1 flex justify-start">
               {/*  */}
               <FormControl sx={{ m: 1, minWidth: 190 }}>
                 <InputLabel>Status</InputLabel>
@@ -109,13 +174,9 @@ function Album() {
                 </Select>
               </FormControl>
               {/*  */}
+              
             </div>
-            <div>
-              <Button onClick={handleSaveAlbum} variant="outlined">
-                TEST SAVE ALBUM
-              </Button>
-            </div>
-            <div className="col-span-2">
+            <div className="col-span-6 flex justify-start">
               <Box sx={{ minWidth: "380px" }}>
                 <TrackList props={AlbumInfo} />
               </Box>
