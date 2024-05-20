@@ -7,7 +7,7 @@ import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
 import Typography from "@mui/material/Typography";
-import { CardActionArea } from "@mui/material";
+import { Button, CardActionArea } from "@mui/material";
 import { testAlbumData } from "../services/Spotify";
 import { useAuth0 } from "@auth0/auth0-react";
 import ActivityCard from "../components/ActivityCard/ActivityCard";
@@ -27,6 +27,7 @@ function Profile() {
   const [activities, setActivities] = useState([]);
   const [favoriteTracks, setFavoriteTracks] = useState([]);
   const [recentActivity, setRecentActivity] = useState([]);
+  const [chatGPTResponse, setChatGPTResponse] = useState("");
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -74,6 +75,7 @@ function Profile() {
             id: review.review_id,
             image: albumData.images[0].url,
             title: albumData.name,
+            artist: songData.artists.map(artist => artist.name).join(', '),
             rating: review.rating,
             review: review.review,
             username: user.name,
@@ -99,6 +101,7 @@ function Profile() {
             id: review.review_id,
             image: songData.album.images[0].url,
             title: songData.name,
+            artist: songData.artists.map(artist => artist.name).join(', '),
             rating: review.rating,
             review: review.review,
             username: user.name,
@@ -109,6 +112,7 @@ function Profile() {
         })
       );
       setActivities((prev) => [...prev, ...reviewsData]);
+      
     };
 
     fetchAlbums();
@@ -119,7 +123,7 @@ function Profile() {
 
   // console.log(albums);
   // console.log(favoriteTracks);
-  // console.log(activities);
+   console.log(activities);
 
   const sectionHeadingStyle = {
     color: "DimGray",
@@ -157,6 +161,33 @@ function Profile() {
       ))}
     </Box>
   );
+  // ai tab
+  const handleFetchChatGPTResponse = async () => {
+    const dataToSend = activities;
+    const prompt = `Please use this data to ask Suno AI to create a song that the user will like based on these albums: Please keep in mind SUNO does not allow artist names in the prompt, so maybe include a specified genre that the user might like based on the songs and artists. Also please keep in mind suno ai has a character limit of 100 characters:\n${JSON.stringify(dataToSend)}`;
+
+    const requestBody = {
+      model: "gpt-4",
+      messages: [
+        { role: "system", content: "You are a helpful assistant." },
+        { role: "user", content: prompt }
+      ],
+      max_tokens: 150,
+      temperature: 0.7
+    };
+    console.log("Data sent to ChatGPT:", requestBody);
+    try {
+      const response = await axios.post('https://api.openai.com/v1/chat/completions', requestBody, {
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer `
+        }
+      });
+      setChatGPTResponse(response.data.choices[0].message.content);
+    } catch (error) {
+      console.error('Error fetching response from ChatGPT:', error);
+    }
+  };
 
   return (
     <div style={{ fontFamily: "Roboto,Helvetica,Arial,sans-serif" }}>
@@ -249,6 +280,7 @@ function Profile() {
                   <Tab label="Profile" />
                   <Tab label="Activity" />
                   <Tab label="Tracks" />
+                  <Tab label="AI Song" />
                 </Tabs>
               </Box>
             </nav>
@@ -309,6 +341,40 @@ function Profile() {
                 ))}
               </Box>
             </section>
+          )}
+          {value === 3 && (
+            <>
+              <section className="ai-song" style={{ marginTop: "40px" }}>
+                <h2 style={sectionHeadingStyle}>AI Song</h2>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={handleFetchChatGPTResponse}
+                >
+                  Generate AI Song
+                </Button>
+                {activities.length > 0 && (
+                  <Box mt={2}>
+                    <Typography variant="h6">Album Details:</Typography>
+                    {activities.map((detail, index) => (
+                      <div key={index}>
+                        <p><strong>Song/Album name:</strong> {detail.title}</p>
+                        <p><strong>Artist/s:</strong> {detail.artist}</p>
+                        <p><strong>Review:</strong> {detail.review}</p>
+                        <p><strong>Rating:</strong> {detail.rating}</p>
+                        
+                      </div>
+                    ))}
+                  </Box>
+                )}
+                {chatGPTResponse && (
+                  <Box mt={2}>
+                    <Typography variant="h6">AI Song Response:</Typography>
+                    <Typography>{chatGPTResponse}</Typography>
+                  </Box>
+                )}
+              </section>
+            </>
           )}
         </div>
       </div>
