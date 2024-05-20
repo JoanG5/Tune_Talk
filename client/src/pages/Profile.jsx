@@ -108,7 +108,7 @@ function Profile() {
           };
         })
       );
-      setActivities((prev) => [...prev, ...reviewsData]);
+      setActivities([...reviewsData]);
     };
 
     fetchAlbums();
@@ -134,9 +134,9 @@ function Profile() {
   };
 
   const displayTracks = (tracks) => (
-    <Box display="flex" justifyContent="space-between" flexWrap="wrap">
+    <Box display="flex" justifyContent="flex-start" flexWrap="wrap">
       {tracks.map((track, index) => (
-        <Card key={index} sx={{ maxWidth: 200, marginY: 2 }}>
+        <Card key={index} sx={{ maxWidth: 200, marginY: 2, marginX: 2 }}>
           <CardActionArea>
             <CardMedia
               component="img"
