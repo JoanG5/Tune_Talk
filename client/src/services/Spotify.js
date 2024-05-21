@@ -231,6 +231,26 @@ export const getRandomTracks = async () => {
   }
 };
 
+export const getTopTracks = async () => {
+  try {
+    const response = await axios.get(
+      "https://api.spotify.com/v1/playlists/37i9dQZEVXbMDoHDwVN2tF/tracks?limit=5",
+      searchParameters
+    );
+    return response.data.items;
+    // const trackData = [];
+    // for (const track of response.data.items) {
+    //   const trackId = track.track.id;
+    //   const trackResponse = await getOneTrackId(trackId);
+    //   trackData.push(trackResponse);
+    // }
+    // return trackData;
+  } catch (error) {
+    console.error("Error fetching data:", error);
+    throw error;
+  }
+};
+
 export const testData = async () => {
   const data = [];
   data.push(await getOneTrack("Slow Dancing in the Dark"));

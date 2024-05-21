@@ -8,7 +8,6 @@ import { Button, ButtonGroup } from "@mui/material";
 import { Link } from "react-router-dom";
 
 function TopTrack({ track }) {
-  console.log(track);
   return (
     <Card
       sx={{
@@ -19,13 +18,13 @@ function TopTrack({ track }) {
     >
       <Button
         component={Link}
-        to={``}
+        to={`/song/${track.id}`}
         sx={{ padding: 0, textTransform: "none" }}
       >
         <CardMedia
           component="img"
           sx={{ width: 151 }}
-          image={track.images[0].url}
+          image={track.album.images[0].url}
           alt={track.name}
         />
       </Button>
