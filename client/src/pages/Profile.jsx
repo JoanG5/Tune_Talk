@@ -113,7 +113,7 @@ function Profile() {
           };
         })
       );
-      setActivities((prev) => [...prev, ...reviewsData]);
+      setActivities([...reviewsData]);
     };
 
     fetchAlbums();

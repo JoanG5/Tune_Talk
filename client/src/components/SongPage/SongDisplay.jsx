@@ -67,7 +67,7 @@ function SongDisplay({ props }) {
     <div>
       {props && (
         <Paper
-          elevation={0}
+          elevation={2}
           sx={{
             p: 2,
             margin: "16px",
