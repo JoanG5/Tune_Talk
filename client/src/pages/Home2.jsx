@@ -18,7 +18,7 @@ function Home2() {
       const tracks = await getRandomTracks();
       setTopAlbums(albums);
       setTopTracks(tracks);
-      setFadeIn(true); 
+      setFadeIn(true);
     };
     fetchData();
   }, []);
@@ -35,7 +35,7 @@ function Home2() {
               variant="h4"
               component="h2"
               gutterBottom
-              sx={{ marginTop: 5, mx: 15 }}
+              sx={{ marginTop: 5, mx: 15, fontWeight: "bold" }}
             >
               Top Albums:
             </Typography>
@@ -57,7 +57,7 @@ function Home2() {
               variant="h4"
               component="h2"
               gutterBottom
-              sx={{ marginTop: 5, mx: 15 }}
+              sx={{ marginTop: 5, mx: 15, fontWeight: "bold" }}
             >
               Top Tracks:
             </Typography>
