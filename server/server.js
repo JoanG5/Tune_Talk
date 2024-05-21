@@ -31,9 +31,11 @@ const songRouter = require("./routes/Songs/song");
 const albumRouter = require("./routes/Albums/album");
 const songReviewRouter = require("./routes/SongReviews/songReview");
 const albumReviewRouter = require("./routes/AlbumReviews/albumReview");
+const customSongRouter = require("./routes/CustomSongs/customSong");
 
 app.use("/user", userRouter);
 app.use("/song", songRouter);
 app.use("/album", albumRouter);
 app.use("/songReview", songReviewRouter);
 app.use("/albumReview", albumReviewRouter);
+app.use("/customSong", customSongRouter);

@@ -81,7 +81,7 @@ function Profile() {
             id: review.review_id,
             image: albumData.images[0].url,
             title: albumData.name,
-            artist: songData.artists.map(artist => artist.name).join(', '),
+            artist: albumData.artists.map(artist => artist.name).join(', '),
             rating: review.rating,
             review: review.review,
             username: user.name,
@@ -218,9 +218,21 @@ function Profile() {
           "wait_audio": false
         }
       );
-      setAISongResponse(response.data);
+      //setAISongResponse(response.data);
+    //} catch (error) {
+      //console.error("Error fetching response from Suno Api:", error);
+    //}
+  //}
+  const songUrl = `https://cdn1.suno.ai/${response.data[1].id}.mp3`;
+      setAISongResponse(songUrl);
+
+      await axios.put(`http://localhost:3000/customSong/user/${user.sub}`, {
+        title: "AI Generated Song",
+        url: songUrl,
+        user_id: user.sub
+      });
     } catch (error) {
-      console.error("Error fetching response from Suno Api:", error);
+      console.error("Error fetching response from Suno Api or Error saving song to db: ", error);
     }
   }
 
@@ -434,6 +446,7 @@ function Profile() {
                 >
                   Generate ChatGPT prompt
                 </Button>
+                <MusicPlayerSlider src={"https://cdn1.suno.ai/ba40ebe5-5051-4509-a550-306bed3e717c.mp3"} />
                 {activities.length > 0 && (
                   <Box mt={2}>
                     <Typography variant="h6">Album Details:</Typography>
@@ -464,9 +477,9 @@ function Profile() {
                 {aiSongResponse && (
                   <Box mt={2}>
                     <Typography variant="h6">Suno AI response:</Typography>
-                    <Typography>{aiSongResponse[1].id}</Typography>
+                    <Typography>{aiSongResponse}</Typography>
                     
-                    <MusicPlayerSlider src={`https://suno.com/song/${aiSongResponse[1].id}`} />
+                    <MusicPlayerSlider src={aiSongResponse} />
               
                   </Box>
                 )}
