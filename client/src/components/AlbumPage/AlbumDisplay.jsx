@@ -11,7 +11,7 @@ function AlbumDisplay({ props }) {
   const Img = styled("img")({
     margin: "auto",
     minWidth: "72px",
-    maxBlockSize: "364px",
+    maxBlockSize: "300px",
     display: "block",
     textAlign: "right",
     borderRadius: 6,
@@ -43,10 +43,10 @@ function AlbumDisplay({ props }) {
             justifyContent="center"
             alignItems="center"
           >
-            <Grid item xs={2}>
+            <Grid item xs={3}>
               <Img alt={props.name} src={props.images[0].url} />
             </Grid>
-            <Grid item xs={6}>
+            <Grid item xs={5}>
               <Typography
                 fontWeight={700}
                 gutterBottom
@@ -55,7 +55,7 @@ function AlbumDisplay({ props }) {
               >
                 Album
               </Typography>
-              <Typography fontWeight={800} variant="h5">
+              <Typography fontWeight={600} variant="h4">
                 {props.name}
               </Typography>
               <Typography

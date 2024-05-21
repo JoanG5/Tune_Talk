@@ -20,6 +20,7 @@ function SavedAlbum() {
   const [listenedAlbums, setListenedAlbums] = useState([]);
   const [currentlyAlbums, setCurrentlyAlbums] = useState([]);
   const [plannedAlbums, setPlannedAlbums] = useState([]);
+  const [fadeIn, setFadeIn] = useState(false);
   const [value, setValue] = useState("1");
 
   useEffect(() => {
@@ -57,7 +58,7 @@ function SavedAlbum() {
 
   if (albums.length === 0) {
     return (
-      <Fade in={true} timeout={1000}>
+      <Fade in={fadeIn} timeout={1000}>
         <div>
           <ListItem>
             <ListItem>

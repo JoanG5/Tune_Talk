@@ -2,13 +2,13 @@ import React, { useState, useEffect } from "react";
 import { useAuth0 } from "@auth0/auth0-react";
 import { spotifySearch } from "../../services/Spotify";
 import axios from "axios";
-
 import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
 import Typography from "@mui/material/Typography";
 import { Link } from "react-router-dom";
+import { CardActionArea } from "@mui/material";
 
 export const Searchbar = () => {
   const { user, isAuthenticated } = useAuth0();
@@ -61,7 +61,14 @@ export const Searchbar = () => {
       />
       <div className="w-10 flex flex-col">
         {searchTracks.map((track) => (
-          <Link to={`/song/${track.id}`}>
+          <Link
+            to={`/song/${track.id}`}
+            onClick={() => {
+              setSearchAlbums([]);
+              setSearchTracks([]);
+              window.location.href = `/song/${track.id}`;
+            }}
+          >
             <Card
               sx={{
                 display: "flex",
@@ -97,7 +104,14 @@ export const Searchbar = () => {
           </Link>
         ))}
         {searchAlbums.map((album) => (
-          <Link to={`/album/${album.id}`}>
+          <Link
+            to={`/album/${album.id}`}
+            onClick={() => {
+              setSearchAlbums([]);
+              setSearchTracks([]);
+              window.location.href = `/album/${track.id}`;
+            }}
+          >
             <Card
               sx={{
                 display: "flex",

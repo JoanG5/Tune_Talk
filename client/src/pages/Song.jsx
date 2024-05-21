@@ -122,7 +122,6 @@ function Song() {
           container
           spacing={2}
           direction="row"
-          justifyContent="center"
           alignItems="flex-start"
           paddingRight={4}
         >
