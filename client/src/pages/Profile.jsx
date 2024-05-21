@@ -7,6 +7,7 @@ import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
 import Typography from "@mui/material/Typography";
+import MusicPlayerSlider from "../components/SongPage/SongPreview";
 import { Button, CardActionArea } from "@mui/material";
 import { testAlbumData } from "../services/Spotify";
 import { useAuth0 } from "@auth0/auth0-react";
@@ -28,6 +29,7 @@ function Profile() {
   const [favoriteTracks, setFavoriteTracks] = useState([]);
   const [recentActivity, setRecentActivity] = useState([]);
   const [chatGPTResponse, setChatGPTResponse] = useState("");
+  const [aiSongResponse, setAISongResponse] = useState("");
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -180,7 +182,7 @@ function Profile() {
       const response = await axios.post('https://api.openai.com/v1/chat/completions', requestBody, {
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer `
+          'Authorization': `Bearer ${process.env.OPENAI_KEY}`
         }
       });
       setChatGPTResponse(response.data.choices[0].message.content);
@@ -188,6 +190,22 @@ function Profile() {
       console.error('Error fetching response from ChatGPT:', error);
     }
   };
+
+  const handleFetchSunoResponse = async () => {
+    try {
+      const response = await axios.post(
+        "http://localhost:3001/api/generate",
+        {
+          "prompt": chatGPTResponse,
+          "make_instrumental": false,
+          "wait_audio": false
+        }
+      );
+      setAISongResponse(response.data);
+    } catch (error) {
+      console.error("Error fetching response from Suno Api:", error);
+    }
+  }
 
   return (
     <div style={{ fontFamily: "Roboto,Helvetica,Arial,sans-serif" }}>
@@ -351,7 +369,7 @@ function Profile() {
                   color="primary"
                   onClick={handleFetchChatGPTResponse}
                 >
-                  Generate AI Song
+                  Generate ChatGPT prompt
                 </Button>
                 {activities.length > 0 && (
                   <Box mt={2}>
@@ -369,8 +387,24 @@ function Profile() {
                 )}
                 {chatGPTResponse && (
                   <Box mt={2}>
-                    <Typography variant="h6">AI Song Response:</Typography>
+                    <Typography variant="h6">ChatGPT prompt for Suno AI:</Typography>
                     <Typography>{chatGPTResponse}</Typography>
+                    <Button
+                    variant="contained"
+                    color="primary"
+                    onClick={handleFetchSunoResponse}
+                  >
+                    Generate AI Song
+                  </Button>            
+                  </Box>
+                )}
+                {aiSongResponse && (
+                  <Box mt={2}>
+                    <Typography variant="h6">Suno AI response:</Typography>
+                    <Typography>{aiSongResponse[1].id}</Typography>
+                    
+                    <MusicPlayerSlider src={`https://suno.com/song/${aiSongResponse[1].id}`} />
+              
                   </Box>
                 )}
               </section>
