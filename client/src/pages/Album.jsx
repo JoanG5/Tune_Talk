@@ -11,17 +11,18 @@ import SaveIcon from "@mui/icons-material/Save";
 import CheckIcon from "@mui/icons-material/Check";
 import Fab from "@mui/material/Fab";
 import { green } from "@mui/material/colors";
-
+import Fade from "@mui/material/Fade";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
+import Loading from "../components/Loading";
 
 function Album() {
   const { user, isAuthenticated } = useAuth0();
   const [AlbumInfo, setAlbumInfo] = useState(null);
   const [reviews, setReviews] = useState([]);
-
+  const [fadeIn, setFadeIn] = useState(false);
   const [status, setStatus] = useState("");
   const handleChange = (event) => {
     setStatus(event.target.value);
@@ -42,6 +43,7 @@ function Album() {
           `http://localhost:3000/albumReview/${albumId}`
         );
         setReviews(reviews.data);
+        setFadeIn(true);
       } catch (error) {
         console.error("Error fetching album info:", error);
       }
@@ -111,80 +113,84 @@ function Album() {
     await handleSaveAlbum();
   };
 
-  return (
-    <div>
-      <AlbumDisplay props={AlbumInfo} />
+  if (!AlbumInfo) {
+    return <Loading />;
+  }
 
-      <Grid
-        container
-        spacing={2}
-        direction="row"
-        alignItems="flex-start"
-        paddingRight={4}
-      >
-        <Grid item xs={8}>
-          <ReviewList />
-        </Grid>
+  return (
+    <Fade in={true} timeout={1000}>
+      <div>
+        <AlbumDisplay props={AlbumInfo} />
+
         <Grid
-          item
-          xs
           container
+          spacing={2}
           direction="row"
-          justifyContent="center"
-          minWidth="400px"
+          alignItems="flex-start"
+          paddingRight={4}
         >
-          <div class="grid grid-cols-6 gap-6 pt-8 ml-4">
-            <div class="col-span-1 flex justify-start">
-              <Box sx={{ m: 1, position: "relative" }}>
-                <Fab
-                  aria-label="save"
-                  color="primary"
-                  sx={buttonSx}
-                  onClick={handleSave}
-                >
-                  {success ? <CheckIcon /> : <SaveIcon />}
-                </Fab>
-                {loading && (
-                  <CircularProgress
-                    size={68}
-                    sx={{
-                      color: green[500],
-                      position: "absolute",
-                      top: -6,
-                      left: -6,
-                      zIndex: 1,
-                    }}
-                  />
-                )}
-              </Box>
-              
+          <Grid item xs={8}>
+            <ReviewList />
+          </Grid>
+          <Grid
+            item
+            xs
+            container
+            direction="row"
+            justifyContent="center"
+            minWidth="400px"
+          >
+            <div class="grid grid-cols-6 gap-6 pt-8 ml-4">
+              <div class="col-span-1 flex justify-start">
+                <Box sx={{ m: 1, position: "relative" }}>
+                  <Fab
+                    aria-label="save"
+                    color="primary"
+                    sx={buttonSx}
+                    onClick={handleSave}
+                  >
+                    {success ? <CheckIcon /> : <SaveIcon />}
+                  </Fab>
+                  {loading && (
+                    <CircularProgress
+                      size={68}
+                      sx={{
+                        color: green[500],
+                        position: "absolute",
+                        top: -6,
+                        left: -6,
+                        zIndex: 1,
+                      }}
+                    />
+                  )}
+                </Box>
+              </div>
+              <div class="col-span-1 flex justify-start">
+                {/*  */}
+                <FormControl sx={{ m: 1, minWidth: 190 }}>
+                  <InputLabel>Status</InputLabel>
+                  <Select value={status} label="Status" onChange={handleChange}>
+                    <MenuItem value={"Listened To"}>Listened To</MenuItem>
+                    <MenuItem value={"Currently Listening"}>
+                      Currently Listening
+                    </MenuItem>
+                    <MenuItem value={"Plan On Listening"}>
+                      Plan On Listening
+                    </MenuItem>
+                  </Select>
+                </FormControl>
+                {/*  */}
+              </div>
+              <div className="col-span-6 flex justify-start">
+                <Box sx={{ minWidth: "380px" }}>
+                  <TrackList props={AlbumInfo} />
+                </Box>
+              </div>
             </div>
-            <div class="col-span-1 flex justify-start">
-              {/*  */}
-              <FormControl sx={{ m: 1, minWidth: 190 }}>
-                <InputLabel>Status</InputLabel>
-                <Select value={status} label="Status" onChange={handleChange}>
-                  <MenuItem value={"Listened To"}>Listened To</MenuItem>
-                  <MenuItem value={"Currently Listening"}>
-                    Currently Listening
-                  </MenuItem>
-                  <MenuItem value={"Plan On Listening"}>
-                    Plan On Listening
-                  </MenuItem>
-                </Select>
-              </FormControl>
-              {/*  */}
-              
-            </div>
-            <div className="col-span-6 flex justify-start">
-              <Box sx={{ minWidth: "380px" }}>
-                <TrackList props={AlbumInfo} />
-              </Box>
-            </div>
-          </div>
+          </Grid>
         </Grid>
-      </Grid>
-    </div>
+      </div>
+    </Fade>
   );
 }
 
