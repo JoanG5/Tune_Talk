@@ -65,10 +65,6 @@ function SavedAlbumItem({ props }) {
     return allArtists.slice(0, -2);
   };
 
-  if (!review.rating) {
-    return <></>;
-  }
-
   const handleDeleteAlbum = async () => {
     try {
       const response = await axios.delete(
@@ -131,11 +127,14 @@ function SavedAlbumItem({ props }) {
         />
         <ListItemText sx={{ width: "30%" }} primary={props.status} />
         <div className="flex-grow" />
-        <ListItemText sx={{ m: 3 }} primary={`${review.rating}/5`} />
+        {review.rating ? (
+          <ListItemText sx={{ m: 3 }} primary={`${review.rating}/5`} />
+        ) : (
+          <ListItemText sx={{ m: 3 }} primary={`-/5`} />
+        )}
         <Button onClick={handleOpen}>Update Album</Button>
       </ListItemButton>
       <Divider />
-
       <Modal
         open={open}
         onClose={handleClose}

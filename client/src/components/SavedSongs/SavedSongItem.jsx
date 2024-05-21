@@ -94,10 +94,6 @@ function SavedSongItem({ props }) {
     }
   };
 
-  if (!review.rating) {
-    return <></>;
-  }
-
   return (
     <div>
       <ListItemButton className="h-32 flex items-center justify-between">
@@ -125,7 +121,11 @@ function SavedSongItem({ props }) {
         />
         <ListItemText sx={{ width: "30%" }} primary={props.status} />
         <div className="flex-grow" />
-        <ListItemText sx={{ m: 3 }} primary={`${review.rating}/5`} />
+        {review.rating ? (
+          <ListItemText sx={{ m: 3 }} primary={`${review.rating}/5`} />
+        ) : (
+          <ListItemText sx={{ m: 3 }} primary={`-/5`} />
+        )}
         <Button onClick={handleOpen}>Update Track</Button>
       </ListItemButton>
       <Divider />
