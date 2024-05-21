@@ -15,6 +15,7 @@ import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import TextField from "@mui/material/TextField";
 import { useAuth0 } from "@auth0/auth0-react";
+import Loading from "../Loading";
 
 const style = {
   position: "absolute",
@@ -64,7 +65,9 @@ function SavedAlbumItem({ props }) {
     return allArtists.slice(0, -2);
   };
 
-  getAllArtists(props.albumResponse.artists);
+  if (!review.rating) {
+    return <></>;
+  }
 
   const handleDeleteAlbum = async () => {
     try {
