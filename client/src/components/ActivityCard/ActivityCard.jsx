@@ -7,75 +7,89 @@ import {
   Typography,
   Box,
   Avatar,
+  CardActionArea,
 } from "@mui/material";
 import Rating from "@mui/material/Rating";
+import { Link } from "react-router-dom";
 
 const ActivityCard = ({ activity }) => {
+
   return (
-    <Card sx={{ display: "flex", marginBottom: 3, padding: 3 }}>
-      <CardMedia
-        component="img"
-        sx={{ width: 200, height: 200, objectFit: "cover", borderRadius: 2}}
-        image={activity.image}
-        alt={activity.title}
-      />
-      <Box
-        sx={{
-          display: "flex",
-          flexDirection: "column",
-          flex: 1,
-          paddingLeft: 2,
-        }}
+    <Card sx={{ marginBottom: 3, padding: 3 }}>
+      <CardActionArea
+        component={Link}
+        to={activity.album ? `/album/${activity.spotifyId}` : `/song/${activity.spotifyId}`}
+        sx={{ display: "flex", padding: 3 }}
       >
-        <CardContent sx={{ flex: "1 0 auto" }}>
-          <Typography
-            component="div"
-            variant="h5"
-            style={{ fontWeight: "bold" }}
-          >
-            {activity.title}
-          </Typography>
-          <Rating
-            name="read-only"
-            value={activity.rating}
-            readOnly
-            sx={{ margin: "3px 0px" }}
-          />
-          <Typography
-            variant="subtitle1"
-            color="text.secondary"
-            component="div"
-          >
-            {activity.year}
-          </Typography>
-          <Typography
-            variant="body2"
-            color="text.secondary"
-            component="p"
-            sx={{ marginTop: "3px" }}
-          >
-            {activity.review}
-          </Typography>
-        </CardContent>
+        <CardMedia
+          component="img"
+          sx={{
+            width: 200,
+            height: 200,
+            objectFit: "cover",
+            borderRadius: 2,
+          }}
+          image={activity.image}
+          alt={activity.title}
+        />
         <Box
           sx={{
             display: "flex",
-            alignItems: "center",
-            paddingLeft: 1,
-            paddingBottom: 1,
+            flexDirection: "column",
+            flex: 1,
+            paddingLeft: 2,
           }}
         >
-          <Avatar src={activity.userAvatar} />
-          <Typography
-            variant="subtitle1"
-            color="text.secondary"
-            component="div"
-            sx={{ paddingLeft: 1 }}
+          <CardContent sx={{ flex: "1 0 auto" }}>
+            <Typography
+              component="div"
+              variant="h5"
+              style={{ fontWeight: "bold" }}
+            >
+              {activity.title}
+            </Typography>
+            <Rating
+              name="read-only"
+              value={activity.rating}
+              readOnly
+              sx={{ margin: "3px 0px" }}
+            />
+            <Typography
+              variant="subtitle1"
+              color="text.secondary"
+              component="div"
+            >
+              {activity.year}
+            </Typography>
+            <Typography
+              variant="body2"
+              color="text.secondary"
+              component="p"
+              sx={{ marginTop: "3px" }}
+            >
+              {activity.review}
+            </Typography>
+          </CardContent>
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              paddingLeft: 1,
+              paddingBottom: 1,
+            }}
           >
-            {activity.username}
-          </Typography>
+            <Avatar src={activity.userAvatar} />
+            <Typography
+              variant="subtitle1"
+              color="text.secondary"
+              component="div"
+              sx={{ paddingLeft: 1 }}
+            >
+              {activity.username}
+            </Typography>
+          </Box>
         </Box>
-      </Box>
+      </CardActionArea>
     </Card>
   );
 };

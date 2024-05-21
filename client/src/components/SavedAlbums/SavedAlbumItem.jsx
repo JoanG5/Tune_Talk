@@ -15,6 +15,7 @@ import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import TextField from "@mui/material/TextField";
 import { useAuth0 } from "@auth0/auth0-react";
+import Loading from "../Loading";
 
 const style = {
   position: "absolute",
@@ -64,14 +65,14 @@ function SavedAlbumItem({ props }) {
     return allArtists.slice(0, -2);
   };
 
-  getAllArtists(props.albumResponse.artists);
-
   const handleDeleteAlbum = async () => {
     try {
       const response = await axios.delete(
         `http://localhost:3000/album/${user.sub}/${props.albumResponse.db_id}`
       );
       console.log(response);
+      handleClose();
+      window.location.reload();
     } catch (error) {
       console.error("Error deleting album:", error);
     }
@@ -126,11 +127,14 @@ function SavedAlbumItem({ props }) {
         />
         <ListItemText sx={{ width: "30%" }} primary={props.status} />
         <div className="flex-grow" />
-        <ListItemText sx={{ m: 3 }} primary={`${review.rating}/5`} />
+        {review.rating ? (
+          <ListItemText sx={{ m: 3 }} primary={`${review.rating}/5`} />
+        ) : (
+          <ListItemText sx={{ m: 3 }} primary={`-/5`} />
+        )}
         <Button onClick={handleOpen}>Update Album</Button>
       </ListItemButton>
       <Divider />
-
       <Modal
         open={open}
         onClose={handleClose}

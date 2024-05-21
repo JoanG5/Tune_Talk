@@ -15,6 +15,7 @@ import Modal from "@mui/material/Modal";
 import TextField from "@mui/material/TextField";
 import axios from "axios";
 import { useAuth0 } from "@auth0/auth0-react";
+import Loading from "../Loading";
 
 const style = {
   position: "absolute",
@@ -62,6 +63,8 @@ function SavedSongItem({ props }) {
         `http://localhost:3000/song/${user.sub}/${props.trackResponse.db_id}`
       );
       console.log(response);
+      handleClose();
+      window.location.reload();
     } catch (error) {
       console.error("Error deleting song:", error);
     }
@@ -118,7 +121,11 @@ function SavedSongItem({ props }) {
         />
         <ListItemText sx={{ width: "30%" }} primary={props.status} />
         <div className="flex-grow" />
-        <ListItemText sx={{ m: 3 }} primary={`${review.rating}/5`} />
+        {review.rating ? (
+          <ListItemText sx={{ m: 3 }} primary={`${review.rating}/5`} />
+        ) : (
+          <ListItemText sx={{ m: 3 }} primary={`-/5`} />
+        )}
         <Button onClick={handleOpen}>Update Track</Button>
       </ListItemButton>
       <Divider />
