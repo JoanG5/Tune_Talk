@@ -2,6 +2,18 @@
 
 This web application will allows users to share their thoughts on music and keep track of the songs or albums they plan on or are currently listening to. It will allow users to give songs or albums a rating out of 5 alongside a title and description describing their thoughts in depth. As well, users will be able to save songs and albums to a “plan to listen”, “listening” or “listened” section that is saved to their profile. 
 
+<!-- ABOUT THE PROJECT -->
+## About The Project
+
+<h1 align="center">   
+  <img src="client\src\assets\MusicReviewApp_HomePage.gif" alt="MusicReviewApp Home Page" >
+   <img src="client\src\assets\MusicReviewApp_GetSong.gif" alt="MusicReviewApp Get Song" >
+  <img src="client\src\assets\MusicReviewApp_UpdateSong.gif" alt="MusicReviewApp Song Update" >
+  <img src="client\src\assets\MusicReviewApp_GetAlbum.gif" alt="MusicReviewApp Get Album" >
+  <img src="client\src\assets\MusicReviewApp_UpdateAlbum.gif" alt="MusicReviewApp Album Update" >
+  <img src="client\src\assets\MusicReviewApp_Profile.gif" alt="MusicReviewApp Profile" >
+</h1>
+
 ## Technologies Used
 
 * [![React][React.js]][React-url]
