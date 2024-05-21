@@ -84,6 +84,7 @@ function Profile() {
             userAvatar: user.picture,
             year: new Date(review.createdAt).toLocaleDateString(),
             spotifyId: review.spotify_id,
+            album: true,
           };
         })
       );
@@ -94,7 +95,6 @@ function Profile() {
       const response = await axios.get(
         `http://localhost:3000/songReview/profile/${user.sub}`
       );
-      console.log(response.data);
 
       const reviewsData = await Promise.all(
         response.data.map(async (review, index) => {
@@ -109,6 +109,7 @@ function Profile() {
             userAvatar: user.picture,
             year: new Date(review.createdAt).toLocaleDateString(),
             spotifyId: review.spotify_id,
+            album: false,
           };
         })
       );
@@ -119,7 +120,7 @@ function Profile() {
     fetchTracks();
     fetchAlbumReviews();
     fetchSongReviews();
-  }, [user]);
+  }, []);
 
   const sectionHeadingStyle = {
     color: "DimGray",
@@ -132,8 +133,6 @@ function Profile() {
     paddingBottom: "5px",
     textTransform: "uppercase",
   };
-
-  console.log(tracks);
 
   const displayTracks = (tracks) => (
     <Box display="flex" justifyContent="justify-start" flexWrap="wrap">
@@ -168,6 +167,8 @@ function Profile() {
   if (albums.length === 0 || tracks.length === 0) {
     return <Loading />;
   }
+
+  console.log(activities);
 
   return (
     <Fade in={true} timeout={1000}>
