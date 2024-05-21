@@ -33,11 +33,28 @@ function Profile() {
   const [recentActivity, setRecentActivity] = useState([]);
   const [chatGPTResponse, setChatGPTResponse] = useState("");
   const [aiSongResponse, setAISongResponse] = useState("");
+  const [customSong, setCustomSong] = useState(null);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
 
+  useEffect(() => {
+    const fetchCustomSong = async () => {
+      try {
+        const response = await axios.get(`http://localhost:3000/CustomSong/user/${user.sub}`);
+        setCustomSong(response.data.url);
+      } catch (err) {
+        if (err.response && err.response.status === 404) {
+          setCustomSong(null);
+        } else {
+          console.log("An error occurred while fetching the custom song.");
+        }
+      }
+    };
+
+    fetchCustomSong();
+  }, [user.sub]);
   useEffect(() => {
     const fetchAlbums = async () => {
       const response = await axios.get(
@@ -438,7 +455,15 @@ function Profile() {
             {value === 3 && (
             <>
               <section className="ai-song" style={{ marginTop: "40px" }}>
-                <h2 style={sectionHeadingStyle}>AI Song</h2>
+              <h2 style={sectionHeadingStyle}>Current Custom Song: </h2>
+              {customSong ? (
+                      <MusicPlayerSlider src={customSong} />
+                    ) : (
+                      <Typography variant="h6">
+                        You do not have a custom song yet... would you like to make one?
+                      </Typography>
+                    )}
+              <h2 style={sectionHeadingStyle}>Song Generation Process: </h2>
                 <Button
                   variant="contained"
                   color="primary"
@@ -446,7 +471,7 @@ function Profile() {
                 >
                   Generate ChatGPT prompt
                 </Button>
-                <MusicPlayerSlider src={"https://cdn1.suno.ai/ba40ebe5-5051-4509-a550-306bed3e717c.mp3"} />
+
                 {activities.length > 0 && (
                   <Box mt={2}>
                     <Typography variant="h6">Album Details:</Typography>
