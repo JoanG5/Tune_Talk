@@ -47,7 +47,7 @@ function Home() {
         </div>
         <div className="Wrapper for each song">
           <div class="grid grid-cols-3 gap-4 px-4">
-            <div class="bg-blue-200 p-4 ">
+            <div class="bg-gray-200 p-4">
               <Button color="secondary">
                 Song <br/>
                 Picture <br/>

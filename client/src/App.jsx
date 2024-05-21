@@ -20,7 +20,7 @@ function App() {
 
   const darkTheme = createTheme({
     palette: {
-      mode: darkMode ? "dark" : "light",
+      mode: darkMode ? "light" : "dark",
     },
   });
 
