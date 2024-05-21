@@ -122,6 +122,14 @@ function Profile() {
     fetchSongReviews();
   }, []);
 
+  const getAllArtists = (artists) => {
+    let allArtists = "";
+    artists.map((artist) => {
+      allArtists += artist.name + ", ";
+    });
+    return allArtists.slice(0, -2);
+  };
+
   const sectionHeadingStyle = {
     color: "DimGray",
     fontFamily: "Roboto,Helvetica,Arial,sans-serif",
@@ -167,8 +175,6 @@ function Profile() {
   if (albums.length === 0 || tracks.length === 0) {
     return <Loading />;
   }
-
-  console.log(activities);
 
   return (
     <Fade in={true} timeout={1000}>
@@ -322,7 +328,7 @@ function Profile() {
                               {album.albumResponse.name}
                             </Typography>
                             <Typography variant="body2" color="text.secondary">
-                              {album.albumResponse.artists[0].name}
+                              {getAllArtists(album.albumResponse.artists)}
                             </Typography>
                           </CardContent>
                         </CardActionArea>

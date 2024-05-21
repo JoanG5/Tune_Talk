@@ -50,7 +50,7 @@ function Album() {
     };
 
     fetchAlbumInfo();
-  }, [albumTitle]);
+  }, []);
 
   const handleSaveAlbum = async () => {
     try {

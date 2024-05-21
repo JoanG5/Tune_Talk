@@ -49,7 +49,7 @@ function Song() {
     };
 
     fetchSongInfo();
-  }, [songTitle]);
+  }, []);
 
   const handleSaveSong = async () => {
     try {
