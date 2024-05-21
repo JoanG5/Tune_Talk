@@ -15,6 +15,7 @@ import Modal from "@mui/material/Modal";
 import TextField from "@mui/material/TextField";
 import axios from "axios";
 import { useAuth0 } from "@auth0/auth0-react";
+import Loading from "../Loading";
 
 const style = {
   position: "absolute",
@@ -62,6 +63,8 @@ function SavedSongItem({ props }) {
         `http://localhost:3000/song/${user.sub}/${props.trackResponse.db_id}`
       );
       console.log(response);
+      handleClose();
+      window.location.reload();
     } catch (error) {
       console.error("Error deleting song:", error);
     }
@@ -90,6 +93,10 @@ function SavedSongItem({ props }) {
       console.error("Error updating review:", error);
     }
   };
+
+  if (!review.rating) {
+    return <></>;
+  }
 
   return (
     <div>

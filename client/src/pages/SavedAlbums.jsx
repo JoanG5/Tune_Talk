@@ -12,6 +12,7 @@ import Loading from "../components/Loading";
 import { getAlbumDataFromDB } from "../services/Spotify";
 import axios from "axios";
 import { useAuth0 } from "@auth0/auth0-react";
+import Fade from "@mui/material/Fade";
 
 function SavedAlbum() {
   const { user, isAuthenticated } = useAuth0();
@@ -19,7 +20,7 @@ function SavedAlbum() {
   const [listenedAlbums, setListenedAlbums] = useState([]);
   const [currentlyAlbums, setCurrentlyAlbums] = useState([]);
   const [plannedAlbums, setPlannedAlbums] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [fadeIn, setFadeIn] = useState(false);
   const [value, setValue] = useState("1");
 
   useEffect(() => {
@@ -28,19 +29,11 @@ function SavedAlbum() {
         const response = await axios.get(
           `http://localhost:3000/album/${user.sub}`
         );
-        if (
-          !response.data.listened_albums &&
-          !response.data.currently_albums &&
-          !response.data.planned_albums
-        ) {
-          return setLoading(false);
-        }
         const [listenedAlbumsData, currentlyAlbumsData, plannedAlbumsData] =
           await Promise.all([
             getAlbumDataFromDB(response.data.listened_albums),
             getAlbumDataFromDB(response.data.currently_albums),
             getAlbumDataFromDB(response.data.planned_albums),
-            setLoading(false),
           ]);
 
         setListenedAlbums(listenedAlbumsData);
@@ -51,6 +44,7 @@ function SavedAlbum() {
           ...currentlyAlbumsData,
           ...plannedAlbumsData,
         ]);
+        setFadeIn(true);
       } catch (error) {
         console.error("Error fetching access token:", error);
       }
@@ -62,57 +56,88 @@ function SavedAlbum() {
     setValue(newValue);
   };
 
-  if (loading) {
-    return <Loading />;
+  if (albums.length === 0) {
+    return (
+      <Fade in={fadeIn} timeout={1000}>
+        <div>
+          <ListItem>
+            <ListItem>
+              <ListItemText>
+                <Typography
+                  sx={{
+                    display: "flex",
+                    justifyContent: "center",
+                  }}
+                  variant="h4"
+                >
+                  Saved Albums
+                </Typography>
+              </ListItemText>
+            </ListItem>
+          </ListItem>
+          <Typography
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+            }}
+            variant="h6"
+          >
+            No albums found.
+          </Typography>
+        </div>
+      </Fade>
+    );
   }
 
   return (
-    <div>
-      <ListItem>
+    <Fade in={true}>
+      <div>
         <ListItem>
-          <ListItemText>
-            <Typography
-              sx={{
-                display: "flex",
-                justifyContent: "center",
-              }}
-              variant="h4"
-            >
-              Saved Album
-            </Typography>
-          </ListItemText>
+          <ListItem>
+            <ListItemText>
+              <Typography
+                sx={{
+                  display: "flex",
+                  justifyContent: "center",
+                }}
+                variant="h4"
+              >
+                Saved Albums
+              </Typography>
+            </ListItemText>
+          </ListItem>
         </ListItem>
-      </ListItem>
-      <TabContext value={value} variant="fullWidth">
-        <Box
-          sx={{
-            display: "flex",
-            justifyContent: "center",
-            borderBottom: 1,
-            borderColor: "divider",
-          }}
-        >
-          <TabList onChange={handleChange} aria-label="lab API tabs example">
-            <Tab label="All Albums" value="1" />
-            <Tab label="Listened To" value="2" />
-            <Tab label="Currently Listening" value="3" />
-            <Tab label="Plan On Listening" value="4" />
-          </TabList>
-        </Box>
-        <TabPanel value="1">
-          <SavedAlbumSection props={albums} />
-        </TabPanel>
-        <TabPanel value="2">
-          <SavedAlbumSection props={listenedAlbums} />
-        </TabPanel>
-        <TabPanel value="3">
-          <SavedAlbumSection props={currentlyAlbums} />
-        </TabPanel>
-        <TabPanel value="4">
-          <SavedAlbumSection props={plannedAlbums} />
-        </TabPanel>
-      </TabContext>
-    </div>
+        <TabContext value={value} variant="fullWidth">
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+              borderBottom: 1,
+              borderColor: "divider",
+            }}
+          >
+            <TabList onChange={handleChange} aria-label="lab API tabs example">
+              <Tab label="All Albums" value="1" />
+              <Tab label="Listened To" value="2" />
+              <Tab label="Currently Listening" value="3" />
+              <Tab label="Plan On Listening" value="4" />
+            </TabList>
+          </Box>
+          <TabPanel value="1">
+            <SavedAlbumSection props={albums} />
+          </TabPanel>
+          <TabPanel value="2">
+            <SavedAlbumSection props={listenedAlbums} />
+          </TabPanel>
+          <TabPanel value="3">
+            <SavedAlbumSection props={currentlyAlbums} />
+          </TabPanel>
+          <TabPanel value="4">
+            <SavedAlbumSection props={plannedAlbums} />
+          </TabPanel>
+        </TabContext>
+      </div>
+    </Fade>
   );
 }
 
