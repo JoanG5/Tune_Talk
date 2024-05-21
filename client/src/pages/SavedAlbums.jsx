@@ -20,7 +20,6 @@ function SavedAlbum() {
   const [listenedAlbums, setListenedAlbums] = useState([]);
   const [currentlyAlbums, setCurrentlyAlbums] = useState([]);
   const [plannedAlbums, setPlannedAlbums] = useState([]);
-  const [loading, setLoading] = useState(true);
   const [value, setValue] = useState("1");
 
   useEffect(() => {
@@ -29,19 +28,11 @@ function SavedAlbum() {
         const response = await axios.get(
           `http://localhost:3000/album/${user.sub}`
         );
-        if (
-          !response.data.listened_albums &&
-          !response.data.currently_albums &&
-          !response.data.planned_albums
-        ) {
-          return setLoading(false);
-        }
         const [listenedAlbumsData, currentlyAlbumsData, plannedAlbumsData] =
           await Promise.all([
             getAlbumDataFromDB(response.data.listened_albums),
             getAlbumDataFromDB(response.data.currently_albums),
             getAlbumDataFromDB(response.data.planned_albums),
-            setLoading(false),
           ]);
 
         setListenedAlbums(listenedAlbumsData);
@@ -78,7 +69,7 @@ function SavedAlbum() {
                   }}
                   variant="h4"
                 >
-                  Saved Album
+                  Saved Albums
                 </Typography>
               </ListItemText>
             </ListItem>
@@ -110,7 +101,7 @@ function SavedAlbum() {
                 }}
                 variant="h4"
               >
-                Saved Album
+                Saved Albums
               </Typography>
             </ListItemText>
           </ListItem>

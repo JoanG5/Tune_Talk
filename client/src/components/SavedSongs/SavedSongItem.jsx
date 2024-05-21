@@ -62,6 +62,8 @@ function SavedSongItem({ props }) {
         `http://localhost:3000/song/${user.sub}/${props.trackResponse.db_id}`
       );
       console.log(response);
+      handleClose();
+      window.location.reload();
     } catch (error) {
       console.error("Error deleting song:", error);
     }
