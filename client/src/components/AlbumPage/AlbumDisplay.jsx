@@ -20,7 +20,7 @@ function AlbumDisplay({props}) {
   return (
     <div>
       {props && (
-        <Paper elevation={0}
+        <Paper elevation={2}
           sx={{
             p: 2,
             margin: '16px',
