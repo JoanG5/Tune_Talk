@@ -72,6 +72,8 @@ function SavedAlbumItem({ props }) {
         `http://localhost:3000/album/${user.sub}/${props.albumResponse.db_id}`
       );
       console.log(response);
+      handleClose();
+      window.location.reload();
     } catch (error) {
       console.error("Error deleting album:", error);
     }

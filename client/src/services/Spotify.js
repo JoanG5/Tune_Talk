@@ -205,6 +205,32 @@ export const spotifySearch = async (search) => {
   }
 };
 
+export const getTopAlbums = async () => {
+  try {
+    const response = await axios.get(
+      "https://api.spotify.com/v1/browse/new-releases?limit=5",
+      searchParameters
+    );
+    return response.data.albums.items;
+  } catch (error) {
+    console.error("Error fetching data:", error);
+    throw error;
+  }
+};
+
+export const getRandomTracks = async () => {
+  try {
+    const response = await axios.get(
+      "https://api.spotify.com/v1/browse/featured-playlists?limit=5",
+      searchParameters
+    );
+    return response.data.playlists.items;
+  } catch (error) {
+    console.error("Error fetching data:", error);
+    throw error;
+  }
+};
+
 export const testData = async () => {
   const data = [];
   data.push(await getOneTrack("Slow Dancing in the Dark"));

@@ -13,6 +13,8 @@ import { ThemeProvider, createTheme } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
 import { Box, FormControlLabel, Switch } from "@mui/material";
 import { useState } from "react";
+import Home2 from "./pages/Home2";
+import Footer from "./components/Footer";
 
 function App() {
   const { isLoading, error } = useAuth0();
@@ -42,7 +44,7 @@ function App() {
           <>
             <Navbar />
             <Routes>
-              <Route path="/" element={<Home />} />
+              <Route path="/" element={<Home2 />} />
               <Route path="/album/:albumId" element={<Album />} />
               <Route path="/song/:songId" element={<Song />} />
               <Route path="/profile" element={<Profile />} />
@@ -59,6 +61,7 @@ function App() {
             }
           />
         </Box>
+        {/* <Footer /> */}
       </ThemeProvider>
     </Router>
   );
