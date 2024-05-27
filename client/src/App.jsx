@@ -14,6 +14,8 @@ import CssBaseline from "@mui/material/CssBaseline";
 import { Box, FormControlLabel, Switch } from "@mui/material";
 import { useState } from "react";
 import Home2 from "./pages/Home2";
+import NotFound from "./pages/NotFound";
+import LoggedIn from "./components/LoggedIn";
 import Footer from "./components/Footer";
 
 function App() {
@@ -47,10 +49,13 @@ function App() {
               <Route path="/" element={<Home2 />} />
               <Route path="/album/:albumId" element={<Album />} />
               <Route path="/song/:songId" element={<Song />} />
-              <Route path="/profile" element={<Profile />} />
-              <Route path="/profile/savedsong" element={<SavedSongs />} />
-              <Route path="/profile/savedalbum" element={<SavedAlbums />} />
-              <Route path="/test" element={<Test />} />
+              <Route element={<LoggedIn />} path="/">
+                <Route path="/profile" element={<Profile />} />
+                <Route path="/profile/savedsong" element={<SavedSongs />} />
+                <Route path="/profile/savedalbum" element={<SavedAlbums />} />
+              </Route>
+              {/* <Route path="/test" element={<Test />} /> */}
+              <Route path="*" element={<NotFound />} />
             </Routes>
           </>
         )}

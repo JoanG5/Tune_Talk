@@ -1,15 +1,18 @@
+const serverless = require("serverless-http");
 const express = require("express");
 const cors = require("cors");
 const app = express();
 const sequelize = require("./database");
 app.use(express.json());
 
-app.use(cors({
-  origin: 'http://localhost:5173',
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization'],
-  credentials: true
-}));
+app.use(
+  cors({
+    origin: "http://localhost:5173",
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+    credentials: true,
+  })
+);
 
 PORT = 3000;
 
@@ -39,3 +42,5 @@ app.use("/album", albumRouter);
 app.use("/songReview", songReviewRouter);
 app.use("/albumReview", albumReviewRouter);
 app.use("/customSong", customSongRouter);
+
+module.exports.handler = serverless(app);
