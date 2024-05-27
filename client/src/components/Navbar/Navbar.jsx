@@ -118,7 +118,7 @@ export const Navbar = () => {
                 </Menu>
               </>
             ) : (
-              <LoginButton />
+              <LoginButton text="Login" />
             )}
           </Box>
         </Toolbar>

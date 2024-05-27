@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 const navigationItems = [
   { text: "Songs", to: "/profile/savedsong" },
   { text: "Albums", to: "/profile/savedalbum" },
+  { text: "AI Songs", to: "/profile/ai" },
 ];
 
 const Navigation = ({ value, handleChange }) => {

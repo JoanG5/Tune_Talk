@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const SongReview = require("./songReview.model");
+const { CallEnd } = require("@material-ui/icons");
 
 router.post("/", async (req, res) => {
   SongReview.findOne({
@@ -26,6 +27,17 @@ router.post("/", async (req, res) => {
         });
     }
   });
+});
+
+router.get("/recent", (req, res) => {
+  SongReview.findAll({ limit: 5, order: [["createdAt", "DESC"]] })
+    .then((reviews) => {
+      res.send(reviews);
+    })
+    .catch((error) => {
+      console.error("Error fetching reviews:", error);
+      res.status(500).send("Error fetching reviews");
+    });
 });
 
 router.get("/:spotify_id", (req, res) => {

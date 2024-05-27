@@ -29,6 +29,17 @@ router.post("/", (req, res) => {
   });
 });
 
+router.get("/recent", (req, res) => {
+  AlbumReview.findAll({ limit: 5, order: [["createdAt", "DESC"]] })
+    .then((reviews) => {
+      res.send(reviews);
+    })
+    .catch((error) => {
+      console.error("Error fetching reviews:", error);
+      res.status(500).send("Error fetching reviews");
+    });
+});
+
 router.get("/:spotify_id", (req, res) => {
   AlbumReview.findAll({ where: { spotify_id: req.params.spotify_id } })
     .then((reviews) => {
