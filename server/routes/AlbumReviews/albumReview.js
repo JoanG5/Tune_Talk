@@ -32,9 +32,9 @@ router.post("/", (req, res) => {
 router.get("/:spotify_id", (req, res) => {
   AlbumReview.findAll({ where: { spotify_id: req.params.spotify_id } })
     .then((reviews) => {
-      if (reviews.length === 0) {
-        return res.send([{ empty: true }]);
-      }
+      // if (reviews.length === 0) {
+      //   return res.send([{ empty: true }]);
+      // }
       res.send(reviews);
     })
     .catch((error) => {
