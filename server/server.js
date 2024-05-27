@@ -1,9 +1,18 @@
+const serverless = require("serverless-http");
 const express = require("express");
 const cors = require("cors");
 const app = express();
 const sequelize = require("./database");
 app.use(express.json());
-app.use(cors());
+
+app.use(
+  cors({
+    origin: "http://localhost:5173",
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+    credentials: true,
+  })
+);
 
 PORT = 3000;
 
@@ -25,8 +34,13 @@ const songRouter = require("./routes/Songs/song");
 const albumRouter = require("./routes/Albums/album");
 const songReviewRouter = require("./routes/SongReviews/songReview");
 const albumReviewRouter = require("./routes/AlbumReviews/albumReview");
+const customSongRouter = require("./routes/CustomSongs/customSong");
+
 app.use("/user", userRouter);
 app.use("/song", songRouter);
 app.use("/album", albumRouter);
 app.use("/songReview", songReviewRouter);
 app.use("/albumReview", albumReviewRouter);
+app.use("/customSong", customSongRouter);
+
+module.exports.handler = serverless(app);

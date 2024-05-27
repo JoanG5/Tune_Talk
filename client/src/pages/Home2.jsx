@@ -5,18 +5,29 @@ import TopTrack from "../components/Home/TopTrack";
 import Hero from "../components/Home/Hero";
 import Loading from "../components/Loading";
 import Fade from "@mui/material/Fade";
+import axios from "axios";
 import { getTopAlbums, getTopTracks } from "../services/Spotify";
 
 function Home2() {
   const [topAlbums, setTopAlbums] = useState([]);
   const [topTracks, setTopTracks] = useState([]);
+  const [recentAlbumReviews, setRecentAlbumReviews] = useState([]);
+  const [recentTrackReviews, setRecentTrackReviews] = useState([]);
   const [fadeIn, setFadeIn] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
       const albums = await getTopAlbums();
       const topTracks = await getTopTracks();
-      console.log(topTracks);
+      const response = await axios.get(
+        "http://localhost:3000/albumReview/recent"
+      );
+      console.log(response.data);
+      setRecentAlbumReviews(response.data);
+      const response2 = await axios.get(
+        "http://localhost:3000/songReview/recent"
+      );
+      setRecentTrackReviews(response2.data);
       setTopAlbums(albums);
       setTopTracks(topTracks);
       setFadeIn(true);
