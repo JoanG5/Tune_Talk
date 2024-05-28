@@ -81,6 +81,10 @@ function ReviewList() {
   }, [albumId, songId, isAlbumPage]);
 
   const handleClickOpen = () => {
+    if (!isAuthenticated) {
+      alert("Please log in to leave a review.");
+      return;
+    }
     setOpen(true);
   };
 

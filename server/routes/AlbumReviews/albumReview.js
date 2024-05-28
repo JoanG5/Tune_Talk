@@ -30,15 +30,24 @@ router.post("/", (req, res) => {
   });
 });
 
-router.get("/recent", (req, res) => {
-  AlbumReview.findAll({ limit: 5, order: [["createdAt", "DESC"]] })
-    .then((reviews) => {
-      res.send(reviews);
-    })
-    .catch((error) => {
-      console.error("Error fetching reviews:", error);
-      res.status(500).send("Error fetching reviews");
+router.get("/recent", async (req, res) => {
+  try {
+    const reviews = await AlbumReview.findAll({
+      limit: 5,
+      order: [["createdAt", "DESC"]],
     });
+    const userPromises = reviews.map(async (review) => {
+      const user = await User.findOne({ where: { user_id: review.user_id } });
+      review.dataValues.user = user;
+    });
+
+    await Promise.all(userPromises);
+
+    res.send(reviews);
+  } catch (error) {
+    console.error("Error fetching reviews:", error);
+    res.status(500).send("Error fetching reviews");
+  }
 });
 
 router.get("/:spotify_id", async (req, res) => {

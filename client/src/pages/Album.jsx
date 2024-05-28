@@ -105,6 +105,10 @@ function Album() {
   };
 
   const handleSave = async () => {
+    if (!isAuthenticated) {
+      alert("Please Login To Save an Album.");
+      return;
+    }
     if (status === "") {
       alert("Please select a status");
       return;
