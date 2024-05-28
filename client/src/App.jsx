@@ -49,8 +49,8 @@ function App() {
               <Route path="/" element={<Home2 />} />
               <Route path="/album/:albumId" element={<Album />} />
               <Route path="/song/:songId" element={<Song />} />
+              <Route path="/profile/:userId" element={<Profile />} />
               <Route element={<LoggedIn />} path="/">
-                <Route path="/profile/:userId" element={<Profile />} />
                 <Route path="/profile/savedsong" element={<SavedSongs />} />
                 <Route path="/profile/savedalbum" element={<SavedAlbums />} />
               </Route>
