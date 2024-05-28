@@ -214,7 +214,10 @@ function ReviewList() {
                           <ListItemAvatar>
                             <Avatar
                               alt="User Avatar"
-                              src={review.user.picture}
+                              src={
+                                review.user.picture ||
+                                "/static/images/avatar/1.jpg"
+                              }
                             />
                           </ListItemAvatar>
                           <div className="grid grid-flow-row-dense">
@@ -225,7 +228,7 @@ function ReviewList() {
                                 value={review.rating}
                                 readOnly
                                 size="small"
-                              />{" "}
+                              />
                               <br />
                             </div>
                             <div className="col-span-2">{review.review}</div>

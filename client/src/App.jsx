@@ -50,7 +50,7 @@ function App() {
               <Route path="/album/:albumId" element={<Album />} />
               <Route path="/song/:songId" element={<Song />} />
               <Route element={<LoggedIn />} path="/">
-                <Route path="/profile" element={<Profile />} />
+                <Route path="/profile/:userId" element={<Profile />} />
                 <Route path="/profile/savedsong" element={<SavedSongs />} />
                 <Route path="/profile/savedalbum" element={<SavedAlbums />} />
               </Route>

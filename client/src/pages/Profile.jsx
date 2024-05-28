@@ -20,11 +20,13 @@ import {
   getOneTrackId,
 } from "../services/Spotify";
 import Loading from "../components/Loading";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 
 function Profile() {
-  const { user } = useAuth0();
-  const { name, picture } = user;
+  // const { user } = useAuth0();
+  // const { name, picture } = user;
+  const [name, setName] = useState("");
+  const [picture, setPicture] = useState("");
   const [value, setValue] = useState(0);
   const [albums, setAlbums] = useState([]);
   const [tracks, setTracks] = useState([]);
@@ -34,6 +36,9 @@ function Profile() {
   const [chatGPTResponse, setChatGPTResponse] = useState("");
   const [aiSongResponse, setAISongResponse] = useState("");
   const [customSong, setCustomSong] = useState(null);
+  const [user, setUser] = useState({});
+
+  const { userId } = useParams();
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -43,7 +48,7 @@ function Profile() {
     const fetchCustomSong = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:3000/CustomSong/user/${user.sub}`
+          `http://localhost:3000/CustomSong/user/${userId}`
         );
         setCustomSong(response.data.url);
       } catch (err) {
@@ -56,12 +61,11 @@ function Profile() {
     };
 
     fetchCustomSong();
-  }, [user.sub]);
+  }, [userId]);
+
   useEffect(() => {
     const fetchAlbums = async () => {
-      const response = await axios.get(
-        `http://localhost:3000/album/${user.sub}`
-      );
+      const response = await axios.get(`http://localhost:3000/album/${userId}`);
       const [listenedAlbumsData, currentlyAlbumsData, plannedAlbumsData] =
         await Promise.all([
           getAlbumDataFromDB(response.data.listened_albums),
@@ -76,9 +80,7 @@ function Profile() {
     };
 
     const fetchTracks = async () => {
-      const response = await axios.get(
-        `http://localhost:3000/song/${user.sub}`
-      );
+      const response = await axios.get(`http://localhost:3000/song/${userId}`);
       const [listenedSongsData, plannedSongsData] = await Promise.all([
         getTrackDataFromDB(response.data.listened_songs),
         getTrackDataFromDB(response.data.planned_songs),
@@ -90,7 +92,7 @@ function Profile() {
 
     const fetchAlbumReviews = async () => {
       const response = await axios.get(
-        `http://localhost:3000/albumReview/profile/${user.sub}`
+        `http://localhost:3000/albumReview/profile/${userId}`
       );
 
       const reviewsData = await Promise.all(
@@ -117,7 +119,7 @@ function Profile() {
 
     const fetchSongReviews = async () => {
       const response = await axios.get(
-        `http://localhost:3000/songReview/profile/${user.sub}`
+        `http://localhost:3000/songReview/profile/${userId}`
       );
 
       const reviewsData = await Promise.all(
@@ -142,6 +144,14 @@ function Profile() {
       setActivities([...reviewsData]);
     };
 
+    const getUserData = async () => {
+      const response = await axios.get(`http://localhost:3000/user/${userId}`);
+      setName(response.data.nickname);
+      setPicture(response.data.picture);
+      setUser(response.data)
+    };
+
+    getUserData();
     fetchAlbums();
     fetchTracks();
     fetchAlbumReviews();
@@ -250,10 +260,10 @@ function Profile() {
       const songUrl = `https://cdn1.suno.ai/${response.data[1].id}.mp3`;
       setAISongResponse(songUrl);
 
-      await axios.put(`http://localhost:3000/customSong/user/${user.sub}`, {
+      await axios.put(`http://localhost:3000/customSong/user/${userId}`, {
         title: "AI Generated Song",
         url: songUrl,
-        user_id: user.sub,
+        user_id: userId,
       });
     } catch (error) {
       console.error(
