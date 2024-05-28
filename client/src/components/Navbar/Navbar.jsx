@@ -36,7 +36,7 @@ export const Navbar = () => {
   };
 
   const handleProfile = () => {
-    navigate("/profile");
+    navigate(`/profile/${user.sub}`);
     handleClose();
   };
 

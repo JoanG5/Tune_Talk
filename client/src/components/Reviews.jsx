@@ -81,6 +81,10 @@ function ReviewList() {
   }, [albumId, songId, isAlbumPage]);
 
   const handleClickOpen = () => {
+    if (!isAuthenticated) {
+      alert("Please log in to leave a review.");
+      return;
+    }
     setOpen(true);
   };
 
@@ -173,8 +177,6 @@ function ReviewList() {
     }
   };
 
-  console.log(reviews);
-
   return (
     <div style={{ paddingLeft: "24px" }}>
       <Grid container spacing={0} direction="row">
@@ -216,18 +218,21 @@ function ReviewList() {
                           <ListItemAvatar>
                             <Avatar
                               alt="User Avatar"
-                              src="/static/images/avatar/1.jpg"
+                              src={
+                                review.user.picture ||
+                                "/static/images/avatar/1.jpg"
+                              }
                             />
                           </ListItemAvatar>
                           <div className="grid grid-flow-row-dense">
                             <div className="col-span-2">
-                              User <br />
+                              {review.user.nickname} <br />
                               <Rating
                                 name="read-only"
                                 value={review.rating}
                                 readOnly
                                 size="small"
-                              />{" "}
+                              />
                               <br />
                             </div>
                             <div className="col-span-2">{review.review}</div>
@@ -301,7 +306,6 @@ function ReviewList() {
                             <Button onClick={handleEditClose} color="primary">
                               Cancel
                             </Button>
-                            {console.log(review)}
                             <Button
                               onClick={() =>
                                 handleUpdateReview(review.review_id, index)
