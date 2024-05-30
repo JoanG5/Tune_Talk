@@ -7,6 +7,8 @@ import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
 import Typography from "@mui/material/Typography";
+import { List, ListItem, ListItemText } from "@mui/material";
+
 import MusicPlayerSlider from "../components/SongPage/SongPreview";
 import { Button, CardActionArea, Fade } from "@mui/material";
 import { testAlbumData } from "../services/Spotify";
@@ -21,6 +23,7 @@ import {
 } from "../services/Spotify";
 import Loading from "../components/Loading";
 import { Link, useParams } from "react-router-dom";
+import MusicPlayer from "../components/Profile/MusicPlayer";
 
 function Profile() {
   // const { user } = useAuth0();
@@ -37,6 +40,8 @@ function Profile() {
   const [aiSongResponse, setAISongResponse] = useState("");
   const [customSongs, setCustomSongs] = useState([]);
   const [user, setUser] = useState({});
+  const [selectedSongIndex, setSelectedSongIndex] = useState(0);
+  const selectedSong = customSongs[selectedSongIndex];
 
   const { userId } = useParams();
 
@@ -52,19 +57,21 @@ function Profile() {
         );
         const data = Array.isArray(response.data) ? response.data : [];
         setCustomSongs(data);
-        console.log(data);  
+        console.log(data);
       } catch (err) {
         if (err.response && err.response.status === 404) {
           setCustomSongs([]);
         } else {
-          console.log("An error occurred while fetching the custom songs.", err);
+          console.log(
+            "An error occurred while fetching the custom songs.",
+            err
+          );
         }
       }
     };
-  
+
     fetchCustomSongs();
   }, [userId]);
-  
 
   useEffect(() => {
     const fetchAlbums = async () => {
@@ -151,7 +158,7 @@ function Profile() {
       const response = await axios.get(`http://localhost:3000/user/${userId}`);
       setName(response.data.nickname);
       setPicture(response.data.picture);
-      setUser(response.data)
+      setUser(response.data);
     };
 
     getUserData();
@@ -250,19 +257,16 @@ function Profile() {
 
   const handleFetchSunoResponse = async () => {
     try {
-      const response = await axios.post(
-        "http://localhost:3001/api/generate",
-        {
-          "prompt": chatGPTResponse,
-          "make_instrumental": false,
-          "wait_audio": true
-        }
-      );
+      const response = await axios.post("http://localhost:3001/api/generate", {
+        prompt: chatGPTResponse,
+        make_instrumental: false,
+        wait_audio: true,
+      });
 
-  const songUrl = `https://cdn1.suno.ai/${response.data[1].id}.mp3`;
-  const picUrl = `https://cdn1.suno.ai/image_${response.data[1].id}.png`;
-  const lyrics = response.data[1].lyric;
-  const title = response.data[1].title;
+      const songUrl = `https://cdn1.suno.ai/${response.data[1].id}.mp3`;
+      const picUrl = `https://cdn1.suno.ai/image_${response.data[1].id}.png`;
+      const lyrics = response.data[1].lyric;
+      const title = response.data[1].title;
 
       setAISongResponse(songUrl);
 
@@ -481,31 +485,59 @@ function Profile() {
               </section>
             )}
             {value === 3 && (
-            <>
-              <section className="ai-song" style={{ marginTop: "40px" }}>
-      <h2 style={sectionHeadingStyle}>Your Custom Songs:</h2>
-      {customSongs.length === 0 ? (
-        <Typography variant="h6">
-          You do not have any custom songs yet... would you like to make one?
-        </Typography>
-      ) : (
-        <ul>
-          {Array.isArray(customSongs) && customSongs.map((song, index) => (
-            <li key={index} style={{ marginBottom: '20px' }}>
-              <p>Title: {song.title}</p>
-              <MusicPlayerSlider src={song.url} />
-            </li>
-          ))}
-        </ul>
-      )}
-              <h2 style={sectionHeadingStyle}>Song Generation Process: </h2>
-                <Button
-                  variant="contained"
-                  color="primary"
-                  onClick={handleFetchChatGPTResponse}
-                >
-                  Generate ChatGPT prompt
-                </Button>
+              <>
+                <section className="ai-song" style={{ marginTop: "40px" }}>
+                  <h2 style={sectionHeadingStyle}>Your Custom Songs:</h2>
+                  {customSongs.length === 0 ? (
+                    <Typography variant="h6">
+                      You do not have any custom songs yet... would you like to
+                      make one?
+                    </Typography>
+                  ) : (
+                    <ul>
+                      <Box display="flex" width="100%">
+                        <Box
+                          width="60%"
+                          borderRight="1px solid gray"
+                          padding="16px"
+                        >
+                          <List>
+                            {Array.isArray(customSongs) &&
+                              customSongs.map((song, index) => (
+                                <ListItem
+                                  button
+                                  key={index}
+                                  selected={index === selectedSongIndex}
+                                  onClick={() => setSelectedSongIndex(index)}
+                                >
+                                  <ListItemText
+                                    primary={`${index + 1}. ${song.title}`}
+                                  />
+                                </ListItem>
+                              ))}
+                          </List>
+                        </Box>
+
+                        <Box width="40%" padding="16px">
+                          <Typography variant="h6">
+                            {selectedSong.title}
+                          </Typography>
+                          <Typography variant="body1">
+                            {selectedSong.lyrics}
+                          </Typography>
+                        </Box>
+                      </Box>
+                      <MusicPlayer src={selectedSong} />
+                    </ul>
+                  )}
+                  <h2 style={sectionHeadingStyle}>Song Generation Process: </h2>
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    onClick={handleFetchChatGPTResponse}
+                  >
+                    Generate ChatGPT prompt
+                  </Button>
 
                   {activities.length > 0 && (
                     <Box mt={2}>
@@ -547,8 +579,6 @@ function Profile() {
                     <Box mt={2}>
                       <Typography variant="h6">Suno AI response:</Typography>
                       <Typography>{aiSongResponse}</Typography>
-
-                      <MusicPlayerSlider src={aiSongResponse} />
                     </Box>
                   )}
                 </section>
