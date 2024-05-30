@@ -33,28 +33,31 @@ function Profile() {
   const [recentActivity, setRecentActivity] = useState([]);
   const [chatGPTResponse, setChatGPTResponse] = useState("");
   const [aiSongResponse, setAISongResponse] = useState("");
-  const [customSong, setCustomSong] = useState(null);
+  const [customSongs, setCustomSongs] = useState([]);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
 
   useEffect(() => {
-    const fetchCustomSong = async () => {
+    const fetchCustomSongs = async () => {
       try {
-        const response = await axios.get(`http://localhost:3000/CustomSong/user/${user.sub}`);
-        setCustomSong(response.data.url);
+        const response = await axios.get(`http://localhost:3000/customSong/user/${user.sub}`);
+        const data = Array.isArray(response.data) ? response.data : [];
+        setCustomSongs(data);
+        console.log(data);  
       } catch (err) {
         if (err.response && err.response.status === 404) {
-          setCustomSong(null);
+          setCustomSongs([]);
         } else {
-          console.log("An error occurred while fetching the custom song.");
+          console.log("An error occurred while fetching the custom songs.", err);
         }
       }
     };
-
-    fetchCustomSong();
+  
+    fetchCustomSongs();
   }, [user.sub]);
+  
   useEffect(() => {
     const fetchAlbums = async () => {
       const response = await axios.get(
@@ -232,20 +235,22 @@ function Profile() {
         {
           "prompt": chatGPTResponse,
           "make_instrumental": false,
-          "wait_audio": false
+          "wait_audio": true
         }
       );
-      //setAISongResponse(response.data);
-    //} catch (error) {
-      //console.error("Error fetching response from Suno Api:", error);
-    //}
-  //}
+
   const songUrl = `https://cdn1.suno.ai/${response.data[1].id}.mp3`;
+  const picUrl = `https://cdn1.suno.ai/image_${response.data[1].id}.png`;
+  const lyrics = response.data[1].lyric;
+  const title = response.data[1].title;
+
       setAISongResponse(songUrl);
 
       await axios.put(`http://localhost:3000/customSong/user/${user.sub}`, {
-        title: "AI Generated Song",
+        title: title,
         url: songUrl,
+        picture: picUrl,
+        lyrics: lyrics,
         user_id: user.sub
       });
     } catch (error) {
@@ -455,14 +460,21 @@ function Profile() {
             {value === 3 && (
             <>
               <section className="ai-song" style={{ marginTop: "40px" }}>
-              <h2 style={sectionHeadingStyle}>Current Custom Song: </h2>
-              {customSong ? (
-                      <MusicPlayerSlider src={customSong} />
-                    ) : (
-                      <Typography variant="h6">
-                        You do not have a custom song yet... would you like to make one?
-                      </Typography>
-                    )}
+      <h2 style={sectionHeadingStyle}>Your Custom Songs:</h2>
+      {customSongs.length === 0 ? (
+        <Typography variant="h6">
+          You do not have any custom songs yet... would you like to make one?
+        </Typography>
+      ) : (
+        <ul>
+          {Array.isArray(customSongs) && customSongs.map((song, index) => (
+            <li key={index} style={{ marginBottom: '20px' }}>
+              <p>Title: {song.title}</p>
+              <MusicPlayerSlider src={song.url} />
+            </li>
+          ))}
+        </ul>
+      )}
               <h2 style={sectionHeadingStyle}>Song Generation Process: </h2>
                 <Button
                   variant="contained"

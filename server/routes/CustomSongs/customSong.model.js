@@ -9,12 +9,21 @@ const CustomSong = sequelize.define("CustomSong", {
   },
   title: {
     type: DataTypes.STRING,
-    allowNull: true, //true for now for testing cause rn only have url and nothing else (should we store title and lyrics or just call the suno api and display it from there?)
+    allowNull: true,
   },
   url: {
     type: DataTypes.STRING,
     allowNull: false,
   },
+  picture: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+  lyrics: {
+    type: DataTypes.TEXT,
+    allowNull: true,
+  },
+  
   createdAt: {
     type: DataTypes.DATE,
     defaultValue: DataTypes.NOW,
@@ -27,7 +36,6 @@ const CustomSong = sequelize.define("CustomSong", {
   user_id: {
     type: DataTypes.STRING,
     allowNull: false,
-    unique: true, //only one song per user
     references: {
       model: "Users",
       key: "user_id",
