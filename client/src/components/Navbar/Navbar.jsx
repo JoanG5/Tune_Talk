@@ -83,11 +83,15 @@ export const Navbar = () => {
           >
             <Searchbar />
           </Box>
-          <Navigation
-            value={value}
-            handleChange={handleChange}
-            userId={user.sub}
-          />
+          {(isAuthenticated && (
+            <Navigation
+              value={value}
+              handleChange={handleChange}
+              userId={user.sub}
+            />
+          )) || (
+            <Navigation value={value} handleChange={handleChange} userId={""} />
+          )}
           <Box
             sx={{
               display: "flex",
