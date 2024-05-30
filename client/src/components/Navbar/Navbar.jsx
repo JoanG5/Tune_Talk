@@ -83,7 +83,11 @@ export const Navbar = () => {
           >
             <Searchbar />
           </Box>
-          <Navigation value={value} handleChange={handleChange} />
+          <Navigation
+            value={value}
+            handleChange={handleChange}
+            userId={user.sub}
+          />
           <Box
             sx={{
               display: "flex",

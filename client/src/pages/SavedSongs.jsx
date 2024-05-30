@@ -75,7 +75,7 @@ function SavedSongs() {
             }}
             variant="h6"
           >
-            No songs found.
+            No Songs Found.
           </Typography>
         </div>
       </Fade>
