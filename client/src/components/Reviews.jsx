@@ -236,14 +236,21 @@ function ReviewList() {
                               <br />
                             </div>
                             <div className="col-span-2">{review.review}</div>
-                            <IconButton
-                              style={{ position: "absolute", top: 0, right: 0 }}
-                              aria-controls={`menu-${index}`}
-                              aria-haspopup="true"
-                              onClick={handleClick}
-                            >
-                              <MoreHorizIcon />
-                            </IconButton>
+                            {(review.user_id === user.sub && (
+                              <IconButton
+                                style={{
+                                  position: "absolute",
+                                  top: 0,
+                                  right: 0,
+                                }}
+                                aria-controls={`menu-${index}`}
+                                aria-haspopup="true"
+                                onClick={handleClick}
+                              >
+                                <MoreHorizIcon />
+                              </IconButton>
+                            )) || <div></div>}
+                            {/*  */}
                             <Menu
                               id={`menu-${index}`}
                               anchorEl={anchorEl}
@@ -271,6 +278,7 @@ function ReviewList() {
                                 Delete
                               </MenuItem>
                             </Menu>
+                            {/* EDIT HERE */}
                           </div>
                         </ListItem>
                         <Divider />

@@ -26,6 +26,16 @@ function Home2() {
 
   useEffect(() => {
     const fetchData = async () => {
+      if (user) {
+        const request = axios.post("http://localhost:3000/user", user);
+        request
+          .then((response) => {
+            console.log(response.data);
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      }
       const albums = await getTopAlbums();
       const topTracks = await getTopTracks();
 

@@ -29,6 +29,13 @@ function SavedAlbum() {
         const response = await axios.get(
           `http://localhost:3000/album/${user.sub}`
         );
+        if (
+          !response.data.listened_albums &&
+          !response.data.currently_albums &&
+          !response.data.planned_albums
+        ) {
+          return;
+        }
         const [listenedAlbumsData, currentlyAlbumsData, plannedAlbumsData] =
           await Promise.all([
             getAlbumDataFromDB(response.data.listened_albums),
@@ -46,7 +53,7 @@ function SavedAlbum() {
         ]);
         setFadeIn(true);
       } catch (error) {
-        console.error("Error fetching access token:", error);
+        console.error("Error finding albums", error);
       }
     };
     searchAlbums();
@@ -58,7 +65,7 @@ function SavedAlbum() {
 
   if (albums.length === 0) {
     return (
-      <Fade in={fadeIn} timeout={1000}>
+      <Fade in={true} timeout={1000}>
         <div>
           <ListItem>
             <ListItem>
@@ -82,7 +89,7 @@ function SavedAlbum() {
             }}
             variant="h6"
           >
-            No albums found.
+            No Albums Found.
           </Typography>
         </div>
       </Fade>
@@ -90,54 +97,59 @@ function SavedAlbum() {
   }
 
   return (
-    <Fade in={true}>
-      <div>
-        <ListItem>
+    <div>
+      <Fade in={fadeIn} timeout={1000}>
+        <div>
           <ListItem>
-            <ListItemText>
-              <Typography
-                sx={{
-                  display: "flex",
-                  justifyContent: "center",
-                }}
-                variant="h4"
-              >
-                Saved Albums
-              </Typography>
-            </ListItemText>
+            <ListItem>
+              <ListItemText>
+                <Typography
+                  sx={{
+                    display: "flex",
+                    justifyContent: "center",
+                  }}
+                  variant="h4"
+                >
+                  Saved Albums
+                </Typography>
+              </ListItemText>
+            </ListItem>
           </ListItem>
-        </ListItem>
-        <TabContext value={value} variant="fullWidth">
-          <Box
-            sx={{
-              display: "flex",
-              justifyContent: "center",
-              borderBottom: 1,
-              borderColor: "divider",
-            }}
-          >
-            <TabList onChange={handleChange} aria-label="lab API tabs example">
-              <Tab label="All Albums" value="1" />
-              <Tab label="Listened To" value="2" />
-              <Tab label="Currently Listening" value="3" />
-              <Tab label="Plan On Listening" value="4" />
-            </TabList>
-          </Box>
-          <TabPanel value="1">
-            <SavedAlbumSection props={albums} />
-          </TabPanel>
-          <TabPanel value="2">
-            <SavedAlbumSection props={listenedAlbums} />
-          </TabPanel>
-          <TabPanel value="3">
-            <SavedAlbumSection props={currentlyAlbums} />
-          </TabPanel>
-          <TabPanel value="4">
-            <SavedAlbumSection props={plannedAlbums} />
-          </TabPanel>
-        </TabContext>
-      </div>
-    </Fade>
+          <TabContext value={value} variant="fullWidth">
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "center",
+                borderBottom: 1,
+                borderColor: "divider",
+              }}
+            >
+              <TabList
+                onChange={handleChange}
+                aria-label="lab API tabs example"
+              >
+                <Tab label="All Albums" value="1" />
+                <Tab label="Listened To" value="2" />
+                <Tab label="Currently Listening" value="3" />
+                <Tab label="Plan On Listening" value="4" />
+              </TabList>
+            </Box>
+            <TabPanel value="1">
+              <SavedAlbumSection props={albums} />
+            </TabPanel>
+            <TabPanel value="2">
+              <SavedAlbumSection props={listenedAlbums} />
+            </TabPanel>
+            <TabPanel value="3">
+              <SavedAlbumSection props={currentlyAlbums} />
+            </TabPanel>
+            <TabPanel value="4">
+              <SavedAlbumSection props={plannedAlbums} />
+            </TabPanel>
+          </TabContext>
+        </div>
+      </Fade>
+    </div>
   );
 }
 
