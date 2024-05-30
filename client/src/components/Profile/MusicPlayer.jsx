@@ -44,7 +44,7 @@ const TinyText = styled(Typography)({
   letterSpacing: 0.2,
 });
 
-export default function MusicPlayer({ src, autoPlay }) {
+export default function MusicPlayer({ src, onPrevious, onNext }) {
   const theme = useTheme();
   const [duration, setDuration] = React.useState(0);
   const [position, setPosition] = React.useState(0);
@@ -122,7 +122,7 @@ export default function MusicPlayer({ src, autoPlay }) {
               mt: -1,
             }}
           >
-            <IconButton aria-label="previous song">
+            <IconButton aria-label="previous song" onClick={onPrevious}>
               <FastRewindRounded fontSize="large" htmlColor={mainIconColor} />
             </IconButton>
             <IconButton
@@ -141,7 +141,7 @@ export default function MusicPlayer({ src, autoPlay }) {
                 />
               )}
             </IconButton>
-            <IconButton aria-label="next song">
+            <IconButton aria-label="next song" onClick={onNext}>
               <FastForwardRounded fontSize="large" htmlColor={mainIconColor} />
             </IconButton>
           </Box>

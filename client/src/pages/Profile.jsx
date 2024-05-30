@@ -45,6 +45,20 @@ function Profile() {
 
   const { userId } = useParams();
 
+  const handlePreviousSong = () => {
+    if (selectedSongIndex > 0) {
+      setSelectedSongIndex(selectedSongIndex - 1);
+      setIsSongPlaying(true);
+    }
+  };
+
+  const handleNextSong = () => {
+    if (selectedSongIndex < customSongs.length - 1) {
+      setSelectedSongIndex(selectedSongIndex + 1);
+      setIsSongPlaying(true);
+    }
+  };
+
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
@@ -527,7 +541,11 @@ function Profile() {
                           </Typography>
                         </Box>
                       </Box>
-                      <MusicPlayer src={selectedSong} />
+                      <MusicPlayer
+                        src={selectedSong}
+                        onPrevious={handlePreviousSong}
+                        onNext={handleNextSong}
+                      />
                     </ul>
                   )}
                   <h2 style={sectionHeadingStyle}>Song Generation Process: </h2>
