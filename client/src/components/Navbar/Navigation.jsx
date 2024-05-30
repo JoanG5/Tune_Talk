@@ -2,13 +2,13 @@ import React from "react";
 import { Box, Button } from "@mui/material";
 import { Link } from "react-router-dom";
 
-const navigationItems = [
-  { text: "Songs", to: "/profile/savedsong" },
-  { text: "Albums", to: "/profile/savedalbum" },
-  { text: "AI Songs", to: "/profile/ai" },
-];
+const Navigation = ({ value, handleChange, userId }) => {
+  const navigationItems = [
+    { text: "Songs", to: "/profile/savedsong" },
+    { text: "Albums", to: "/profile/savedalbum" },
+    { text: "AI Songs", to: `/profile/${userId}` },
+  ];
 
-const Navigation = ({ value, handleChange }) => {
   return (
     <Box display="flex" justifyContent="flex-end" flexGrow={1} gap={2}>
       {navigationItems.map(({ to, text }) => (

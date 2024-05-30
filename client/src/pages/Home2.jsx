@@ -134,7 +134,7 @@ function Home2() {
               gutterBottom
               sx={{ marginTop: 5, mx: 15, fontWeight: "bold" }}
             >
-              Top Albums:
+              Recent Albums:
             </Typography>
             <Box
               sx={{
