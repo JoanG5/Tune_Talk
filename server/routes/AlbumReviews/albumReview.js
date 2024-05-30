@@ -4,7 +4,8 @@ const AlbumReview = require("./albumReview.model");
 const Album = require("../Albums/album.model");
 const User = require("../Users/user.model");
 
-router.post("/", (req, res) => {
+router.post("/", async (req, res) => {
+  const user = await User.findOne({ where: { user_id: req.body.user_id } });
   AlbumReview.findOne({
     where: { user_id: req.body.user_id, spotify_id: req.body.spotify_id },
   }).then((review) => {
@@ -19,6 +20,7 @@ router.post("/", (req, res) => {
         spotify_id: req.body.spotify_id,
       })
         .then((review) => {
+          review.dataValues.user = user;
           review.save();
           res.send(review);
         })

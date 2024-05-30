@@ -107,13 +107,8 @@ function ReviewList() {
           : "http://localhost:3000/songReview",
         reviewData
       );
-
-      console.log(response);
-      if (reviews[0].empty) {
-        setReviews([reviewData]);
-      } else {
-        setReviews([...reviews, reviewData]);
-      }
+      console.log(response.data);
+      setReviews([...reviews, response.data]);
       setOpen(false);
     } catch (error) {
       console.error("Error saving review:", error);
@@ -214,108 +209,126 @@ function ReviewList() {
                   {!reviews[0].empty &&
                     reviews.map((review, index) => (
                       <div key={index}>
-                        <ListItem alignItems="flex-start">
-                          <ListItemAvatar>
-                            <Avatar
-                              alt="User Avatar"
-                              src={
-                                review.user.picture ||
-                                "/static/images/avatar/1.jpg"
-                              }
-                            />
-                          </ListItemAvatar>
-                          <div className="grid grid-flow-row-dense">
-                            <div className="col-span-2">
-                              {review.user.nickname} <br />
-                              <Rating
-                                name="read-only"
-                                value={review.rating}
-                                readOnly
-                                size="small"
-                              />
-                              <br />
-                            </div>
-                            <div className="col-span-2">{review.review}</div>
-                            <IconButton
-                              style={{ position: "absolute", top: 0, right: 0 }}
-                              aria-controls={`menu-${index}`}
-                              aria-haspopup="true"
-                              onClick={handleClick}
-                            >
-                              <MoreHorizIcon />
-                            </IconButton>
-                            <Menu
-                              id={`menu-${index}`}
-                              anchorEl={anchorEl}
-                              keepMounted
-                              open={Boolean(anchorEl)}
-                              onClose={handleCloseMenu}
-                            >
-                              <MenuItem
-                                onClick={() => {
-                                  handleEditClick(review.review_id, index);
-                                  handleCloseMenu();
-                                }}
-                              >
-                                <EditOutlinedIcon sx={{ marginRight: 1 }} />
-                                Edit
-                              </MenuItem>
-                              <MenuItem
-                                sx={{ color: "error.main" }}
-                                onClick={() => {
-                                  handleDeleteReview(review.review_id, index);
-                                  handleCloseMenu();
-                                }}
-                              >
-                                <DeleteOutlinedIcon sx={{ marginRight: 1 }} />
-                                Delete
-                              </MenuItem>
-                            </Menu>
-                          </div>
-                        </ListItem>
-                        <Divider />
-                        <Dialog open={editOpen} onClose={handleEditClose}>
-                          <DialogTitle>Edit Review</DialogTitle>
-                          <DialogContent>
-                            <DialogContentText>
-                              Please update your review.
-                            </DialogContentText>
-                            <Rating
-                              name="rating"
-                              value={editedRating}
-                              onChange={(event, newValue) => {
-                                setEditedRating(newValue);
-                              }}
-                            />
-                            <TextField
-                              autoFocus
-                              margin="dense"
-                              id="review-comment"
-                              label="Your Review"
-                              multiline
-                              rows={6}
-                              type="text"
-                              fullWidth
-                              value={editedReview}
-                              onChange={(event) =>
-                                setEditedReview(event.target.value)
-                              }
-                            />
-                          </DialogContent>
-                          <DialogActions>
-                            <Button onClick={handleEditClose} color="primary">
-                              Cancel
-                            </Button>
-                            <Button
-                              onClick={() =>
-                                handleUpdateReview(review.review_id, index)
-                              }
-                              color="primary"
-                            >
-                              Submit
-                            </Button>
-                          </DialogActions>
-                        </Dialog>
+                        {review.user && (
+                          <>
+                            <ListItem alignItems="flex-start">
+                              <ListItemAvatar>
+                                <Avatar
+                                  alt="User Avatar"
+                                  src={
+                                    review.user.picture ||
+                                    "/static/images/avatar/1.jpg"
+                                  }
+                                />
+                              </ListItemAvatar>
+                              <div className="grid grid-flow-row-dense">
+                                <div className="col-span-2">
+                                  {review.user.nickname} <br />
+                                  <Rating
+                                    name="read-only"
+                                    value={review.rating}
+                                    readOnly
+                                    size="small"
+                                  />
+                                  <br />
+                                </div>
+                                <div className="col-span-2">
+                                  {review.review}
+                                </div>
+                                <IconButton
+                                  style={{
+                                    position: "absolute",
+                                    top: 0,
+                                    right: 0,
+                                  }}
+                                  aria-controls={`menu-${index}`}
+                                  aria-haspopup="true"
+                                  onClick={handleClick}
+                                >
+                                  <MoreHorizIcon />
+                                </IconButton>
+                                <Menu
+                                  id={`menu-${index}`}
+                                  anchorEl={anchorEl}
+                                  keepMounted
+                                  open={Boolean(anchorEl)}
+                                  onClose={handleCloseMenu}
+                                >
+                                  <MenuItem
+                                    onClick={() => {
+                                      handleEditClick(review.review_id, index);
+                                      handleCloseMenu();
+                                    }}
+                                  >
+                                    <EditOutlinedIcon sx={{ marginRight: 1 }} />
+                                    Edit
+                                  </MenuItem>
+                                  <MenuItem
+                                    sx={{ color: "error.main" }}
+                                    onClick={() => {
+                                      handleDeleteReview(
+                                        review.review_id,
+                                        index
+                                      );
+                                      handleCloseMenu();
+                                    }}
+                                  >
+                                    <DeleteOutlinedIcon
+                                      sx={{ marginRight: 1 }}
+                                    />
+                                    Delete
+                                  </MenuItem>
+                                </Menu>
+                              </div>
+                            </ListItem>
+                            <Divider />
+                            <Dialog open={editOpen} onClose={handleEditClose}>
+                              <DialogTitle>Edit Review</DialogTitle>
+                              <DialogContent>
+                                <DialogContentText>
+                                  Please update your review.
+                                </DialogContentText>
+                                <Rating
+                                  name="rating"
+                                  value={editedRating}
+                                  onChange={(event, newValue) => {
+                                    setEditedRating(newValue);
+                                  }}
+                                />
+                                <TextField
+                                  autoFocus
+                                  margin="dense"
+                                  id="review-comment"
+                                  label="Your Review"
+                                  multiline
+                                  rows={6}
+                                  type="text"
+                                  fullWidth
+                                  value={editedReview}
+                                  onChange={(event) =>
+                                    setEditedReview(event.target.value)
+                                  }
+                                />
+                              </DialogContent>
+                              <DialogActions>
+                                <Button
+                                  onClick={handleEditClose}
+                                  color="primary"
+                                >
+                                  Cancel
+                                </Button>
+                                <Button
+                                  onClick={() =>
+                                    handleUpdateReview(review.review_id, index)
+                                  }
+                                  color="primary"
+                                >
+                                  Submit
+                                </Button>
+                              </DialogActions>
+                            </Dialog>
+                          </>
+                        ) }
                       </div>
                     ))}
                 </List>
