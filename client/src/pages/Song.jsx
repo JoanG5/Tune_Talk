@@ -105,6 +105,10 @@ function Song() {
   };
 
   const handleSave = async () => {
+    if (!isAuthenticated) {
+      alert("Please Login To Save an Song.");
+      return;
+    }
     if (status === "") {
       alert("Please select a status");
       return;

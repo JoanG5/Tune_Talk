@@ -36,7 +36,7 @@ export const Navbar = () => {
   };
 
   const handleProfile = () => {
-    navigate("/profile");
+    navigate(`/profile/${user.sub}`);
     handleClose();
   };
 
@@ -118,7 +118,7 @@ export const Navbar = () => {
                 </Menu>
               </>
             ) : (
-              <LoginButton />
+              <LoginButton text="Login" />
             )}
           </Box>
         </Toolbar>

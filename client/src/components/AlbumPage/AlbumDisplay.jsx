@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { styled } from "@mui/material/styles";
 import Paper from "@mui/material/Paper";
 import Grid from "@mui/material/Grid";
@@ -6,8 +6,14 @@ import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import Divider from "@mui/material/Divider";
 import Rating from "@mui/material/Rating";
+import { useParams } from "react-router-dom";
+import axios from "axios";
 
 function AlbumDisplay({ props }) {
+  const [reviews, setReviews] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const { albumId } = useParams();
+
   const Img = styled("img")({
     margin: "auto",
     minWidth: "72px",
@@ -24,6 +30,33 @@ function AlbumDisplay({ props }) {
     });
     return allArtists.slice(0, -2);
   };
+
+  const getAverageRating = () => {
+    console.log(reviews);
+    if (reviews.length === 0) return 0;
+    let sum = 0;
+    reviews.forEach((review) => {
+      sum += review.rating;
+    });
+    return sum / reviews.length;
+  };
+
+  useEffect(() => {
+    const fetchAlbumInfo = async () => {
+      try {
+        const reviews = await axios.get(
+          `http://localhost:3000/albumReview/${albumId}`
+        );
+        const [albumData] = await Promise.all([reviews.data]);
+        setReviews(albumData);
+        setLoading(false);
+      } catch (error) {
+        console.error("Error fetching song info:", error);
+      }
+    };
+
+    fetchAlbumInfo();
+  }, []);
 
   return (
     <div>
@@ -82,9 +115,14 @@ function AlbumDisplay({ props }) {
                 <Typography fontWeight={700} gutterBottom component={"legend"}>
                   User Score
                 </Typography>
-                <Rating name="read-only" value={4} readOnly /> <br />
+                <Rating
+                  name="read-only"
+                  value={getAverageRating(reviews)}
+                  readOnly
+                />{" "}
+                <br />
                 <Typography gutterBottom variant="caption">
-                  Based on 100 ratings
+                  Based on {reviews.length} ratings
                 </Typography>
               </Box>
               <Box sx={{ p: "12px", minWidth: "200px", maxWidth: "300px" }}>

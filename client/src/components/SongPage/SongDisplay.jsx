@@ -13,7 +13,6 @@ import Loading from "../Loading";
 
 function SongDisplay({ props }) {
   const [reviews, setReviews] = useState([]);
-  const [average, setAverage] = useState(0);
   const [loading, setLoading] = useState(true);
   const { songId } = useParams();
 
@@ -34,7 +33,6 @@ function SongDisplay({ props }) {
         );
         const [songData] = await Promise.all([reviews.data]);
         setReviews(songData);
-        setAverage(getAverageRating(reviews));
         setLoading(false);
       } catch (error) {
         console.error("Error fetching song info:", error);
@@ -131,7 +129,12 @@ function SongDisplay({ props }) {
                 <Typography fontWeight={700} gutterBottom component={"legend"}>
                   User Score
                 </Typography>
-                <Rating name="read-only" value={average} readOnly /> <br />
+                <Rating
+                  name="read-only"
+                  value={getAverageRating(reviews)}
+                  readOnly
+                />
+                <br />
                 <Typography gutterBottom variant="caption">
                   Based on {reviews.length} ratings
                 </Typography>

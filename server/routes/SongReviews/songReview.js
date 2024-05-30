@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const SongReview = require("./songReview.model");
+const User = require("../Users/user.model");
 
 router.post("/", async (req, res) => {
   SongReview.findOne({
@@ -28,18 +29,44 @@ router.post("/", async (req, res) => {
   });
 });
 
-router.get("/:spotify_id", (req, res) => {
-  SongReview.findAll({ where: { spotify_id: req.params.spotify_id } })
-    .then((reviews) => {
-      if (reviews.length === 0) {
-        return res.send([{ empty: true }]);
-      }
-      res.send(reviews);
-    })
-    .catch((error) => {
-      console.error("Error fetching reviews:", error);
-      res.status(500).send("Error fetching reviews");
+router.get("/recent", async (req, res) => {
+  try {
+    const reviews = await SongReview.findAll({
+      limit: 5,
+      order: [["createdAt", "DESC"]],
     });
+    const userPromises = reviews.map(async (review) => {
+      const user = await User.findOne({ where: { user_id: review.user_id } });
+      review.dataValues.user = user; 
+    });
+
+    await Promise.all(userPromises);
+
+    res.send(reviews);
+  } catch (error) {
+    console.error("Error fetching reviews:", error);
+    res.status(500).send("Error fetching reviews");
+  }
+});
+
+router.get("/:spotify_id", async (req, res) => {
+  try {
+    const reviews = await SongReview.findAll({
+      where: { spotify_id: req.params.spotify_id },
+    });
+
+    const userPromises = reviews.map(async (review) => {
+      const user = await User.findOne({ where: { user_id: review.user_id } });
+      review.dataValues.user = user; // Use `dataValues` to avoid mutating the Sequelize instance
+    });
+
+    await Promise.all(userPromises);
+
+    res.send(reviews);
+  } catch (error) {
+    console.error("Error fetching reviews:", error);
+    res.status(500).send("Error fetching reviews");
+  }
 });
 
 router

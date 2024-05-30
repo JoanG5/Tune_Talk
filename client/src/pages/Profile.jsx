@@ -20,11 +20,13 @@ import {
   getOneTrackId,
 } from "../services/Spotify";
 import Loading from "../components/Loading";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 
 function Profile() {
-  const { user } = useAuth0();
-  const { name, picture } = user;
+  // const { user } = useAuth0();
+  // const { name, picture } = user;
+  const [name, setName] = useState("");
+  const [picture, setPicture] = useState("");
   const [value, setValue] = useState(0);
   const [albums, setAlbums] = useState([]);
   const [tracks, setTracks] = useState([]);
@@ -34,6 +36,9 @@ function Profile() {
   const [chatGPTResponse, setChatGPTResponse] = useState("");
   const [aiSongResponse, setAISongResponse] = useState("");
   const [customSongs, setCustomSongs] = useState([]);
+  const [user, setUser] = useState({});
+
+  const { userId } = useParams();
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -42,7 +47,9 @@ function Profile() {
   useEffect(() => {
     const fetchCustomSongs = async () => {
       try {
-        const response = await axios.get(`http://localhost:3000/customSong/user/${user.sub}`);
+        const response = await axios.get(
+          `http://localhost:3000/customSong/user/${userId}`
+        );
         const data = Array.isArray(response.data) ? response.data : [];
         setCustomSongs(data);
         console.log(data);  
@@ -56,13 +63,12 @@ function Profile() {
     };
   
     fetchCustomSongs();
-  }, [user.sub]);
+  }, [userId]);
   
+
   useEffect(() => {
     const fetchAlbums = async () => {
-      const response = await axios.get(
-        `http://localhost:3000/album/${user.sub}`
-      );
+      const response = await axios.get(`http://localhost:3000/album/${userId}`);
       const [listenedAlbumsData, currentlyAlbumsData, plannedAlbumsData] =
         await Promise.all([
           getAlbumDataFromDB(response.data.listened_albums),
@@ -77,9 +83,7 @@ function Profile() {
     };
 
     const fetchTracks = async () => {
-      const response = await axios.get(
-        `http://localhost:3000/song/${user.sub}`
-      );
+      const response = await axios.get(`http://localhost:3000/song/${userId}`);
       const [listenedSongsData, plannedSongsData] = await Promise.all([
         getTrackDataFromDB(response.data.listened_songs),
         getTrackDataFromDB(response.data.planned_songs),
@@ -91,7 +95,7 @@ function Profile() {
 
     const fetchAlbumReviews = async () => {
       const response = await axios.get(
-        `http://localhost:3000/albumReview/profile/${user.sub}`
+        `http://localhost:3000/albumReview/profile/${userId}`
       );
 
       const reviewsData = await Promise.all(
@@ -101,7 +105,7 @@ function Profile() {
             id: review.review_id,
             image: albumData.images[0].url,
             title: albumData.name,
-            artist: albumData.artists.map(artist => artist.name).join(', '),
+            artist: albumData.artists.map((artist) => artist.name).join(", "),
             rating: review.rating,
             review: review.review,
             username: user.name,
@@ -109,6 +113,7 @@ function Profile() {
             year: new Date(review.createdAt).toLocaleDateString(),
             spotifyId: review.spotify_id,
             album: true,
+            userId: review.user_id,
           };
         })
       );
@@ -117,7 +122,7 @@ function Profile() {
 
     const fetchSongReviews = async () => {
       const response = await axios.get(
-        `http://localhost:3000/songReview/profile/${user.sub}`
+        `http://localhost:3000/songReview/profile/${userId}`
       );
 
       const reviewsData = await Promise.all(
@@ -127,7 +132,7 @@ function Profile() {
             id: review.review_id,
             image: songData.album.images[0].url,
             title: songData.name,
-            artist: songData.artists.map(artist => artist.name).join(', '),
+            artist: songData.artists.map((artist) => artist.name).join(", "),
             rating: review.rating,
             review: review.review,
             username: user.name,
@@ -135,12 +140,21 @@ function Profile() {
             year: new Date(review.createdAt).toLocaleDateString(),
             spotifyId: review.spotify_id,
             album: false,
+            userId: review.user_id,
           };
         })
       );
       setActivities([...reviewsData]);
     };
 
+    const getUserData = async () => {
+      const response = await axios.get(`http://localhost:3000/user/${userId}`);
+      setName(response.data.nickname);
+      setPicture(response.data.picture);
+      setUser(response.data)
+    };
+
+    getUserData();
     fetchAlbums();
     fetchTracks();
     fetchAlbumReviews();
@@ -203,28 +217,34 @@ function Profile() {
   // ai tab
   const handleFetchChatGPTResponse = async () => {
     const dataToSend = activities;
-    const prompt = `Please use this data to ask Suno AI to create a song that the user will like based on these albums: Please keep in mind SUNO does not allow artist names in the prompt, so maybe include a specified genre that the user might like based on the songs and artists. Also please keep in mind suno ai has a character limit of 100 characters:\n${JSON.stringify(dataToSend)}`;
+    const prompt = `Please use this data to ask Suno AI to create a song that the user will like based on these albums: Please keep in mind SUNO does not allow artist names in the prompt, so maybe include a specified genre that the user might like based on the songs and artists. Also please keep in mind suno ai has a character limit of 100 characters:\n${JSON.stringify(
+      dataToSend
+    )}`;
 
     const requestBody = {
       model: "gpt-4",
       messages: [
         { role: "system", content: "You are a helpful assistant." },
-        { role: "user", content: prompt }
+        { role: "user", content: prompt },
       ],
       max_tokens: 150,
-      temperature: 0.7
+      temperature: 0.7,
     };
     console.log("Data sent to ChatGPT:", requestBody);
     try {
-      const response = await axios.post('https://api.openai.com/v1/chat/completions', requestBody, {
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${process.env.OPENAI_KEY}`
+      const response = await axios.post(
+        "https://api.openai.com/v1/chat/completions",
+        requestBody,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${process.env.OPENAI_KEY}`,
+          },
         }
-      });
+      );
       setChatGPTResponse(response.data.choices[0].message.content);
     } catch (error) {
-      console.error('Error fetching response from ChatGPT:', error);
+      console.error("Error fetching response from ChatGPT:", error);
     }
   };
 
@@ -246,17 +266,20 @@ function Profile() {
 
       setAISongResponse(songUrl);
 
-      await axios.put(`http://localhost:3000/customSong/user/${user.sub}`, {
+      await axios.put(`http://localhost:3000/customSong/user/${userId}`, {
         title: title,
         url: songUrl,
         picture: picUrl,
         lyrics: lyrics,
-        user_id: user.sub
+        user_id: userId,
       });
     } catch (error) {
-      console.error("Error fetching response from Suno Api or Error saving song to db: ", error);
+      console.error(
+        "Error fetching response from Suno Api or Error saving song to db: ",
+        error
+      );
     }
-  }
+  };
 
   return (
     <Fade in={true} timeout={1000}>
@@ -351,7 +374,7 @@ function Profile() {
                     <Tab label="Activity" />
                     <Tab label="Tracks" />
                     <Tab label="AI Song" />
-                </Tabs>
+                  </Tabs>
                 </Box>
               </nav>
             </section>
@@ -484,46 +507,54 @@ function Profile() {
                   Generate ChatGPT prompt
                 </Button>
 
-                {activities.length > 0 && (
-                  <Box mt={2}>
-                    <Typography variant="h6">Album Details:</Typography>
-                    {activities.map((detail, index) => (
-                      <div key={index}>
-                        <p><strong>Song/Album name:</strong> {detail.title}</p>
-                        <p><strong>Artist/s:</strong> {detail.artist}</p>
-                        <p><strong>Review:</strong> {detail.review}</p>
-                        <p><strong>Rating:</strong> {detail.rating}</p>
-                        
-                      </div>
-                    ))}
-                  </Box>
-                )}
-                {chatGPTResponse && (
-                  <Box mt={2}>
-                    <Typography variant="h6">ChatGPT prompt for Suno AI:</Typography>
-                    <Typography>{chatGPTResponse}</Typography>
-                    <Button
-                    variant="contained"
-                    color="primary"
-                    onClick={handleFetchSunoResponse}
-                  >
-                    Generate AI Song
-                  </Button>            
-                  </Box>
-                )}
-                {aiSongResponse && (
-                  <Box mt={2}>
-                    <Typography variant="h6">Suno AI response:</Typography>
-                    <Typography>{aiSongResponse}</Typography>
-                    
-                    <MusicPlayerSlider src={aiSongResponse} />
-              
-                  </Box>
-                )}
-              </section>
-            </>
-          )}
-        </div>
+                  {activities.length > 0 && (
+                    <Box mt={2}>
+                      <Typography variant="h6">Album Details:</Typography>
+                      {activities.map((detail, index) => (
+                        <div key={index}>
+                          <p>
+                            <strong>Song/Album name:</strong> {detail.title}
+                          </p>
+                          <p>
+                            <strong>Artist/s:</strong> {detail.artist}
+                          </p>
+                          <p>
+                            <strong>Review:</strong> {detail.review}
+                          </p>
+                          <p>
+                            <strong>Rating:</strong> {detail.rating}
+                          </p>
+                        </div>
+                      ))}
+                    </Box>
+                  )}
+                  {chatGPTResponse && (
+                    <Box mt={2}>
+                      <Typography variant="h6">
+                        ChatGPT prompt for Suno AI:
+                      </Typography>
+                      <Typography>{chatGPTResponse}</Typography>
+                      <Button
+                        variant="contained"
+                        color="primary"
+                        onClick={handleFetchSunoResponse}
+                      >
+                        Generate AI Song
+                      </Button>
+                    </Box>
+                  )}
+                  {aiSongResponse && (
+                    <Box mt={2}>
+                      <Typography variant="h6">Suno AI response:</Typography>
+                      <Typography>{aiSongResponse}</Typography>
+
+                      <MusicPlayerSlider src={aiSongResponse} />
+                    </Box>
+                  )}
+                </section>
+              </>
+            )}
+          </div>
         </div>
         <footer></footer>
       </div>

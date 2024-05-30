@@ -1,5 +1,5 @@
 // src/components/ActivityCard.jsx
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   Card,
   CardContent,
@@ -11,14 +11,27 @@ import {
 } from "@mui/material";
 import Rating from "@mui/material/Rating";
 import { Link } from "react-router-dom";
+import axios from "axios";
 
 const ActivityCard = ({ activity }) => {
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    const response = axios.get(`http://localhost:3000/user/${activity.userId}`);
+    response.then((response) => setUser(response.data));
+  }, []);
+
+  if (!user) return null;
 
   return (
     <Card sx={{ marginBottom: 3, padding: 3 }}>
       <CardActionArea
         component={Link}
-        to={activity.album ? `/album/${activity.spotifyId}` : `/song/${activity.spotifyId}`}
+        to={
+          activity.album
+            ? `/album/${activity.spotifyId}`
+            : `/song/${activity.spotifyId}`
+        }
         sx={{ display: "flex", padding: 3 }}
       >
         <CardMedia
@@ -78,14 +91,14 @@ const ActivityCard = ({ activity }) => {
               paddingBottom: 1,
             }}
           >
-            <Avatar src={activity.userAvatar} />
+            <Avatar src={user.picture} />
             <Typography
               variant="subtitle1"
               color="text.secondary"
               component="div"
               sx={{ paddingLeft: 1 }}
             >
-              {activity.username}
+              {user.nickname}
             </Typography>
           </Box>
         </Box>
