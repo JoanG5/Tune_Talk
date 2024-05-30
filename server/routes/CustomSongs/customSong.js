@@ -5,7 +5,7 @@ const CustomSong = require("./customSong.model");
 
 router.get('/user/:userId', async (req, res) => {
     try {
-      const customSong = await CustomSong.findOne({
+      const customSong = await CustomSong.findAll({
         where: { user_id: req.params.userId }
       });
       if (customSong) {
@@ -21,11 +21,13 @@ router.get('/user/:userId', async (req, res) => {
 
   router.put('/user/:userId', async (req, res) => {
     try {
-      const { title, url } = req.body;
+      const { title, url, picture, lyrics } = req.body;
       const [customSong, created] = await CustomSong.upsert({
         user_id: req.params.userId,
         title,
-        url
+        url,
+        picture,
+        lyrics
       }, {
         where: { user_id: req.params.userId }
       });

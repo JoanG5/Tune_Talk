@@ -4,6 +4,7 @@ const SongReview = require("./songReview.model");
 const User = require("../Users/user.model");
 
 router.post("/", async (req, res) => {
+  const user = await User.findOne({ where: { user_id: req.body.user_id } });
   SongReview.findOne({
     where: { user_id: req.body.user_id, spotify_id: req.body.spotify_id },
   }).then((review) => {
@@ -18,6 +19,7 @@ router.post("/", async (req, res) => {
         spotify_id: req.body.spotify_id,
       })
         .then((review) => {
+          review.dataValues.user = user;
           review.save();
           res.send(review);
         })
@@ -37,7 +39,7 @@ router.get("/recent", async (req, res) => {
     });
     const userPromises = reviews.map(async (review) => {
       const user = await User.findOne({ where: { user_id: review.user_id } });
-      review.dataValues.user = user; 
+      review.dataValues.user = user;
     });
 
     await Promise.all(userPromises);
