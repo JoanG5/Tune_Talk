@@ -1,4 +1,5 @@
 <!-- TABLE OF CONTENTS -->
+<a name="readme-top"></a>
 <details>
   <summary>Table of Contents</summary>
   <ol>
@@ -19,36 +20,37 @@
 
 # Music Review App
 
-This web application will allows users to share their thoughts on music and keep track of the songs or albums they plan on or are currently listening to. It will allow users to give songs or albums a rating out of 5 alongside a title and description describing their thoughts in depth. As well, users will be able to save songs and albums to a “plan to listen”, “listening” or “listened” section that is saved to their profile.
+This web application will allow users to share their thoughts on music and keep track of the songs or albums they plan on or are currently listening to. It will allow users to give songs or albums a rating out of 5 alongside a title and description describing their thoughts in depth. As well, users will be able to save songs and albums to a “plan to listen”, “listening” or “listened” section that is saved to their profile.
+
+<!-- ABOUT THE PROJECT -->
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ## About The Project
 
 <h1 align="center">
   <div align="left">
-    <h3>Home Page</h3>
+    <h5>Home Page</h5>
     <img src="client\src\assets\MusicReviewApp_HomePage.gif" alt="MusicReviewApp Home Page">
   </div>
   <div align="left">
-    <h3>Get Song</h3>
+    <h5>Get Song</h5>
     <img src="client\src\assets\MusicReviewApp_GetSong.gif" alt="MusicReviewApp Get Song">
   </div>
   <div align="left">
-    <h3>Song Update</h3>
+    <h5>Song Update</h5>
     <img src="client\src\assets\MusicReviewApp_UpdateSong.gif" alt="MusicReviewApp Song Update">
   </div>
   <div align="left">
-    <h3>Get Album</h3>
-    <img src="client\src\assets\MusicReviewApp_GetAlbum.gif" alt="MusicReviewApp Get Album">
-  </div>
-  <div align="left">
-    <h3>Album Update</h3>
+    <h5>Album Update</h5>
     <img src="client\src\assets\MusicReviewApp_UpdateAlbum.gif" alt="MusicReviewApp Album Update">
   </div>
   <div align="left">
-    <h3>Profile</h3>
+    <h5>Profile</h5>
     <img src="client\src\assets\MusicReviewApp_Profile.gif" alt="MusicReviewApp Profile">
   </div>
 </h1>
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 <!-- TECHNOLOGIES USED -->
 ## Technologies Used
@@ -56,6 +58,8 @@ This web application will allows users to share their thoughts on music and keep
 - [![React][React.js]][React-url]
 - [![Express][Express]][Express-url]
 - [![PostgreSQL][PostgreSQL]][PostgreSQL-url]
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 <!-- GETTING STARTED -->
 ## Getting Started
@@ -98,6 +102,7 @@ For this project you will need Node.js and PostgreSQL installed
    REACT_APP_AUTH0_CLIENT_ID=YOUR_AUTH0_CLIENT_ID
    ```
 
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 <!-- ACKNOWLEDGMENTS -->
 ## Acknowledgments
@@ -115,3 +120,5 @@ For this project you will need Node.js and PostgreSQL installed
 [Express-url]: https://expressjs.com/
 [PostgreSQL]: https://img.shields.io/badge/PostgreSQL-000000?style=for-the-badge&logo=PostgreSQL&link=https%3A%2F%2Fwww.postgresql.org%2F
 [PostgreSQL-url]: https://postgresql.org
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
