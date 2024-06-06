@@ -110,7 +110,7 @@ For this project you will need Node.js and PostgreSQL installed
 - Team members who contributed to this project:
   - [Angelo Vitalino](https://github.com/angvit)
   - [Daniel Samborski](https://github.com/popki222)
-  - [Jerome](https://github.com/jgalam)
+  - [Jerome Galam](https://github.com/jgalam)
   - [Joan Guzman](https://github.com/JoanG5)
   - [Paulo Xu](https://github.com/pauloxx)
 
