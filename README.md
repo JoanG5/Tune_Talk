@@ -18,7 +18,7 @@
   </ol>
 </details>
 
-# Music Review App
+# Tune Talk
 
 TuneTalk will allow users to share their thoughts on music and keep track of the songs or albums they plan on or are currently listening to. It will allow users to give songs or albums a rating out of 5 alongside a title and description describing their thoughts in depth. As well, users will be able to save songs and albums to a “plan to listen”, “listening” or “listened” section that is saved to their profile. Users will also be able to create a unique personalized AI song using their previous reviews as input to tailor the song to their musical tastes and preferences.
 
