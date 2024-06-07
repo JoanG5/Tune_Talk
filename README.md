@@ -48,6 +48,14 @@ TuneTalk will allow users to share their thoughts on music and keep track of the
     <h5>Profile</h5>
     <img src="client\src\assets\MusicReviewApp_Profile.gif" alt="MusicReviewApp Profile">
   </div>
+  <div align="left">
+    <h5>Generate Custom Songs</h5>
+    <img src="client\src\assets\MusicReviewApp_SongGeneration.gif" alt="MusicReviewApp Home Page">
+  </div>
+  <div align="left">
+    <h5>View Custom Songs</h5>
+    <img src="client\src\assets\MusicReviewApp_CustomSongView.gif" alt="MusicReviewApp Home Page">
+  </div>
 </h1>
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
