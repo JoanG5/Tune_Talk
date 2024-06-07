@@ -554,10 +554,10 @@ function Profile() {
                     color="primary"
                     onClick={handleFetchChatGPTResponse}
                   >
-                    Generate ChatGPT prompt
+                    Generate prompt
                   </Button>
 
-                  {activities.length > 0 && (
+{/*                   {activities.length > 0 && (
                     <Box mt={2}>
                       <Typography variant="h6">Album Details:</Typography>
                       {activities.map((detail, index) => (
@@ -577,11 +577,11 @@ function Profile() {
                         </div>
                       ))}
                     </Box>
-                  )}
+                  )}  */}
                   {chatGPTResponse && (
                     <Box mt={2}>
                       <Typography variant="h6">
-                        ChatGPT prompt for Suno AI:
+                        Prompt for Suno AI:
                       </Typography>
                       <Typography>{chatGPTResponse}</Typography>
                       <Button
