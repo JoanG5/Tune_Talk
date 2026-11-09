@@ -120,7 +120,7 @@ For this project you will need Node.js and PostgreSQL installed
   - [Daniel Samborski](https://github.com/popki222)
   - [Jerome Galam](https://github.com/jgalam)
   - [Joan Guzman](https://github.com/JoanG5)
-  - [Paulo Xu](https://github.com/pauloxx)
+  - [Paulo Xu](https://github.com/prxu3)
 
 [React.js]: https://img.shields.io/badge/react-000000?style=for-the-badge&logo=react&link=https%3A%2F%2Freact.dev%2F
 [React-url]: https://reactjs.org/
